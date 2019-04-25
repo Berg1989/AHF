@@ -5,22 +5,13 @@ const fetch = require('node-fetch');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-exports.createHash = async (pw) => {
-    const hashedpw = bcrypt.hash(pw, saltRounds, function(hash) {
-        console.log(hash);
-        return hash;
-      });
-      return hashedpw;
-}
-
 // Returns a promise that resolves when the user is created
-exports.createUser = async (firstname, lastname, email, password) => {
-    password = await exports.createHash(password);
-    console.log(password);
+exports.createUser = async (username, firstname, lastname, email, password) => {
+    password = await bcrypt.hash(password, saltRounds);
     const user = new User({
         firstname,
         lastname,
-        //username,
+        username,
         password,
         email
         //phone,
@@ -33,5 +24,11 @@ exports.createUser = async (firstname, lastname, email, password) => {
 };
 
 exports.findUser = async (username) => {
-    return Joke.findOne({ username: username }).exec();
+    return User.findOne({ username: username }).exec();
+};
+
+exports.login = async (username, password) => {
+        const user = await exports.findUser(username).json();
+        if (user) return hashCheck = await bcrypt.compare(password, user.password);
+        else return false;
 };

@@ -4,14 +4,14 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-.post('/', function (request, response) {
+.post('/', async (request, response) => {
     const {username, password} = request.body;
-
-    if (navn === 'nn' && password === 'pp') {
-        request.session.navn = navn;
-        response.send({ok: true});
+    const result = await controller.login(username, password);
+    if (result) {
+        request.session.username = username;
+        response.send({ok : result});
     } else {
-        response.send({ok: false});
+        response.send({ok : result});
     }
 })
 

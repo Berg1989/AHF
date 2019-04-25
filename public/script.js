@@ -1,4 +1,5 @@
 onload = () => {
+    const username = document.getElementById('username');
     const firstname = document.getElementById('firstname');
     const lastname = document.getElementById('lastname');
     const password = document.getElementById('password');
@@ -7,6 +8,7 @@ onload = () => {
 
     btnSend.onclick = async () => {
         const data = {
+            username: username.value,
             firstname: firstname.value,
             lastname: lastname.value, 
             password: password.value,
