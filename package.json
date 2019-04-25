@@ -3,7 +3,7 @@
         "express": "^4.16.4",
         "mongoose": "^5.4.21",
         "morgan": "^1.9.1",
+        "express-session": "^1.15.6",
         "node-fetch": "^2.3.0"
     }
 }
-  
