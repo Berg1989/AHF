@@ -1,21 +1,31 @@
 onload = () => {
-    const navn = document.querySelector('#navn');
-    const password = document.querySelector('#password');
-    const button = document.querySelector('#button');
-    const fejl = document.querySelector('#fejl');
+    const firstname = document.getElementById('firstname');
+    const lastname = document.getElementById('lastname');
+    const password = document.getElementById('password');
+    const email = document.getElementById('email');
+    const btnSend = document.getElementById('btnSend');
 
-    button.onclick = async () => {
-        const data = {navn: navn.value, password: password.value};
-        const resultat = await fetch("/login", {
+    btnSend.onclick = async () => {
+        const data = {
+            firstname: firstname.value,
+            lastname: lastname.value, 
+            password: password.value,
+            email: email.value
+        };
+        const resultat = await fetch("/user", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json'}
         });
         const svar = await resultat.json();
-        if (svar.ok)
-            window.location.href = "/session";
-        else {
-            fejl.innerHTML = "Login fejl!";
+        console.log(svar);
+        
+        /*if (svar.ok) {
+            console.log('Succes!');
+            //window.location.href = "/session";
         }
+        else {
+            console.log('Fejl');
+        }*/
     }
 };

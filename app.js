@@ -22,6 +22,8 @@ const router = require('./routes/routes');
 app.use('/api', router);
 const sessionRouter = require('./routes/session');
 app.use('/session', sessionRouter);
+const userRouter = require('./routes/user');
+app.use('/user', userRouter);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;

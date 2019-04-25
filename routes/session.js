@@ -5,7 +5,8 @@ const fetch = require('node-fetch');
 
 router
 .post('/', function (request, response) {
-    const {navn, password} = request.body;
+    const {username, password} = request.body;
+
     if (navn === 'nn' && password === 'pp') {
         request.session.navn = navn;
         response.send({ok: true});
