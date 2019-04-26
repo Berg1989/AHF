@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="subscriptionScript.js" defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+    <link rel = "stylesheet" href = "subscriptionStyle.css">
+    <title>Test</title>
+</head>
+<body>
+    <div class = "container">
+        <div class = "row">
+            <h1 class = "col-12-lg">Opret nyt kontingent:</h1>
+            <div class = "col-6-lg well">
+                <div class = "well">
+                    <label class = "col-12-lg">Kontingent navn:</label>
+                    <input class = "name col-12-lg" type = "text" name = "name" id = "nameInput"></input><br>
+                    <label class = "col-12-lg">Kontingent længde:</label>
+                    <input class = "subLenght col-12-lg" type = "text" name = "subLenght" id = "subLenghtInput"></input><br>
+                    <label class = "col-12-lg">Månedlig pris</label>
+                    <input class = "mdrPrice col-12-lg" type = "text" name = "mdrPrice" id = mdrPriceInput></input><br>
+                    <button type = "btnCreateSub" class = "btn btn-primary col-12-lg" id = btnOpretId>Opret kontingent</button>
+                </div>
+            </div>
+            <div class = "well">
+                <div class = "col-6-lg row">
+                <h3 class = "col-12-lg">Kontingenter</h3>
+                <ol id = subscriptionHBS></ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
