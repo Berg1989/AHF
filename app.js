@@ -35,6 +35,8 @@ const registrationRouter = require('./routes/registration');
 app.use('/registration', registrationRouter);
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+const userProfiles = require('./routes/userprofiles');
+app.use('/userprofiles', userProfiles);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
