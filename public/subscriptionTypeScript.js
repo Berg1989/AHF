@@ -1,9 +1,17 @@
+createSubscriptionType();
+getSubscriptionTypes();
+
 async function createSubscriptionType(){
-    document.querySelector('#btnOpretId').onclick = () => {
+const btnOpret = document.getElementById('#btnOpretId');
+const name = document.getElementById('#nameInput');
+const duration = document.getElementById('#subLenghtInput');
+const mdrPrice = document.getElementById('#mdrPriceInput');
+
+    btnOpret.onclick = () => {
         const msg = {
-            name: document.querySelector('#nameInput').value,
-            duration: document.querySelector('#subLenghtInput').value, //check om nummer
-            mdrPrice: document.querySelector('#mdrPriceInput').value, //check om nummer
+            name: name.value,
+            duration: duration.value, //check om nummer
+            mdrPrice: mdrPrice.value, //check om nummer
         };
         fetch('/subscriptionType', {
             method: "POST",
