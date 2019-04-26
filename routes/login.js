@@ -5,18 +5,18 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-    .post('/',  [
+    .post('/', [
         //check email og om den findes i db
         check('email', 'Email is required')
             .isEmail(),
         //check password
         check('password', 'Password is required')
             .isLength({ min: 1 })
-            .custom(async (password, { req }) => {
+            /*.custom(async (password, { req }) => {
                 const result = await controller.login(req.body.email, password);
                 if (!result)
                     return Promise.reject('Password and email do not match');
-            })
+            })*/
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
@@ -30,18 +30,21 @@ router
             if (result) {
                 request.session.user = result;
                 request.session.success = true;
-                response.redirect('/profile');
+                response.redirect('/profile/' + result._id);
             } else {
-                response.sendStatus(405);
+                request.session.errors = [{ msg: 'Username and password do not match' }];
+                request.session.email = request.body.email;
+                request.session.success = false;
+                response.redirect('/login');
             }
         }
     })
     .get('/', function (request, response) {
-        response.render('login', { 
-            success: request.session.success, 
+        response.render('login', {
+            success: request.session.success,
             errors: request.session.errors,
-            email: request.session.email, 
-            user: request.session.user 
+            email: request.session.email,
+            user: request.session.user
         });
         request.session.errors = null;
     })
