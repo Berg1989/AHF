@@ -40,6 +40,8 @@ app.use('/register', registerRouter);
 
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+const userProfiles = require('./routes/userprofiles');
+app.use('/userprofiles', userProfiles);
 
 const profileRouter = require('./routes/profile');
 app.use('/profile', profileRouter);
