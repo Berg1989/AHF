@@ -35,6 +35,8 @@ const registrationRouter = require('./routes/registration');
 app.use('/registration', registrationRouter);
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+const subscriptionTypeRouter = require('./routes/subscriptionType');
+app.use('/subscriptionType', subscriptionTypeRouter);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
