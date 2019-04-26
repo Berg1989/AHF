@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="subscriptionTypeScript.js" defer></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <script src = "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
     <title>Test</title>
 </head>
+
 <body>
-    <div class = "container">
-        <div class = "col">
-            <h1 class = "col-12-lg">Opret nyt kontingent:</h1>
-            <div class = "col-12-lg">
-                <label class = "col-12-lg">Kontingent navn:</label>
-                <input class = "name col-12-lg" type = "text" name = "name" id = "nameInput"></input>
-            </div>
-            <div class = "col-lg-12">
-            <label class = "col-12-lg">Kontingent længde:</label>
-            <input class = "subLenght col-lg-12" type = "text" name = "subLenght" id = "subLenghtInput"></input>
-            </div>
-            <div class = "col-12-lg">
-            <label class = "col-12-lg">Månedlig pris</label>
-            <input class = "mdrPrice col-12-lg" type = "text" name = "mdrPrice" id = "mdrPriceInput"></input>
-            </div>
-            <button type = "btnCreateSub" class = "btn btn-primary col-12-lg" id = "btnOpretId">Opret kontingent</button>
-            <div class = "row">
-                <div class = "col-6-lg row">
-                <h3 class = "col-12-lg">Kontingenter</h3>
-                <ol id = subscriptionHBS></ol>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form method="POST" action="/subscriptionType">
+                    <div class="form-group">
+                        <label for="subscriptionInfoInput">Kontingent information</label>
+                        <input type="subscriptionInfo" class="form-control" id="subscriptionInfoInput" aria-describedby="emailHelp"
+                            placeholder="Kontigent navn">
+                    </div>
+                    <div class="form-group">
+                        <label for="subLenghtInput">Kontingent</label>
+                        <input type="subLenght" class="form-control" id="subLenghtInput" placeholder="Kontingent længde">
+                    </div>
+                    <div class="form-group">
+                        <label for="subPriceInput">Kontingent pris</label>
+                        <input type="subPrice" class="form-control" id="subPriceInput" placeholder="Månedlig pris">
+                    </div>
+                    <button type="opret" class="btn btn-primary">Opret</button>
+                </form>
             </div>
         </div>
     </div>
 </body>
+
 </html>
