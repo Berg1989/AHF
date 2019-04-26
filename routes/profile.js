@@ -12,18 +12,26 @@ router
             response.redirect('/profile/' + user._id)
         }
     })
-    .get('/:id', (request, response) => {
+    .get('/edit', (request, response) => {
         const user = request.session.user;
-        if (user) {
-            if (user._id === request.params.id) {
-                response.render('profile', { user });
-                request.session.errors = null;
+        if (!user) {
+            response.redirect('/login');
+        } else {
+            response.render('editProfile', { user });
+        }
+    })
+    .get('/:id', async (request, response) => {
+        const user = request.session.user;
+        const result = await controller.getMemberById(request.params.id);
+        if (result) {
+            if (user && user._id === request.params.id) {
+                response.render('personalProfile', { user });
             } else {
-                response.redirect('/profile/' + user._id);
+                response.render('profile', { result });
             }
         } else {
-            response.redirect('/login');
-        } 
+            response.sendStatus(404);
+        }
     })
     .post('/logout', (request, response) => {
         request.session.destroy(err => {

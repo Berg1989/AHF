@@ -27,6 +27,10 @@ exports.findMember = async (email) => {
     return Member.findOne({ email: email }).exec();
 };
 
+exports.getMemberById = async (id) => {
+    return Member.findOne({ _id: id }).exec();
+};
+
 exports.login = async (email, password) => {
     const member = await exports.findMember(email);
     if (member) {
