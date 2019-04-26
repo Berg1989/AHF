@@ -6,11 +6,11 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // Returns a promise that resolves when the user is created
-exports.createMember = async (email, password) => {
+exports.createMember = async (email, password, firstname, lastname) => {
         password = await bcrypt.hash(password, saltRounds);
         const member = new Member({
-            //firstname,
-            //lastname,
+            firstname,
+            lastname,
             password,
             email
             //dogtag,
@@ -30,6 +30,11 @@ exports.findMember = async (email) => {
 exports.login = async (email, password) => {
     const member = await exports.findMember(email);
     if (member) {
-        return await bcrypt.compare(password, member.password);
+        const result = await bcrypt.compare(password, member.password);
+        if (result) return member;
     } else return false;
+};
+
+exports.checkpassword = async (plaintextPassword, hash) => {
+    return await bcrypt.compare(plaintextPassword, hash);
 };

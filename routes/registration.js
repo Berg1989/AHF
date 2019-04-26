@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 router
     .post('/', [
         //check om email og denne allerede existere i database
-        check('email', 'Must be a valid email')
+        check('email', 'Please enter a valid email')
             .isEmail()
             .custom(async email => {
                 const result = await controller.findMember(email);
@@ -16,26 +16,45 @@ router
             }),
         //check om password er min 5 chars lang
         check('password', 'Password must be 5 characters or longer')
-            .isLength({ min: 5 })
+            .isLength({ min: 5 }),
+        check('firstname', 'Please enter your firstname')
+            .isLength({ min: 2 }),
+        check('lastname', 'Please enter your lastname')
+            .isLength({ min: 2 })
     ], async (request, response) => {
-        const errs = request.validationErrors();
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
-            request.session.errors = errs;
+            request.session.errors = await errors.array();
+            request.session.email = request.body.email;
+            request.session.firstname = request.body.firstname;
+            request.session.lastname = request.body.lastname;
             request.session.success = false;
             response.redirect('/registration');
         } else {
-            const result = await controller.createMember(request.body.email, request.body.password);
+            const { email, password, firstname, lastname } = request.body;
+            const result = await controller.createMember(email, password, firstname, lastname);
             if (result) {
                 request.session.user = result;
                 request.session.success = true;
-                response.redirect('/');
+                response.redirect('/profile');
             }
         }
     })
     .get('/', function (request, response) {
-        response.render('registration', { success: request.session.success, errors: request.session.errors, user: request.session.user });
-        request.session.errors = null;
+        if (!request.session.user) {
+            response.render('registration', { 
+                success: request.session.success, 
+                errors: request.session.errors, 
+                user: request.session.user,
+                email: request.session.email,
+                firstname: request.session.firstname,
+                lastname: request.session.lastname
+             });
+            request.session.errors = null;
+        } else {
+            response.redirect('/');
+        }
+
     })
 
 module.exports = router;

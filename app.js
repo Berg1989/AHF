@@ -31,10 +31,17 @@ mongoose.Promise = Promise;
 mongoose.connect(config.mongodb, {useNewUrlParser: true});
 
 // ROUTES FOR THE APP
+const rootRouter = require('./routes/root');
+app.use('/', rootRouter);
+
 const registrationRouter = require('./routes/registration');
 app.use('/registration', registrationRouter);
+
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+
+const profileRouter = require('./routes/profile');
+app.use('/profile', profileRouter);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;

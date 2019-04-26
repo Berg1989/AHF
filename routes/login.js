@@ -1,47 +1,48 @@
 const controller = require("../controllers/controller");
 const express = require('express');
+const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-    .post('/', async (request, response) => {
-        const { email, password } = request.body;
-
-        request.checkBody('email', 'email is required').notEmpty();
-        request.checkBody('password', 'Password is required').notEmpty();
-
-        const errors = request.validationErrors();
-
-        if (errors) {
-            request.session.errors = errors;
+    .post('/',  [
+        //check email og om den findes i db
+        check('email', 'Email is required')
+            .isEmail(),
+        //check password
+        check('password', 'Password is required')
+            .isLength({ min: 1 })
+            .custom(async (password, { req }) => {
+                const result = await controller.login(req.body.email, password);
+                if (!result)
+                    return Promise.reject('Password and email do not match');
+            })
+    ], async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            request.session.email = request.body.email;
             request.session.success = false;
             response.redirect('/login');
         } else {
-            result = await controller.login(email, password);
+            const { email, password } = request.body;
+            const result = await controller.login(email, password);
             if (result) {
+                request.session.user = result;
                 request.session.success = true;
-                request.session.user = email;
-                response.redirect('/');
+                response.redirect('/profile');
             } else {
-                request.session.errors = 'Invalid email and/or password';
-                request.session.success = false;
-                response.redirect('/login');
+                response.sendStatus(405);
             }
         }
     })
-    .post('/add', async (request, response) => {
-        const { email, password } = request.body;
-
-        controller.createUser(email, password)
-            .then(result => response.json({ message: 'user saved!', newMember: result }))
-            .catch(err => {
-                console.error("Error: " + err);
-                if (err.stack) console.error(err.stack);
-                response.status(500).send(err);
-            });
-    })
     .get('/', function (request, response) {
-        response.render('login', { success: request.session.success, errors: request.session.errors, user: request.session.user });
+        response.render('login', { 
+            success: request.session.success, 
+            errors: request.session.errors,
+            email: request.session.email, 
+            user: request.session.user 
+        });
         request.session.errors = null;
     })
 
