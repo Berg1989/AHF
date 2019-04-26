@@ -8,7 +8,7 @@ onload = () => {
             username: username.value,
             password: password.value,
         };
-        const resultat = await fetch("/user/add", {
+        const resultat = await fetch("/login/add", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json'}

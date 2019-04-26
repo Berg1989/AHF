@@ -16,7 +16,6 @@ app.engine('hbs', hbs.express4({
   }));
 app.set('view engine', 'hbs');
 app.set('views', 'views');
-//hbs.registerPartials('templates');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('tiny'));
@@ -32,12 +31,10 @@ mongoose.Promise = Promise;
 mongoose.connect(config.mongodb, {useNewUrlParser: true});
 
 // ROUTES FOR THE APP
-const router = require('./routes/routes');
-app.use('/api', router);
-const sessionRouter = require('./routes/session');
-app.use('/session', sessionRouter);
-const userRouter = require('./routes/user');
-app.use('/user', userRouter);
+const registrationRouter = require('./routes/registration');
+app.use('/registration', registrationRouter);
+const loginRouter = require('./routes/login');
+app.use('/login', loginRouter);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;

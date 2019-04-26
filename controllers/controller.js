@@ -1,36 +1,35 @@
 "use strict";
 
-const User = require('../models/user');
+const Member = require('../models/member');
 const fetch = require('node-fetch');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // Returns a promise that resolves when the user is created
-exports.createUser = async (username, password) => {
-    password = await bcrypt.hash(password, saltRounds);
-    const user = new User({
-        //firstname,
-        //lastname,
-        username,
-        password
-        //email
-        //phone,
-        //birth,
-        //accesslevel,
-        //zipcode,
-        //street
-    });
-    return user.save();
+exports.createMember = async (email, password) => {
+        password = await bcrypt.hash(password, saltRounds);
+        const member = new Member({
+            //firstname,
+            //lastname,
+            password,
+            email
+            //dogtag,
+            //phone,
+            //birth,
+            //usertype,
+            //zipcode,
+            //street
+        });
+        return member.save();
 };
 
-exports.findUser = async (username) => {
-    return User.findOne({ username: username }).exec();
+exports.findMember = async (email) => {
+    return Member.findOne({ email: email }).exec();
 };
 
-exports.login = async (username, password) => {
-    const user = await exports.findUser(username);
-    if (user) {
-        //const json = await user.json();
-        return await bcrypt.compare(password, user.password);
+exports.login = async (email, password) => {
+    const member = await exports.findMember(email);
+    if (member) {
+        return await bcrypt.compare(password, member.password);
     } else return false;
 };
