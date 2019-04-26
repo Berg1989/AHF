@@ -1,5 +1,5 @@
 async function createSubscriptionType(){
-    document.querySelector('##btnOpretId').onclick = () => {
+    document.querySelector('#btnOpretId').onclick = () => {
         const msg = {
             name: document.querySelector('#nameInput').value,
             duration: document.querySelector('#subLenghtInput').value, //check om nummer

@@ -14,7 +14,7 @@ router
 })
 
 .post('/subscriptionTypes', (request,response) =>{
-    const {name, duration, mdrprice} = request.body;
+    const {name, duration, mdrPrice} = request.body;
     controller.createSubType(name, duration, mdrPrice)
         .then (() => response.json({message: "SubscriptionType saved"}))
         .catch(err =>{
