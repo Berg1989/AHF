@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 
 router
     .post('/', [
+        //yey
         //check om email og denne allerede existere i database
         check('email', 'Must be a valid email')
             .isEmail()
