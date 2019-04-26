@@ -7,11 +7,11 @@ router
 .get('/', async (request, response) => {
     response.render('subscriptionType');
 })
-.get('/subscriptionTypes', (request,response) =>{
-    controller.getSubTypes().then(result =>{
-        response.send(result);
-    });
-})
+//.get('/subscriptionTypes', (request,response) =>{
+  //  controller.getSubTypes().then(result =>{
+    //    response.send(result);
+    //});
+//})
 
 .post('/subscriptionTypes', (request,response) =>{
     const {name, duration, mdrPrice} = request.body;
