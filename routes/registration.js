@@ -1,42 +1,37 @@
 const controller = require("../controllers/controller");
 const express = require('express');
-const {check} = require('express-validator/check')
+const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-    .post('/', async (request, response) => {
-        const { email, password } = request.body;
-
-        request.checkBody('email', 'email is required').notEmpty().isEmail();
-        request.checkBody('password', 'Password is required').notEmpty();
-
-        const errors = request.validationErrors();
-
-        if (errors) {
-            request.session.errors = errors;
+    .post('/', [
+        //check om email og denne allerede existere i database
+        check('email', 'Must be a valid email')
+            .isEmail()
+            .custom(async email => {
+                const result = await controller.findMember(email);
+                if (result)
+                    return Promise.reject('Email already in use');
+            }),
+        //check om password er min 5 chars lang
+        check('password', 'Password must be 5 characters or longer')
+            .isLength({ min: 5 })
+    ], async (request, response) => {
+        const errs = request.validationErrors();
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = errs;
             request.session.success = false;
             response.redirect('/registration');
-        }else {
-            result = await controller.createMember(email, password);
+        } else {
+            const result = await controller.createMember(request.body.email, request.body.password);
             if (result) {
+                request.session.user = result;
                 request.session.success = true;
-                request.session.user = email;
                 response.redirect('/');
-            } else {
-                request.session.errors = 'Invalid email and/or password';
-                request.session.success = false;
-                response.redirect('/registraion');
             }
         }
-
-        controller.createUser(email, password)
-            .then(result => response.json({ message: 'user saved!', newMember: result }))
-            .catch(err => {
-                console.error("Error: " + err);
-                if (err.stack) console.error(err.stack);
-                response.status(500).send(err);
-            });
     })
     .get('/', function (request, response) {
         response.render('registration', { success: request.session.success, errors: request.session.errors, user: request.session.user });
