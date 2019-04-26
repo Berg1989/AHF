@@ -38,6 +38,7 @@ app.use('/login', loginRouter);
 const userProfiles = require('./routes/userprofiles');
 app.use('/userprofiles', userProfiles);
 
+
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
 app.listen(port);
