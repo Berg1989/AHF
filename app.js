@@ -5,12 +5,26 @@ const express = require('express');
 const morgan = require('morgan');
 const config = require('./config');
 const session = require('express-session');
+const hbs = require('express-hbs');
+const expressValidator =  require('express-validator');
+const cookeParser =  require('cookie-parser');
+const bodyParser =  require('body-parser');
 
 const app = express();
+app.engine('hbs', hbs.express4({
+    partialsDir: 'views/partials'
+  }));
+app.set('view engine', 'hbs');
+app.set('views', 'views');
+//hbs.registerPartials('templates');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('tiny'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookeParser());
 app.use(session({secret: 'hemmelig', saveUninitialized: true, resave: true}));
+app.use(expressValidator());
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');

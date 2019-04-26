@@ -6,14 +6,14 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 // Returns a promise that resolves when the user is created
-exports.createUser = async (username, firstname, lastname, email, password) => {
+exports.createUser = async (username, password) => {
     password = await bcrypt.hash(password, saltRounds);
     const user = new User({
-        firstname,
-        lastname,
+        //firstname,
+        //lastname,
         username,
-        password,
-        email
+        password
+        //email
         //phone,
         //birth,
         //accesslevel,
@@ -28,7 +28,9 @@ exports.findUser = async (username) => {
 };
 
 exports.login = async (username, password) => {
-        const user = await exports.findUser(username).json();
-        if (user) return hashCheck = await bcrypt.compare(password, user.password);
-        else return false;
+    const user = await exports.findUser(username);
+    if (user) {
+        //const json = await user.json();
+        return await bcrypt.compare(password, user.password);
+    } else return false;
 };

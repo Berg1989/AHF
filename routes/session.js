@@ -16,13 +16,8 @@ router
 })
 
 .get('/', function (request, response) {
-    const navn = request.session.navn; //id is better
-    if (navn) {
-        response.render('session', {navn});
-    }
-    else {
-        response.render('login');
-    }
+    response.render('login', {errors : request.session.errors});
+    request.session.errors = null;
 })
 
 .get('/logout', function (request, response) {
