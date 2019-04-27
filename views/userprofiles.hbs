@@ -7,46 +7,71 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>User profiles</title>
     <script src="script.js" defer></script>
-    <script src="/public/css/bootstrap.min.css"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+
     <div class="container">
-        <div class="row">
-            <label class="col-lg-3">Fornavn: </label>
-            <input class="col-lg-3" id="firstName" type="text" placeholder="Fornavn">
-            <label class="col-lg-3">Efternavn: </label>
-            <input class="col-lg-3" id="lastName" type="text" placeholder="Efternavn">
-        </div>
+
 
         <div class="row">
-            <label class="col-lg-3">Alder: </label>
-            <input class="col-lg-3" id="age" type="number" placeholder="Alder" min="0">
-            <label class="col-lg-3">Brugernavn: </label>
-            <input class="col-lg-3" id="username" type="text" placeholder="Brugernavn">
-        </div>
-        <div class="row">
-            <label class="col-lg-3">Adresse</label>
-            <input class="col-lg-3" id="address" type="text" placeholder="Adresse">
-            <label class="col-lg-3">Bynavn</label>
-            <input class="col-lg-3" id="cityname" type="text" placeholder="Bynavn">
-        </div>
 
-        <div class="row">
-            <label class="col-lg-3">Post nr.</label>
-            <input class="col-lg-3" maxlength="4" id="zipcode" type="number" placeholder="Post nr.">
-            <label class="col-lg-3">Fødselsdato</label>
-            <input class="col-lg-3" id="birthdate" type="date">
-        </div>
-        <div class="row">
-            <label class="col-lg-3">Tlf. nummer</label>
-            <input class="col-lg-3" maxlength="11" id="phoneNumer" type="tel">
-            <label class="col-lg-3">E-Mail</label>
-            <input class="col-lg-3" id="email" type="email" placeholder="E-Mail">
-        </div>
-        <div class="row">
-            <button class="coll-lg-12 align-center"></button>
+            <!-- list row -->
+            <div class="col-lg-6">
+                <select class="input-medium" size="10">
+                    <option value="1">Item #1</option>
+                    <option value="2">Item #2</option>
+                    <option value="3">Item #3</option>
+                    <option value="4">Item #4</option>
+                    <option value="5">Item #5</option>
+                    <option value="6">Item #6</option>
+                    <option value="7">Item #7</option>
+                </select>
+            </div>
+            <!-- end of list row -->
+
+            <!-- information fields row -->
+            <div class="col-lg-6">
+                <div class="row">
+                    <label class="col-lg-3">Fornavn: </label>
+                    <input class="col-lg-3" id="firstName" type="text" placeholder="Fornavn">
+                    <label class="col-lg-3">Efternavn: </label>
+                    <input class="col-lg-3" id="lastName" type="text" placeholder="Efternavn">
+                </div>
+
+                <div class="row">
+                    <label class="col-lg-3">Alder: </label>
+                    <input class="col-lg-3" id="age" type="number" placeholder="Alder" min="0">
+                    <label class="col-lg-3">Brugernavn: </label>
+                    <input class="col-lg-3" id="username" type="text" placeholder="Brugernavn">
+                </div>
+                <div class="row">
+                    <label class="col-lg-3">Adresse</label>
+                    <input class="col-lg-3" id="address" type="text" placeholder="Adresse">
+                    <label class="col-lg-3">Bynavn</label>
+                    <input class="col-lg-3" id="cityname" type="text" placeholder="Bynavn">
+                </div>
+
+                <div class="row">
+                    <label class="col-lg-3">Post nr.</label>
+                    <input class="col-lg-3" maxlength="4" id="zipcode" type="number" placeholder="Post nr.">
+                    <label class="col-lg-3">Fødselsdato</label>
+                    <input class="col-lg-3" id="birthdate" type="date">
+                </div>
+                <div class="row">
+                    <label class="col-lg-3">Tlf. nummer</label>
+                    <input class="col-lg-3" maxlength="11" id="phoneNumer" type="tel">
+                    <label class="col-lg-3">E-Mail</label>
+                    <input class="col-lg-3" id="email" type="email" placeholder="E-Mail">
+                </div>
+                <div class="row">
+                    <button class="coll-lg-12">knap test</button>
+                </div>
+            </div>
+            <!-- end of information fields row -->
         </div>
     </div>
 </body>
+
 </html>
