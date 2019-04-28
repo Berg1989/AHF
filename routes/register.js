@@ -12,7 +12,7 @@ router
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
             };
-            response.render('registration', {
+            response.render('register', {
                 layout: 'main',
                 success: request.session.success,
                 errors: request.session.errors,
@@ -50,7 +50,7 @@ router
             request.session.firstname = request.body.firstname;
             request.session.lastname = request.body.lastname;
             request.session.success = false;
-            response.redirect('/registration');
+            response.redirect('/register');
         } else {
             const { email, password, firstname, lastname } = request.body;
             const result = await controller.createMember(email, password, firstname, lastname);

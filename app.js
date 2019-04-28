@@ -35,8 +35,8 @@ mongoose.connect(config.mongodb, { useNewUrlParser: true });
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
 
-const registrationRouter = require('./routes/registration');
-app.use('/registration', registrationRouter);
+const registerRouter = require('./routes/register');
+app.use('/register', registerRouter);
 
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
