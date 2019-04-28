@@ -1,15 +1,16 @@
 {
   "dependencies": {
     "bcryptjs": "*",
+    "body-parser": "*",
+    "cookie-parser": "*",
     "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
     "express-session": "^1.15.6",
-    "express-hbs": "*",
-    "path": "*",
     "express-validator": "*",
+    "handlebars": "^4.1.2",
     "mongoose": "^5.4.21",
     "morgan": "^1.9.1",
     "node-fetch": "^2.3.0",
-    "body-parser": "*",
-    "cookie-parser": "*"
+    "path": "*"
   }
 }

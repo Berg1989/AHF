@@ -5,6 +5,27 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
+    .get('/', function (request, response) {
+        if (!request.session.user) {
+            response.locals.metaTags = {
+                title: 'Register',
+                description: 'Here goes the description',
+                keywords: 'Here goes keywords'
+            };
+            response.render('registration', {
+                layout: 'main',
+                success: request.session.success,
+                errors: request.session.errors,
+                user: request.session.user,
+                email: request.session.email,
+                firstname: request.session.firstname,
+                lastname: request.session.lastname
+            });
+            request.session.errors = null;
+        } else {
+            response.redirect('/');
+        }
+    })
     .post('/', [
         //check om email og denne allerede existere i database
         check('email', 'Please enter a valid email')
@@ -39,22 +60,6 @@ router
                 response.redirect('/profile');
             }
         }
-    })
-    .get('/', function (request, response) {
-        if (!request.session.user) {
-            response.render('registration', { 
-                success: request.session.success, 
-                errors: request.session.errors, 
-                user: request.session.user,
-                email: request.session.email,
-                firstname: request.session.firstname,
-                lastname: request.session.lastname
-             });
-            request.session.errors = null;
-        } else {
-            response.redirect('/');
-        }
-
-    })
+    });
 
 module.exports = router;

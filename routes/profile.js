@@ -24,6 +24,11 @@ router
         const user = request.session.user;
         const result = await controller.getMemberById(request.params.id);
         if (result) {
+            response.locals.metaTags = {
+                title: 'Profile - ' + result.firstname,
+                description: 'Here goes the description',
+                keywords: 'Here goes keywords'
+            };
             if (user && user._id === request.params.id) {
                 response.render('personalProfile', { user });
             } else {

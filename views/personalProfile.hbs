@@ -1,24 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Profile - {{user.firstname}}</title>
-</head>
-
-<body>
-    <h1>Profil tilhørende: {{user.firstname}}</h1>
-    <form method="POST" action="/profile/logout">
-        <button type="submit" name="logout">Logout</button>
-    </form>
- 
-    <br>
-
-    <form method="POST" action="/profile/edit">
-        <button type="submit" name="logout">Edit</button>
-    </form>
-</body>
-
-</html>
+<div class="row">
+    <div class="col">
+        <h1>Profil tilhørende: {{user.firstname}}</h1>
+        <form method="POST" action="/profile/logout">
+            <button type="submit" name="logout">Logout</button>
+        </form>
+    </div>
+</div>

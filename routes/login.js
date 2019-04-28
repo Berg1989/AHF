@@ -5,6 +5,21 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
+    .get('/', function (request, response) {
+        response.locals.metaTags = {
+            title: 'Login',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };
+        response.render('login', {
+            layout: 'main',
+            success: request.session.success,
+            errors: request.session.errors,
+            email: request.session.email,
+            user: request.session.user
+        });
+        request.session.errors = null;
+    })
     .post('/', [
         //check email og om den findes i db
         check('email', 'Email is required')
@@ -12,11 +27,11 @@ router
         //check password
         check('password', 'Password is required')
             .isLength({ min: 1 })
-            /*.custom(async (password, { req }) => {
-                const result = await controller.login(req.body.email, password);
-                if (!result)
-                    return Promise.reject('Password and email do not match');
-            })*/
+        /*.custom(async (password, { req }) => {
+            const result = await controller.login(req.body.email, password);
+            if (!result)
+                return Promise.reject('Password and email do not match');
+        })*/
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
@@ -38,15 +53,6 @@ router
                 response.redirect('/login');
             }
         }
-    })
-    .get('/', function (request, response) {
-        response.render('login', {
-            success: request.session.success,
-            errors: request.session.errors,
-            email: request.session.email,
-            user: request.session.user
-        });
-        request.session.errors = null;
-    })
+    });
 
 module.exports = router;
