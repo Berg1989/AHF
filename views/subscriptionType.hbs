@@ -1,4 +1,12 @@
-<div class="container">
+<div class="row">
+    <div class="col">
+        {{# if errors }}
+        {{# each errors }}
+        <p class="alert alert-danger">{{ this.msg }}</p>
+        {{/each}}
+        {{/if}}
+    </div>
+</div>
     <h1>Kontingenter</h1>
     <div class="row">
         <div class="col">
@@ -19,7 +27,6 @@
             </form>
         </div>
     </div>
-</div>
 <div class="row">
     <ul class="list-group">
         <li class="subscriptions"> </li>
