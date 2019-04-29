@@ -23,6 +23,9 @@ router
             request.session.success = true;
             response.redirect('/subscriptionType');
         }
+    }else{
+        request.session.success = false;
+        request.redirect('/subscriptionType');
     }
 });
 
