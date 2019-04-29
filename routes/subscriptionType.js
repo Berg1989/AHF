@@ -13,15 +13,17 @@ router
     //});
 //})
 
-.post('/', (request,response) =>{
+.post('/', async (request,response) =>{
     const {name, duration, mdrPrice} = request.body;
-    controller.createSubType(name, duration, mdrPrice)
-        .then (() => response.json({message: "SubscriptionType saved"}))
-        .catch(err =>{
-            console.log("Error " + err);
-            if(err.stack) console.error(err.stack);
-            response.status(500).send(err);
-        });
+    const exists = await controller.findSubType(name);
+    if(!exists){
+        const result = await controller.createSubType(name, duration, mdrPrice)
+        if(result){
+            request.session.subType = result;
+            request.session.success = true;
+            response.redirect('/subscriptionType');
+        }
+    }
 });
 
 //.delete('/subscriptionTypes/:_ID', (request,response) =>{
