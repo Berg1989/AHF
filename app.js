@@ -26,6 +26,16 @@ app.use(cookeParser());
 app.use(session({ secret: 'hemmelig', saveUninitialized: true, resave: true }));
 app.use(expressValidator());
 
+hbs.registerHelper("select", function (value, options) {
+  return options.fn(this)
+      .split('\n')
+      .map(function (v) {
+          var t = 'value="' + value + '"'
+          return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
+      })
+      .join('\n')
+})
+
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;

@@ -1,34 +1,49 @@
 "use strict";
 
 const Member = require('../models/member');
+const Usertype = require('../models/usertype');
 const fetch = require('node-fetch');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // Returns a promise that resolves when the user is created
-exports.createMember = async (email, password, firstname, lastname) => {
+exports.createMember = async (email, password, firstname, lastname, usertype) => {
         password = await bcrypt.hash(password, saltRounds);
-        const usertype = '5cc6aec31c9d4400004e6db5'
         const member = new Member({
             firstname,
             lastname,
             password,
             email,
-            //dogtag,
-            //phone,
-            //birth,
             usertype
-            //zipcode,
-            //street
         });
         return member.save();
+};
+
+exports.findMembers = () => {
+    return Member.find().exec();
+};
+
+exports.findUserTypes = () => {
+    return Usertype.find().exec();
+};
+
+exports.findUsertype = (id) => {
+    return Usertype.findOne({_id : id}).exec();
+};
+
+exports.saveUsertype = (title, accesslevel) => {
+    const usertype = new Usertype({
+        title,
+        accesslevel,
+    });
+    return usertype.save();
 };
 
 exports.findMember = (email) => {
     return Member.findOne({ email: email }).exec();
 };
 
-exports.getMemberById = async (id) => {
+exports.findMemberById = (id) => {
     return Member.findOne({ _id: id }).exec();
 };
 

@@ -53,7 +53,8 @@ router
             response.redirect('/register');
         } else {
             const { email, password, firstname, lastname } = request.body;
-            const result = await controller.createMember(email, password, firstname, lastname);
+
+            const result = await controller.createMember(email, password, firstname, lastname, 'Member');
             if (result) {
                 request.session.user = result;
                 request.session.success = true;

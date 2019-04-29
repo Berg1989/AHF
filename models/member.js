@@ -4,14 +4,24 @@ const Schema = mongoose.Schema;
 const member = new Schema({
     firstname: String,
     lastname: String,
-    dogtag: String,
     password: String,
     email: String,
-    phone: String,
-    birth: Date,
-    usertype: { type: Schema.Types.ObjectId, ref: 'usertype' }, //0*..1 link to usertype
-    zipcode: Number,
-    street: String,
+    info: {
+        birth: Date,
+        dogtag: String,
+        phone: String,
+        zipcode: Number,
+        street: String
+    },
+    type: {
+        title: String,
+        level: Number
+    },
+    subscription: {
+        type: { type: Schema.Types.ObjectId, ref: 'subtype' },
+        date: Date,
+        active: Boolean
+    }    
 });
 
 member.methods.toString = function () {
