@@ -53,6 +53,19 @@ exports.createSubType = function (name, duration, mdrPrice) {
     return subType.save();
 }
 
+exports.getSubTypes = function () {
+    return SubscriptionType.find().exec();
+}
+
+exports.createSubType = function (name, duration, mdrPrice) {
+    const subType = new SubscriptionType({
+        name,
+        duration,
+        mdrPrice,
+    });
+    return subType.save();
+}
+
 exports.checkpassword = async (plaintextPassword, hash) => {
     return await bcrypt.compare(plaintextPassword, hash);
 };
