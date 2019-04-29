@@ -85,11 +85,11 @@ exports.login = async (email, password) => {
     } else return false;
 };
 
-exports.getSubTypes = function () {
+exports.getSubTypes = async () => {
     return SubscriptionType.find().exec();
 }
 
-exports.createSubType = function (name, duration, mdrPrice) {
+exports.createSubType = async (name, duration, mdrPrice) => {
     const subType = new SubscriptionType({
         name,
         duration,
@@ -97,6 +97,10 @@ exports.createSubType = function (name, duration, mdrPrice) {
     });
     return subType.save();
 }
+
+exports.findSubType = async (name) => {
+    return SubscriptionType.findOne({ name: name }).exec();
+};
 
 exports.checkpassword = async (plaintextPassword, hash) => {
     return await bcrypt.compare(plaintextPassword, hash);
