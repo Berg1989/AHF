@@ -16,7 +16,7 @@
         <h1>Kontingenter</h1>
         <div class="row">
             <div class="col">
-                <form method="POST" action="/subscriptionType">
+                <form method="post" action="/subscriptionType">
                     <div class="form-group">
                         <label for="subscriptionInfoInput">Kontingent information</label>
                         <input type="subscriptionInfo" class="form-control" id="subscriptionInfoInput"
@@ -31,18 +31,15 @@
                         <label for="subPriceInput">Kontingent pris</label>
                         <input type="subPrice" class="form-control" id="subPriceInput" placeholder="Månedlig pris">
                     </div>
-                    <button type="opret" class="btn btn-primary">Opret</button>
+                    <button type="submit" class="btn btn-primary">Opret</button>
                 </form>
             </div>
-            
-            </div>
         </div>
-
-<div class="row">
-                <ul class="list-group">
-                    <li class = "item"> </li>
-                </ul>
+    </div>
+    <div class="row">
+        <ul class="list-group">
+            <li class="item"> </li>
+        </ul>
     </div>
 </body>
-
 </html>
