@@ -42,8 +42,6 @@ const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
 const subscriptionTypeRouter = require('./routes/subscriptionType');
 app.use('/subscriptionType', subscriptionTypeRouter);
-const subscriptionTypeRouter = require('./routes/subscriptionType');
-app.use('/subscriptionType', subscriptionTypeRouter);
 const userProfiles = require('./routes/userprofiles');
 app.use('/userprofiles', userProfiles);
 
