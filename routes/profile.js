@@ -35,7 +35,7 @@ router
                 response.render('profile', { result });
             }
         } else {
-            response.sendStatus(404);
+            response.sendStatus(404); //render error
         }
     })
     .post('/logout', (request, response) => {

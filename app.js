@@ -44,6 +44,9 @@ app.use('/login', loginRouter);
 const profileRouter = require('./routes/profile');
 app.use('/profile', profileRouter);
 
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
+
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
 app.listen(port);

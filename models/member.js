@@ -9,12 +9,12 @@ const member = new Schema({
     email: String,
     phone: String,
     birth: Date,
-    usertype: String,
+    usertype: { type: Schema.Types.ObjectId, ref: 'usertype' }, //0*..1 link to usertype
     zipcode: Number,
     street: String,
 });
 
-member.methods.toString = function() {
+member.methods.toString = function () {
     return "Navn: " + this.firstname + ", Efternavn: " + this.lastname;
 };
 

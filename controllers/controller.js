@@ -8,22 +8,23 @@ const saltRounds = 10;
 // Returns a promise that resolves when the user is created
 exports.createMember = async (email, password, firstname, lastname) => {
         password = await bcrypt.hash(password, saltRounds);
+        const usertype = '5cc6aec31c9d4400004e6db5'
         const member = new Member({
             firstname,
             lastname,
             password,
-            email
+            email,
             //dogtag,
             //phone,
             //birth,
-            //usertype,
+            usertype
             //zipcode,
             //street
         });
         return member.save();
 };
 
-exports.findMember = async (email) => {
+exports.findMember = (email) => {
     return Member.findOne({ email: email }).exec();
 };
 
