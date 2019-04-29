@@ -13,7 +13,7 @@ router
     //});
 //})
 
-.post('/subscriptionTypes', (request,response) =>{
+.post('/', (request,response) =>{
     const {name, duration, mdrPrice} = request.body;
     controller.createSubType(name, duration, mdrPrice)
         .then (() => response.json({message: "SubscriptionType saved"}))
