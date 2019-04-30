@@ -7,16 +7,25 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // Returns a promise that resolves when the user is created
-exports.createMember = async (email, password, firstname, lastname, usertype) => {
-        password = await bcrypt.hash(password, saltRounds);
-        const member = new Member({
-            firstname,
-            lastname,
-            password,
-            email,
-            usertype
-        });
-        return member.save();
+exports.createMember = async (email, password, firstname, lastname, level) => {
+    const type = { title: exports.userTitle(level), level };
+    password = await bcrypt.hash(password, saltRounds);
+
+    const member = new Member({
+        firstname,
+        lastname,
+        password,
+        email,
+        type 
+    });
+    return member.save();
+};
+
+exports.userTitle = (level) => {
+    if (level === '1') level = 'admin';
+    else if (level === '2') level = 'frivillig';
+    else level = 'medlem';
+    return level;
 };
 
 exports.findMembers = () => {
@@ -28,7 +37,7 @@ exports.findUserTypes = () => {
 };
 
 exports.findUsertype = (id) => {
-    return Usertype.findOne({_id : id}).exec();
+    return Usertype.findOne({ _id: id }).exec();
 };
 
 exports.saveUsertype = (title, accesslevel) => {

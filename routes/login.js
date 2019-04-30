@@ -13,7 +13,6 @@ router
         };
         response.render('login', {
             action: '/login',
-            success: request.session.success,
             errors: request.session.errors,
             email: request.session.email,
             user: request.session.user
@@ -37,19 +36,16 @@ router
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             request.session.email = request.body.email;
-            request.session.success = false;
             response.redirect('/login');
         } else {
             const { email, password } = request.body;
             const result = await controller.login(email, password);
             if (result) {
                 request.session.user = result;
-                request.session.success = true;
                 response.redirect('/profile/' + result._id);
             } else {
                 request.session.errors = [{ msg: 'Username and password do not match' }];
                 request.session.email = request.body.email;
-                request.session.success = false;
                 response.redirect('/login');
             }
         }

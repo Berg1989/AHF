@@ -6,23 +6,22 @@
             <p class="alert alert-danger">{{ this.msg }}</p>
             {{/each}}
             {{/if}}
-            {{# if success == true }}
-                <p class="alert alert-danger">{{ this.msg }}</p>
+            {{# if success }}
+                <p class="alert alert-success">{{ success.msg }}</p>
             {{/if}}
             <div class="panel-heading">
                 <h1>Registrer ny bruger</h1>
             </div>
             <div class="panel-body">
-                <form method="post" action="admin/register">
+                <form method="post" action="/admin/register">
                     <div class="form-group">
                         <label for="typeselect">Vælg en bruger type</label>
-                        <select name="usertype" class="form-control" id="typeselect">
+                        <select name="level" class="form-control" id="typeselect">
                             {{#select "1"}}
                             <option value="0" disabled="true">Vælg</option>
                             <option value="1">Admin</option>
-                            <option value="2">Bestyrrelse</option>
-                            <option value="3">Frivillig</option>
-                            <option value="4">Medlem</option>
+                            <option value="2">Frivillig</option>
+                            <option value="3">Medlem</option>
                             {{/select}}
                             <!--{{# each usertypes }}
                             <option value="{{ this._id }}" {{#selected}} selected="selected" {{/selected}}>{{ this.title }}</option>

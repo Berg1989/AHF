@@ -13,8 +13,6 @@ router
                 keywords: 'Here goes keywords'
             };
             response.render('register', {
-                layout: 'main',
-                success: request.session.success,
                 errors: request.session.errors,
                 user: request.session.user,
                 email: request.session.email,
@@ -49,15 +47,13 @@ router
             request.session.email = request.body.email;
             request.session.firstname = request.body.firstname;
             request.session.lastname = request.body.lastname;
-            request.session.success = false;
             response.redirect('/register');
         } else {
             const { email, password, firstname, lastname } = request.body;
 
-            const result = await controller.createMember(email, password, firstname, lastname, 'Member');
+            const result = await controller.createMember(email, password, firstname, lastname, 3);
             if (result) {
                 request.session.user = result;
-                request.session.success = true;
                 response.redirect('/profile');
             }
         }
