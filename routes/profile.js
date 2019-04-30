@@ -22,7 +22,7 @@ router
     })
     .get('/:id', async (request, response) => {
         const user = request.session.user;
-        const result = await controller.getMemberById(request.params.id);
+        const result = await controller.findMemberById(request.params.id);
         if (result) {
             response.locals.metaTags = {
                 title: 'Profile - ' + result.firstname,
