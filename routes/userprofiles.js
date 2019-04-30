@@ -10,4 +10,16 @@ router
         request.session.errors = null;
     })
 
+    .get('/userprofiles', async (request, response) => {
+        const { name } = request.body;
+        const users = await controller.findMembersByText(name);
+        return await users.json();
+    }
+
+    
+
+    )
+
+
+    
 module.exports = router;

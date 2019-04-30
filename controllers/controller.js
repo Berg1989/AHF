@@ -28,6 +28,11 @@ exports.findMember = async (email) => {
     return Member.findOne({ email: email }).exec();
 };
 
+exports.findMembersByText = async (text) => {
+    return Member.find({$text: {$search: text }}).exec();
+};
+
+
 exports.getMemberById = async (id) => {
     return Member.findOne({ _id: id }).exec();
 };
