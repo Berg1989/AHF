@@ -73,6 +73,10 @@ exports.findMember = (email) => {
     return Member.findOne({ email: email }).exec();
 };
 
+exports.findMembersByText = async (text) => {
+    return Member.find({$text: {$search: text }}).exec();
+};
+
 exports.findMemberById = (id) => {
     return Member.findById(id).exec();
 };
