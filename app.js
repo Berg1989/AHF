@@ -40,13 +40,27 @@ app.use('/register', registerRouter);
 
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+
 const subscriptionTypeRouter = require('./routes/subscriptionType');
 app.use('/subscriptionType', subscriptionTypeRouter);
+
 const userProfiles = require('./routes/userprofiles');
 app.use('/userprofiles', userProfiles);
 
 const profileRouter = require('./routes/profile');
 app.use('/profile', profileRouter);
+
+const statisticsRouter = require('./routes/statistics');
+app.use('/statistics', statisticsRouter);
+
+const memberStatisticsRouter = require('./routes/memberStatistics');
+app.use('/memberStatistics', memberStatisticsRouter);
+
+const subsriptionStatisticsRouter = require('./routes/subscriptionStatistics');
+app.use('/subscriptionStatistics', subsriptionStatisticsRouter);
+
+const shopStatisticsRouter = require('./routes/shopStatistics');
+app.use('/shopStatistics', shopStatisticsRouter);
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
