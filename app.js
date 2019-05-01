@@ -10,6 +10,7 @@ const xhbs = require('express-handlebars')
 const expressValidator = require('express-validator');
 const cookeParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const handlebarsIntl = require('handlebars-intl');
 
 const app = express();
 app.engine('hbs', xhbs({
@@ -17,6 +18,7 @@ app.engine('hbs', xhbs({
   extname: '.hbs'
 }));
 app.set('view engine', 'hbs');
+handlebarsIntl.registerWith(hbs);
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('tiny'));

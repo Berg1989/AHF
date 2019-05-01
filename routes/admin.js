@@ -91,21 +91,50 @@ router
     .get('/users/id=:id', async (request, response) => {
         try {
             const user = await controller.findMemberById(request.params.id);
+            console.log(user.info.birth);
             if (user) {
                 response.locals.metaTags = {
                     title: 'Admin - edit user: ' + user.info.firstname,
                     description: 'Here goes the description',
                     keywords: 'Here goes keywords'
                 };
-                response.render('admin/user', { layout: 'admin', user });
+                response.render('admin/user', {
+                    layout: 'admin',
+                    user,
+                    errors: request.session.errors,
+                    success: request.session.success
+                });
+                request.session.errors = null;
+                request.session.success = null;
             }
-        } catch(err) {
+        } catch (err) {
             response.render('error');
         }
         // Render a users info to edit
     })
-    .post('/users/id=:id', async (request, response) => {
+    .post('/users/id=:id', [
+        check('firstname', 'Fornavn skal udfyldes')
+            .isLength({ min: 2 }),
+        check('lastname', 'Efternavn skal udfyldes')
+            .isLength({ min: 2 }),
+        check('zipcode', 'Postnummer skal være et tal')
+            .optional({ checkFalsy: true }) // Can be falsy
+            .isDecimal()
+    ], async (request, response) => {
         // handle post requests of a user edit
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            response.redirect('/admin/users/id=' + request.params.id);
+        } else {
+            const { firstname, lastname, birth, phone, zipcode, street } = request.body;
+            const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street);
+
+            if (result) {
+                request.session.success = { msg: 'Success - bruger opdateret' };
+                response.redirect('/admin/users/id=' + request.params.id);
+            }
+        }
     })
 
 
@@ -127,8 +156,8 @@ router
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
             };
-            response.render('login', { 
-                action: '/admin/login', 
+            response.render('login', {
+                action: '/admin/login',
                 errors: request.session.errors,
                 email: request.session.email,
                 user: request.session.user

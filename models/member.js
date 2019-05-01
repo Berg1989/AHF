@@ -8,7 +8,7 @@ const member = new Schema({
     info: {
         firstname: String,
         lastname: String,
-        birth: Date,
+        birth: String,
         phone: String,
         zipcode: Number,
         street: String
