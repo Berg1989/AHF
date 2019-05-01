@@ -105,3 +105,7 @@ exports.findSubType = async (name) => {
 exports.checkpassword = async (plaintextPassword, hash) => {
     return await bcrypt.compare(plaintextPassword, hash);
 };
+
+exports.createSubStatistics = async (name) => {
+    return member.SubscriptionType.name.findOne({name: name}).exec();
+}
