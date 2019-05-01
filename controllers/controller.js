@@ -16,9 +16,16 @@ exports.createMember = async (email, password, firstname, lastname, level) => {
         password,
         email,
         info,
-        type 
+        type
     });
     return member.save();
+};
+
+exports.updateUser = (id, firstname, lastname) => {
+    return Member.findByIdAndUpdate(
+        id,
+        { info: { firstname: firstname, lastname: lastname } }
+    )
 };
 
 exports.userTitle = (level) => {
@@ -53,7 +60,7 @@ exports.findMember = (email) => {
 };
 
 exports.findMemberById = (id) => {
-    return Member.findOne({ _id: id }).exec();
+    return Member.findById(id).exec();
 };
 
 exports.login = async (email, password) => {
