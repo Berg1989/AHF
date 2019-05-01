@@ -40,11 +40,14 @@ router
         request.session.success = false;
         response.redirect('/subscriptionType');
         
-    }
-});
+    };
+})
 
-//.delete('/subscriptionTypes/:_ID', (request,response) =>{
-//});
+.delete('/', async (request, require) => {
+    //Sletningen kan gøres via:
+    //radiobuttons
+    //formcontrol med en selection list som viser information om det valgte kontingent
+})
 
 
 
