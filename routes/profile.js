@@ -10,10 +10,10 @@ router
         if (!user) {
             response.redirect('/login');
         } else {
-            response.redirect('/profile/' + user._id)
+            response.redirect('/profile/id=' + user._id)
         }
     })
-    .get('/:id', async (request, response) => {
+    .get('/id=:id', async (request, response) => {
         try {
             const user = request.session.user;
             const result = await controller.findMemberById(request.params.id);
@@ -28,7 +28,7 @@ router
                         result,
                         success: request.session.success,
                         errors: request.session.errors,
-                        action: '/profile/' + request.params.id,
+                        action: '/profile/id=' + request.params.id,
                      });
                 } else {
                     response.render('profile', { result });
@@ -40,7 +40,7 @@ router
             response.render('error');
         }
     })
-    .post('/:id', [
+    .post('/id=:id', [
         check('firstname', 'Please enter your firstname')
             .isLength({ min: 2 }),
         check('lastname', 'Please enter your lastname')
@@ -50,18 +50,18 @@ router
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             request.session.success = false;
-            response.redirect('/profile/' + request.params.id);
+            response.redirect('/profile/id=' + request.params.id);
         } else {
             const { firstname, lastname } = request.body;
             const result = await controller.updateUser(request.params.id, firstname, lastname);
 
             if (result) {
                 request.session.success = { msg: 'Bruger data opdateret!' };
-                response.redirect('/profile/' + request.params.id);
+                response.redirect('/profile/id=' + request.params.id);
             }
         }
     })
-    .post('/:id/logout', (request, response) => {
+    .post('/id=:id/logout', (request, response) => {
         request.session.destroy(err => {
             if (err) {
                 console.log(err);

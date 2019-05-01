@@ -10,10 +10,10 @@
                 <p class="alert alert-success">{{ success.msg }}</p>
             {{/if}}
             <div class="panel-heading">
-                <h1>Registrer ny bruger</h1>
+                <h2>Registrer ny bruger</h2>
             </div>
             <div class="panel-body">
-                <form method="post" action="/admin/users/register">
+                <form method="post" action="/admin/users">
                     <div class="form-group">
                         <label for="typeselect">Vælg en bruger type</label>
                         <select name="level" class="form-control" id="typeselect">
@@ -23,9 +23,6 @@
                             <option value="2">Frivillig</option>
                             <option value="3">Medlem</option>
                             {{/select}}
-                            <!--{{# each usertypes }}
-                            <option value="{{ this._id }}" {{#selected}} selected="selected" {{/selected}}>{{ this.title }}</option>
-                            {{/each}}-->
                         </select>
                     </div>
                     <div class="form-group">
@@ -50,5 +47,13 @@
                 </form>
             </div>
         </div>
+    </div>
+    <div class="col">
+        <h2>Rediger eksisterende brugere</h2>
+        <ul>
+            {{# each users }}
+            <li><a href="/admin/users/id={{this._id}}">{{this.info.firstname}} {{this.info.lastname}}</a></li>
+            {{/each}}
+        </ul>
     </div>
 </div>

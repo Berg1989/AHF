@@ -10,11 +10,11 @@ router
     .get('/', async (request, response) => {
         const user = request.session.user;
         response.locals.metaTags = {
-            title: 'Frontpage',
+            title: 'Admin - Home',
             description: 'Here goes the description',
             keywords: 'Here goes keywords'
         };
-        response.render('admin/index', { user });
+        response.render('admin/index', { layout: 'admin', user });
         /*
         if (user && user.usertype.accesslevel < 3) {
             response.locals.metaTags = {
@@ -28,16 +28,19 @@ router
         }*/
     })
 
-    //Registrering
-    .get('/users/register', async (request, response) => {
+
+    .get('/users', async (request, response) => {
+        // Get users
         //const usertypes = await controller.findUserTypes();
         //const user = request.session.user;
         response.locals.metaTags = {
-            title: 'Admin - regitrer nyt medlem',
+            title: 'Admin - users',
             description: 'Here goes the description',
             keywords: 'Here goes keywords'
         };
-        response.render('admin/register', {
+        response.render('admin/users', {
+            layout: 'admin',
+            users: await controller.findMembers(),
             success: request.session.success,
             errors: request.session.errors,
             user: request.session.user,
@@ -47,7 +50,9 @@ router
         });
         request.session.errors = null;
     })
-    .post('/users/register', [
+    .post('/users', [
+        //Post new user
+
         //check email og om denne allerede existere i database
         check('email', 'Please enter a valid email')
             .isEmail()
@@ -72,18 +77,46 @@ router
             request.session.email = request.body.email;
             request.session.firstname = request.body.firstname;
             request.session.lastname = request.body.lastname;
-            response.redirect('/admin/users/register');
+            response.redirect('/admin/users');
         } else {
             const { level, email, password, firstname, lastname } = request.body;
             const result = await controller.createMember(email, password, firstname, lastname, level);
 
             if (result) {
-                request.session.user = result;
                 request.session.success = { msg: 'Success - ny bruger: ' + email + ', er oprettet' };
-                response.redirect('/admin/users/register');
+                response.redirect('/admin/users');
             }
         }
     })
+    .get('/users/id=:id', async (request, response) => {
+        try {
+            const user = await controller.findMemberById(request.params.id);
+            if (user) {
+                response.locals.metaTags = {
+                    title: 'Admin - edit user: ' + user.info.firstname,
+                    description: 'Here goes the description',
+                    keywords: 'Here goes keywords'
+                };
+                response.render('admin/user', { layout: 'admin', user });
+            }
+        } catch(err) {
+            response.render('error');
+        }
+        // Render a users info to edit
+    })
+    .post('/users/id=:id', async (request, response) => {
+        // handle post requests of a user edit
+    })
+
+
+    .get('/subsciptions', async (request, response) => {
+        // Render subscriptions and a create sub form
+    })
+    .post('/subsciptions', async (request, response) => {
+        // Render subscriptions and a create sub form
+    })
+
+
 
     //Login 
     .get('/login', function (request, response) {

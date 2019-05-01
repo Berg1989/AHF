@@ -42,7 +42,7 @@ router
             const result = await controller.login(email, password);
             if (result) {
                 request.session.user = result;
-                response.redirect('/profile/' + result._id);
+                response.redirect('/profile/id=' + result._id);
             } else {
                 request.session.errors = [{ msg: 'Username and password do not match' }];
                 request.session.email = request.body.email;
