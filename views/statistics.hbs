@@ -1,0 +1,13 @@
+<h2>Statistik</h1>
+    <h5>Se statistik over:</h4>
+        <div class='row'>
+            <div class='col'>
+                <select id='select'
+                    onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                    <option value="statistics"></option>
+                    <option value="shopStatistics" id='shopStatisticsIndex'>Shop</option>
+                    <option value="subscriptionStatistics" id='subStatisticsIndex'>Kontingenter</option>
+                    <option value="memberStatistics" id='memberStatisticsIndex'>Medlemmer</option>
+                </select>
+            </div>
+        </div>
