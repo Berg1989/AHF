@@ -75,6 +75,18 @@ app.use(function(req, res, next){
   res.status(404).render('error');
 });
 
+const statisticsRouter = require('./routes/statistics');
+app.use('/statistics', statisticsRouter);
+
+const memberStatisticsRouter = require('./routes/memberStatistics');
+app.use('/memberStatistics', memberStatisticsRouter);
+
+const subsriptionStatisticsRouter = require('./routes/subscriptionStatistics');
+app.use('/subscriptionStatistics', subsriptionStatisticsRouter);
+
+const shopStatisticsRouter = require('./routes/shopStatistics');
+app.use('/shopStatistics', shopStatisticsRouter);
+
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
 app.listen(port);
