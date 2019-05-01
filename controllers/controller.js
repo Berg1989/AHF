@@ -85,7 +85,7 @@ exports.login = async (email, password) => {
     } else return false;
 };
 
-exports.getSubTypes = async () => {
+exports.getSubTypes = () => {
     return SubscriptionType.find().exec();
 }
 

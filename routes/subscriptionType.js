@@ -16,7 +16,10 @@ router
         success: request.session.success,
         errors: request.session.errors,
         goodErrors: request.session.goodErrors,
+        subtypes: request.session.subtypes = await controller.getSubTypes()
     });
+    //console.log(await controller.getSubTypes());
+    //request.session.subtypes = await controller.getSubTypes();
     request.session.errors = null;
     request.session.goodErrors = null;
 })
