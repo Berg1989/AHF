@@ -16,6 +16,6 @@
     "path": "*"
   },
   "scripts": {
-    "test": "mocha --timeout 5000"
+    "test": "mocha --timeout 3000"
   }
 }
