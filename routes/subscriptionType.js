@@ -16,9 +16,18 @@ router
         success: request.session.success,
         errors: request.session.errors,
         goodErrors: request.session.goodErrors,
+        subtypes: request.session.subtypes = await controller.getSubTypes()
     });
+    //console.log(await controller.getSubTypes());
+    //request.session.subtypes = await controller.getSubTypes();
     request.session.errors = null;
     request.session.goodErrors = null;
+})
+
+.get('/getdata', async (request, response) => {
+    controller.getSubTypes().then(result =>{ 
+        response.send(result); 
+    }); 
 })
 
 .post('/', async (request,response) =>{
