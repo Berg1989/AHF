@@ -9,13 +9,13 @@ const saltRounds = 10;
 // Returns a promise that resolves when the user is created
 exports.createMember = async (email, password, firstname, lastname, level) => {
     const type = { title: exports.userTitle(level), level };
+    const info = { firstname: firstname, lastname: lastname };
     password = await bcrypt.hash(password, saltRounds);
 
     const member = new Member({
-        firstname,
-        lastname,
         password,
         email,
+        info,
         type 
     });
     return member.save();
