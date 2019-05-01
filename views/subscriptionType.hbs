@@ -12,28 +12,33 @@
         {{/if}}
     </div>
 </div>
-    <h1>Kontingenter</h1>
-    <div class="row">
-        <div class="col">
-            <form method="post" action="/subscriptionType">
-                <div class="form-group">
-                    <label for="subscriptionInfoInput">Kontingent information</label>
-                    <input type="subscriptionInfo" name="name" class="form-control" placeholder="Kontigent navn">
-                </div>
-                <div class="form-group">
-                    <label for="subLenghtInput">Kontingent længde</label>
-                    <input type="subLenght" name="duration" class="form-control" placeholder="Kontingent længde">
-                </div>
-                <div class="form-group">
-                    <label for="subPriceInput">Kontingent pris</label>
-                    <input type="subPrice" name="mdrPrice" class="form-control" placeholder="Månedlig pris">
-                </div>
-                <button type="submit" class="btnOpret btn-primary">Opret</button>
-            </form>
-        </div>
+<h1>Kontingenter</h1>
+<div class="row">
+    <div class="col">
+        <form method="post" action="/subscriptionType">
+            <div class="form-group">
+                <label for="subscriptionInfoInput">Kontingent information</label>
+                <input type="subscriptionInfo" name="name" class="form-control" placeholder="Kontigent navn">
+            </div>
+            <div class="form-group">
+                <label for="subLenghtInput">Kontingent længde</label>
+                <input type="subLenght" name="duration" class="form-control" placeholder="Kontingent længde">
+            </div>
+            <div class="form-group">
+                <label for="subPriceInput">Kontingent pris</label>
+                <input type="subPrice" name="mdrPrice" class="form-control" placeholder="Månedlig pris">
+            </div>
+            <button type="submit" class="btn btn-primary">Opret</button>
+        </form>
+        <form method="delete">
+            <div class="form-group">
+                <button type "submit" class="btn btn-primary">Slet</button>
+            </div>
+        </form>
     </div>
-    <div class="row">
-        <ul class="list-group">
-            <li class="subscriptions"> </li>
-        </ul>
-    </div>
+</div>
+<div class="row">
+    <ul class="list-group">
+        <li class="subscriptions"> </li>
+    </ul>
+</div>
