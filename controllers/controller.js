@@ -29,7 +29,7 @@ exports.findMember = async (email) => {
 };
 
 exports.findMembersByText = async (text) => {
-    return Member.find({$text: {$search: text }}).exec();
+    return Member.find({firstname: {$regex: text}}).exec();
 };
 
 

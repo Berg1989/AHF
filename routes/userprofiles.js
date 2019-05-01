@@ -10,13 +10,9 @@ router
         request.session.errors = null;
     })
 
-    .get('/userprofiles', async (request, response) => {
-        const { name } = request.body;
-        const users = await controller.findMembersByText(name);
-        return await users.json();
+    .get('/:searchid', async (request, response) => {
+        response.json(await controller.findMembersByText(request.params.searchid));
     }
-
-    
 
     )
 
