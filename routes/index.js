@@ -7,12 +7,12 @@ const fetch = require('node-fetch');
 router
     .get('/', function (request, response) {
         response.locals.metaTags = {
-            title: 'Frontpage',
+            title: 'Home',
             description: 'Here goes the description',
             keywords: 'Here goes keywords'
         };
             response.render('index', { layout: 'main' });
             request.session.errors = null;
-    })
+    });
 
 module.exports = router;

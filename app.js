@@ -57,6 +57,16 @@ app.use('/profile', profileRouter);
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
 
+// Render error view, when server responds with status 404
+app.use(function(req, res, next){
+  res.locals.metaTags = {
+    title: '404 - not found',
+    description: 'Here goes the description',
+    keywords: 'Here goes keywords'
+};
+  res.status(404).render('error');
+});
+
 // START THE SERVER
 const port = process.env.PORT || config.localPort;
 app.listen(port);

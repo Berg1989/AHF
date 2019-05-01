@@ -29,7 +29,7 @@ router
     })
 
     //Registrering
-    .get('/register', async (request, response) => {
+    .get('/users/register', async (request, response) => {
         //const usertypes = await controller.findUserTypes();
         //const user = request.session.user;
         response.locals.metaTags = {
@@ -47,7 +47,7 @@ router
         });
         request.session.errors = null;
     })
-    .post('/register', [
+    .post('/users/register', [
         //check email og om denne allerede existere i database
         check('email', 'Please enter a valid email')
             .isEmail()
@@ -72,7 +72,7 @@ router
             request.session.email = request.body.email;
             request.session.firstname = request.body.firstname;
             request.session.lastname = request.body.lastname;
-            response.redirect('/admin/register');
+            response.redirect('/admin/users/register');
         } else {
             const { level, email, password, firstname, lastname } = request.body;
             const result = await controller.createMember(email, password, firstname, lastname, level);
@@ -80,7 +80,7 @@ router
             if (result) {
                 request.session.user = result;
                 request.session.success = { msg: 'Success - ny bruger: ' + email + ', er oprettet' };
-                response.redirect('/admin/register');
+                response.redirect('/admin/users/register');
             }
         }
     })
