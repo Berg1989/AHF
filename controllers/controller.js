@@ -1,7 +1,7 @@
 "use strict";
 
 const Member = require('../models/member');
-const Usertype = require('../models/usertype');
+const SubscriptionType = require('../models/subscriptionType')
 const fetch = require('node-fetch');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
@@ -84,6 +84,32 @@ exports.login = async (email, password) => {
         if (result) return member;
     } else return false;
 };
+
+exports.getSubTypes = function () {
+    return SubscriptionType.find().exec();
+}
+
+exports.createSubType = function (name, duration, mdrPrice) {
+    const subType = new SubscriptionType({
+        name,
+        duration,
+        mdrPrice,
+    });
+    return subType.save();
+}
+
+exports.getSubTypes = function () {
+    return SubscriptionType.find().exec();
+}
+
+exports.createSubType = function (name, duration, mdrPrice) {
+    const subType = new SubscriptionType({
+        name,
+        duration,
+        mdrPrice,
+    });
+    return subType.save();
+}
 
 exports.checkpassword = async (plaintextPassword, hash) => {
     return await bcrypt.compare(plaintextPassword, hash);
