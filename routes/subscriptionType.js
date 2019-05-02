@@ -60,22 +60,18 @@ router
             };
         })
 
-
-    // skal laves om vv
     .delete('/:id', async (request, response) => {
-            try {
-                const goodErrors = validationResult(request);
-                const result = await controller.deleteSubType(request.params.id);
+        try {
+            const goodErrors = validationResult(request);
+            const result = await controller.deleteSubType(request.params.id);
 
-                if (result) {
-                    request.session.goodErrors = [{ message: 'Kontingent slettet' }];
-                    location.reload(true);
-                }
-            } catch (err) {
-                response.render('error');
+            if (result) {
+                request.session.goodErrors = [{ message: 'Kontingent slettet' }];
+                location.reload(true);
             }
+        } catch (err) {
+            response.render('error');
+        }
     })
-
-
 
 module.exports = router;
