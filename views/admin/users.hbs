@@ -52,7 +52,11 @@
         <h2>Rediger eksisterende brugere</h2>
         <ul>
             {{# each users }}
-            <li><a href="/admin/users/id={{this._id}}">{{this.info.firstname}} {{this.info.lastname}}</a></li>
+            <li><a href="/admin/users/id={{this._id}}">{{this.info.firstname}} {{this.info.lastname}}</a>
+                <form action="">
+                    <button></button>
+                </form>
+            </li>
             {{/each}}
         </ul>
     </div>
