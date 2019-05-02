@@ -119,7 +119,15 @@ router
             .isLength({ min: 2 }),
         check('zipcode', 'Postnummer skal være et tal')
             .optional({ checkFalsy: true }) // Can be falsy
-            .isDecimal()
+            .isDecimal(),
+        check('email', 'Please enter a valid email')
+            .optional({ checkFalsy: true }) // Can be falsy
+            .isEmail()
+            .custom(async email => {
+                const result = await controller.findMember(email);
+                if (result)
+                    return Promise.reject('Email already in use');
+            })
     ], async (request, response) => {
         // handle post requests of a user edit
         const errors = validationResult(request);
@@ -127,8 +135,10 @@ router
             request.session.errors = await errors.array();
             response.redirect('/admin/users/id=' + request.params.id);
         } else {
-            const { firstname, lastname, birth, phone, zipcode, street } = request.body;
-            const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street);
+            const user = await controller.findMemberById(request.params.id);
+            let { firstname, lastname, birth, phone, zipcode, street, level, func, email } = request.body;
+            if (!email) email = user.email;
+            const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, level, func, email);
 
             if (result) {
                 request.session.success = { msg: 'Success - bruger opdateret' };

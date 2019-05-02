@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const member = new Schema({
     password: String,
     email: String,
-    dogtag: String,
+    func: String,
+    created: String,
     info: {
         firstname: String,
         lastname: String,

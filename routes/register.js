@@ -2,7 +2,6 @@ const controller = require("../controllers/controller");
 const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
 
 router
     .get('/', function (request, response) {
@@ -51,7 +50,7 @@ router
         } else {
             const { email, password, firstname, lastname } = request.body;
 
-            const result = await controller.createMember(email, password, firstname, lastname, 3);
+            const result = await controller.createMember(email, password, firstname, lastname, 3, 'medlem');
             if (result) {
                 request.session.user = result;
                 response.redirect('/profile');
