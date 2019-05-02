@@ -55,6 +55,12 @@
                 </form>
             </div>
 
+            <form action="/admin/users/passwordreset/id={{ user._id }}" method="post">
+                <button type="submit" class="col-lg-2 btn btn-danger" id="resetBtn" data-dismiss="Alert"{{!--  onclick="resetPassword()" --}}>Reset
+                    password</button>
+
+            </form>
+
             <!--<div class="form-group">
                 <label class="col-md-4">Email*</label>
                 <input type="email" class="form-control" name="email" value="{{email}}" />
@@ -66,3 +72,16 @@
         </div>
     </div>
 </div>
+{{!-- <script>
+    async function resetPassword() {
+
+        try {
+            const response = await fetch('/admin/users/passwordreset/id=' + {{ user._id }},
+        { method: 'PUT', })
+        if (response.status >= 400 || !response) {
+            throw new Error('Failed to fetch');
+        } location.reload(true);
+        } catch (err) { console.log(err); }
+        
+    } 
+</script> --}}

@@ -122,7 +122,7 @@ exports.resetPassword = async function (email) {
     let newPassword = await bcrypt.hash(randomPassword, saltRounds);
     console.log(newPassword);
     const result = await Member.findOneAndUpdate(
-        { email: email },
+        { _id: email },
         { password: newPassword }
     ).exec();
     if (result) return randomPassword;

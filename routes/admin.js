@@ -137,6 +137,16 @@ router
         }
     })
 
+    .post('/users/passwordreset/id=:id', async function (request, response) {
+        console.log(request.body);
+        console.log("pølse");
+        let password = await controller.resetPassword(request.params.id);
+        response.redirect('/admin/users/id=' + request.params.id);
+        //response.send(password);
+        // nedenstående er fjernet da jeg vil gå hen til label fremfor alert
+        // request.session.resetPasswordErr = [{ message: password }]
+        
+    })
 
     .get('/subsciptions', async (request, response) => {
         // Render subscriptions and a create sub form
@@ -193,5 +203,7 @@ router
             }
         }
     });
+
+    
 
 module.exports = router;

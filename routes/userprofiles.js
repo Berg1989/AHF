@@ -29,7 +29,7 @@ router
     })
 
     .put('/', async function (request, response) {
-        let password = await controller.resetPassword(request.body.email);
+        let password = await controller.resetPassword(request.body._id);
         response.send(password);
         // nedenstående er fjernet da jeg vil gå hen til label fremfor alert
         // request.session.resetPasswordErr = [{ message: password }]
