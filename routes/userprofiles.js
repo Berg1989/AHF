@@ -12,7 +12,7 @@ router
 
     .get('/:searchid', async (request, response) => {
         response.json(await controller.findMembersByText(request.params.searchid));
-    }
+    })
 
     .put('/', async function(request, response) {
         let password = await controller.resetPassword(request.body.email);
