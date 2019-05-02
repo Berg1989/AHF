@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col">
+    <div class="col" id="appendhere">
         {{# if errors }}
         {{# each errors }}
         <p class="alert alert-danger">{{ this.msg }}</p>
@@ -9,6 +9,9 @@
         {{# each goodErrors }}
         <p class="alert alert-success">{{ this.message }}</p>
         {{/each}}
+        {{/if}}
+        {{# if success}}
+        <p class="alert alert-success">{{ success }}</p>
         {{/if}}
     </div>
 </div>
@@ -36,17 +39,39 @@
                 <label for="subPriceInput">Kontingent pris</label>
                 <input type="subPrice" name="mdrPrice" class="form-control" placeholder="Månedlig pris">
             </div>
-            <button type="submit" class="btn btn-primary" onclick="getSubTypes()">Opret</button>
+            <button type="submit" class="btn btn-primary">Opret</button>
         </form>
-        <form method="delete">
-            <div class="form-group">
-                <button type "submit" class="btn btn-primary">Slet</button>
-            </div>
-        </form>
+        <!-- <form method="delete"> -->
+        <div class="form-group">
+            <button type "submit" class="btn btn-primary" onclick="deleteSubType()">Slet</button>
+        </div>
+        <!-- </form> -->
     </div>
 </div>
 
 <script>
     //delete method
-    const id = selectSubType.value;
+    async function deleteSubType() {
+        console.log(selectSubType.value);
+        if (selectSubType.value) {
+            try {
+                const response = await fetch('/subscriptionType/' + selectSubType.value, {
+                    method: 'DELETE',
+                })
+                if (response.status >= 400 || !response) {
+                    throw new Error('Failed to fetch');
+                }
+                location.reload(true);
+            } catch (err) {
+                console.log(selectSubType.value)
+                console.log(err);
+            }
+        } else {
+            let alert = document.createElement('P');
+            alert.innerText = 'Der er ingen kontingenter at slette';
+            alert.className = "alert alert-danger";
+            document.getElementById('appendhere').innerHTML = '';
+            document.getElementById('appendhere').appendChild(alert);
+        }
+    }
 </script>

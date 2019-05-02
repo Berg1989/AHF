@@ -102,9 +102,9 @@ exports.findSubType = async (name) => {
     return SubscriptionType.findOne({ name: name }).exec();
 };
 
-exports.deleteSubType = async (_id) => {
-    //return SubscriptionType.deleteOne({_id: _id}).exec();
-    return SubscriptionType.findByIdAndDelete(_id).exec();
+exports.deleteSubType = (_id) => {
+    return SubscriptionType.findOneAndDelete({_id: _id}).exec();
+   // return SubscriptionType.findByIdAndDelete(_id).exec();
 }
 
 exports.checkpassword = async (plaintextPassword, hash) => {
