@@ -14,7 +14,12 @@ router
         response.json(await controller.findMembersByText(request.params.searchid));
     }
 
-    )
+    .put('/', async function(request, response) {
+        let password = await controller.resetPassword(request.body.email);
+        response.send(password);
+        request.session.resetPasswordErr = [{message : password}]
+        response.redirect ('/userprofiles');
+    })
 
 
     

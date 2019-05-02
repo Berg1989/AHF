@@ -115,6 +115,17 @@ exports.createSubType = function (name, duration, mdrPrice) {
     return subType.save();
 }
 
+exports.resetPassword = async function(member){
+    let randomPassword = Math.random().toString(36).slice(-8);
+    newPassword = await bcrypt.hash(randomPassword, saltRounds);
+    member.findOneAndUpdate(
+        { email: email },
+        { password : newPassword }
+    );
+    
+    return randomPassword; 
+}
+
 exports.checkpassword = async (plaintextPassword, hash) => {
     return await bcrypt.compare(plaintextPassword, hash);
 };
