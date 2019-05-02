@@ -23,7 +23,7 @@
                 <label>vælg Kontigenttype</label>
                 <select name='subtype' class="form-control" id="selectSubType">
                     {{# each subtypes }}
-                    <option value="{{this._id}}">{{ this.name }}</option>
+                    <option value="{{this._id}}">{{ this.name }}{{this.duration}}</option>
                     {{/each}}
                 </select>
             </div>
@@ -52,7 +52,6 @@
 <script>
     //delete method
     async function deleteSubType() {
-        console.log(selectSubType.value);
         if (selectSubType.value) {
             try {
                 const response = await fetch('/subscriptionType/' + selectSubType.value, {
@@ -63,7 +62,6 @@
                 }
                 location.reload(true);
             } catch (err) {
-                console.log(selectSubType.value)
                 console.log(err);
             }
         } else {
