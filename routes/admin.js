@@ -192,6 +192,51 @@ router
                 response.redirect('/admin/login');
             }
         }
+    })
+
+    //Statistics
+    .get('/statistics', async (request, response) => {
+        response.locals.metaTags = {
+            title: 'Kontingenter',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };    
+        const statistics = request.session.statistics;
+        response.render('admin/statistics', {layout: 'admin'});
+    })
+
+    //memberStatistics
+    .get('/memberStatistics', async (request, response) => {
+        response.locals.metaTags = {
+            title: 'Medlems statistik',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };    
+        const statistics = request.session.statistics;
+        response.render('admin/memberStatistics', {layout: 'admin'});
+    })
+
+    //shopStatistics
+    .get('/shopStatistics', async (request, response) => {
+        response.locals.metaTags = {
+            title: 'Shop statistik',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };    
+        const statistics = request.session.statistics;
+        response.render('admin/shopStatistics', {layout: 'admin'});
+    })
+
+    //subscriptionStatistics
+    .get('/', async (request, response) => {
+        response.locals.metaTags = {
+            title: 'Subs',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };    
+        const statistics = request.session.statistics;
+        response.render('admin/subscriptionStatistics', {layout: 'admin'});
     });
+    
 
 module.exports = router;
