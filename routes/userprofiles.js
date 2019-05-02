@@ -5,21 +5,24 @@ const fetch = require('node-fetch');
 
 router
 
-    .get('/', function (request, response) {
+    .get('/', async function (request, response) {
         const user = request.session.user;
         /* if (user && user.type.level == 1) { */
-            response.render('admin/userprofiles', { success: request.session.success, errors: request.session.errors, user: request.session.user });
-            request.session.errors = null;
+        response.render('admin/userprofiles', {
+            success: request.session.success,
+            errors: request.session.errors,
+            user: request.session.user });
+        request.session.errors = null;
         /* } else {
             response.redirect('/');
         } */
-
+        const result = await controller.resetPassword("entestmail@ff.dd");
     })
 
     .get('/:searchid', async (request, response) => {
         /* const user = request.session.user;
         if (user && user.type.level == 1) { */
-            response.json(await controller.findMembersByText(request.params.searchid));
+        response.json(await controller.findMembersByText(request.params.searchid));
         /* } else {
             response.redirect('/');
         } */
@@ -28,7 +31,8 @@ router
     .put('/', async function (request, response) {
         let password = await controller.resetPassword(request.body.email);
         response.send(password);
-        request.session.resetPasswordErr = [{ message: password }]
+        // nedenstående er fjernet da jeg vil gå hen til label fremfor alert
+        // request.session.resetPasswordErr = [{ message: password }]
         response.redirect('/admin/userprofiles');
     })
 

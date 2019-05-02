@@ -11,14 +11,17 @@
         </div>
 
         <div class="row">
-            <form method="put" action="/userprofiles"></form>
+            <!--
+            <form method="put" action="/userprofiles">
             {{# if resetPasswordErr }}
             {{# each resetPasswordErr }}
             <p class="alert alert-success">{{this.message}}</p>
             {{/each}}
             {{/if}}
+            -->
             <button type="submit" class="col-lg-12 btn btn-danger" id="resetBtn" data-dismiss="Alert">Reset
                 password</button>
+            <label id="newPasswordLabel"></label>
             </form>
         </div>
 
