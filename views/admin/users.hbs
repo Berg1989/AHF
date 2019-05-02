@@ -7,7 +7,7 @@
             {{/each}}
             {{/if}}
             {{# if success }}
-                <p class="alert alert-success">{{ success.msg }}</p>
+            <p class="alert alert-success">{{ success.msg }}</p>
             {{/if}}
             <div class="panel-heading">
                 <h2>Registrer ny bruger</h2>
@@ -52,12 +52,32 @@
         <h2>Rediger eksisterende brugere</h2>
         <ul>
             {{# each users }}
-            <li><a href="/admin/users/id={{this._id}}">{{this.info.firstname}} {{this.info.lastname}}</a>
-                <form action="">
-                    <button></button>
-                </form>
-            </li>
+            <div class="row justify-content-between align-items-center" style="margin-bottom:15px;">
+                <div class="col">
+                    <span>{{this.info.firstname}} {{this.info.lastname}}</span>
+                </div>
+                <div class="col">
+                     <a href="/admin/users/id={{this._id}}" class="btn btn-primary">Rediger</a>
+                    <button type="submit" id="{{this._id}}" onclick="deleteUser(this.id)" class="btn btn-danger">Slet</button>
+                </div>
+            </div>
             {{/each}}
         </ul>
     </div>
 </div>
+
+<script>
+    async function deleteUser(id) {
+        const res = window.confirm('Vil du slette denne bruger?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/users/id=' + id, {
+                    method: 'DELETE',
+                })
+                location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>

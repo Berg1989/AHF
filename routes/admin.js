@@ -28,7 +28,7 @@ router
         }*/
     })
 
-
+    // Admin / Users
     .get('/users', async (request, response) => {
         // Get users
         //const usertypes = await controller.findUserTypes();
@@ -43,7 +43,7 @@ router
             users: await controller.findMembers(),
             success: request.session.success,
             errors: request.session.errors,
-            user: request.session.user,
+            //user: request.session.user,
             email: request.session.email,
             firstname: request.session.firstname,
             lastname: request.session.lastname
@@ -91,7 +91,6 @@ router
     .get('/users/id=:id', async (request, response) => {
         try {
             const user = await controller.findMemberById(request.params.id);
-            console.log(user.info.birth);
             if (user) {
                 response.locals.metaTags = {
                     title: 'Admin - edit user: ' + user.info.firstname,
@@ -134,6 +133,14 @@ router
                 request.session.success = { msg: 'Success - bruger opdateret' };
                 response.redirect('/admin/users/id=' + request.params.id);
             }
+        }
+    })
+    .delete('/users/id=:id', async (request, response) => {
+        try {
+            const result = await controller.deleteUser(request.params.id);
+            if (result) location.reload(true);
+        } catch (err) {
+            response.sendStatus(405);
         }
     })
 

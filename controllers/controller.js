@@ -42,6 +42,11 @@ exports.updateUser = (id, firstname, lastname) => {
     )
 };
 
+exports.deleteUser = (id) => {
+    //return Member.findOneAndDelete({ _id : id }).exec();
+    return Member.findByIdAndDelete(id);
+};
+
 exports.userTitle = (level) => {
     if (level === '1') level = 'admin';
     else if (level === '2') level = 'frivillig';

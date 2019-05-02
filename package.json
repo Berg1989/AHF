@@ -14,7 +14,8 @@
     "mongoose": "^5.4.21",
     "morgan": "^1.9.1",
     "node-fetch": "^2.3.0",
-    "path": "*"
+    "path": "*",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "test": "mocha --timeout 3000"
