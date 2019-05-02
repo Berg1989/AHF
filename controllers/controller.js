@@ -74,7 +74,7 @@ exports.findMember = (email) => {
 };
 
 exports.findMembersByText = async (text) => {
-    return Member.find({firstname: {$regex: text}}).exec();
+    return Member.find({ firstname: { $regex: text } }).exec();
 };
 
 exports.findMemberById = (id) => {
@@ -115,15 +115,14 @@ exports.createSubType = function (name, duration, mdrPrice) {
     return subType.save();
 }
 
-exports.resetPassword = async function(member){
+exports.resetPassword = async function (member) {
     let randomPassword = Math.random().toString(36).slice(-8);
     newPassword = await bcrypt.hash(randomPassword, saltRounds);
     member.findOneAndUpdate(
         { email: email },
-        { password : newPassword }
+        { password: newPassword }
     );
-    
-    return randomPassword; 
+    return randomPassword;
 }
 
 exports.checkpassword = async (plaintextPassword, hash) => {
