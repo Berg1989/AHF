@@ -3,8 +3,8 @@
     <div class="col-lg-12">
         <div class="row">
             <label class="col-lg-4">Søg med fornavn</label>
-            <input class="col-lg-8" type="text" name="mailSearch" id="mailSearch">
-            <button id="searchbtn" onclick="searchName()">adsf</button>
+            <input class="col-lg-8" type="text" name="nameSearch" id="nameSearch">
+            <button id="searchbtn" onclick="searchName()">Søg</button>
         </div>
         <div class="row">
             <select class="input-medium col-lg-12" size="10" id="userList"></select>
@@ -26,22 +26,17 @@
 </div>
 <script>
     async function searchName() {
-
         try {
-            const service = await fetch('/userprofiles/' + document.getElementById("mailSearch").value);
+            const service = await fetch('/admin/userprofiles/' + document.getElementById("nameSearch").value);
             const json = await service.json();
             const list = document.getElementById("userList");
             list.innerHTML = "";
-            for (let member of json) {
-                console.log(member);
+            for (let member of json) {            
                 let options = document.createElement('option');
                 options.text = member.info.firstname + " " + member.info.lastname;
                 list.appendChild(options);
                 document.execCommand('copy');
             }
-
-
-
         } catch (err) {
             console.log(err);
         }
