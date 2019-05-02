@@ -49,6 +49,7 @@ router
             lastname: request.session.lastname
         });
         request.session.errors = null;
+        request.session.success = null;
     })
     .post('/users', [
         //Post new user
@@ -138,7 +139,7 @@ router
     .delete('/users/id=:id', async (request, response) => {
         try {
             const result = await controller.deleteUser(request.params.id);
-            if (result) location.reload(true);
+            if (result) response.sendStatus(200);//location.reload(true);
         } catch (err) {
             response.sendStatus(405);
         }
