@@ -12,8 +12,7 @@ router
             keywords: 'Here goes keywords'
         };
         response.render('login', {
-            layout: 'main',
-            success: request.session.success,
+            action: '/login',
             errors: request.session.errors,
             email: request.session.email,
             user: request.session.user
@@ -26,7 +25,7 @@ router
             .isEmail(),
         //check password
         check('password', 'Password is required')
-            .isLength({ min: 1 })
+            .isLength({ min: 5 })
         /*.custom(async (password, { req }) => {
             const result = await controller.login(req.body.email, password);
             if (!result)
@@ -37,19 +36,16 @@ router
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             request.session.email = request.body.email;
-            request.session.success = false;
             response.redirect('/login');
         } else {
             const { email, password } = request.body;
             const result = await controller.login(email, password);
             if (result) {
                 request.session.user = result;
-                request.session.success = true;
-                response.redirect('/profile/' + result._id);
+                response.redirect('/profile/id=' + result._id);
             } else {
                 request.session.errors = [{ msg: 'Username and password do not match' }];
                 request.session.email = request.body.email;
-                request.session.success = false;
                 response.redirect('/login');
             }
         }

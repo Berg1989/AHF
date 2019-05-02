@@ -2,19 +2,29 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const member = new Schema({
-    firstname: String,
-    lastname: String,
-    dogtag: String,
     password: String,
     email: String,
-    phone: String,
-    birth: Date,
-    usertype: String,
-    zipcode: Number,
-    street: String,
+    dogtag: String,
+    info: {
+        firstname: String,
+        lastname: String,
+        birth: String,
+        phone: String,
+        zipcode: Number,
+        street: String
+    },
+    type: {
+        title: String,
+        level: Number
+    },
+    subscription: {
+        type: { type: Schema.Types.ObjectId, ref: 'subtype' },
+        date: Date,
+        active: Boolean
+    }    
 });
 
-member.methods.toString = function() {
+member.methods.toString = function () {
     return "Navn: " + this.firstname + ", Efternavn: " + this.lastname;
 };
 

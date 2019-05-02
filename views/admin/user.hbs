@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col">
+        <div class="panel panel-primary">
+            {{# if errors }}
+            {{# each errors }}
+            <p class="alert alert-danger">{{ this.msg }}</p>
+            {{/each}}
+            {{/if}}
+            {{# if success }}
+            <p class="alert alert-success">{{ success.msg }}</p>
+            {{/if}}
+            <div class="panel-heading">
+                <h2>Bruger info:</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="/admin/users/id={{user._id}}">
+                    <div class="form-group">
+                        <label for="typeselect">Bruger type:</label>
+                        <select name="level" class="form-control" id="typeselect">
+                            {{#select "{{user.type.level}}"}}
+                            <option value="0" disabled="true">Vælg</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Frivillig</option>
+                            <option value="3">Medlem</option>
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Fornavn:</label>
+                        <input type="text" class="form-control" name="firstname" value="{{user.info.firstname}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Efternavn:</label>
+                        <input type="text" class="form-control" name="lastname" value="{{user.info.lastname}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Fødselsdato</label>
+                        <input type="date" class="form-control" name="birth" value="{{user.info.birth}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Tlf:</label>
+                        <input type="text" class="form-control" name="phone" value="{{user.info.phone}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Postnummer:</label>
+                        <input type="number" class="form-control" name="zipcode" value="{{user.info.zipcode}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">addresse:</label>
+                        <input type="text" class="form-control" name="street" value="{{user.info.street}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Updater info</button>
+                    </div>
+                </form>
+            </div>
+
+            <!--<div class="form-group">
+                <label class="col-md-4">Email*</label>
+                <input type="email" class="form-control" name="email" value="{{email}}" />
+            </div>
+            <div class="form-group">
+                <label class="col-md-4">Password*</label>
+                <input type="password" class="form-control" name="password" />
+            </div>-->
+        </div>
+    </div>
+</div>

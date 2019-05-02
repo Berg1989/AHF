@@ -7,29 +7,74 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // Returns a promise that resolves when the user is created
-exports.createMember = async (email, password, firstname, lastname) => {
-        password = await bcrypt.hash(password, saltRounds);
-        const member = new Member({
-            firstname,
-            lastname,
-            password,
-            email
-            //dogtag,
-            //phone,
-            //birth,
-            //usertype,
-            //zipcode,
-            //street
-        });
-        return member.save();
+exports.createMember = async (email, password, firstname, lastname, level) => {
+    const type = { title: exports.userTitle(level), level };
+    const info = { firstname: firstname, lastname: lastname };
+    password = await bcrypt.hash(password, saltRounds);
+
+    const member = new Member({
+        password,
+        email,
+        info,
+        type
+    });
+    return member.save();
 };
 
-exports.findMember = async (email) => {
+exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street) => {
+    return Member.findByIdAndUpdate(
+        id,
+        { info: { 
+            firstname: firstname, 
+            lastname: lastname,
+            birth: birth,
+            phone: phone,
+            zipcode: zipcode,
+            street: street 
+        }}
+    )
+};
+
+exports.updateUser = (id, firstname, lastname) => {
+    return Member.findByIdAndUpdate(
+        id,
+        { info: { firstname: firstname, lastname: lastname } }
+    )
+};
+
+exports.userTitle = (level) => {
+    if (level === '1') level = 'admin';
+    else if (level === '2') level = 'frivillig';
+    else level = 'medlem';
+    return level;
+};
+
+exports.findMembers = () => {
+    return Member.find().exec();
+};
+
+exports.findUserTypes = () => {
+    return Usertype.find().exec();
+};
+
+exports.findUsertype = (id) => {
+    return Usertype.findOne({ _id: id }).exec();
+};
+
+exports.saveUsertype = (title, accesslevel) => {
+    const usertype = new Usertype({
+        title,
+        accesslevel,
+    });
+    return usertype.save();
+};
+
+exports.findMember = (email) => {
     return Member.findOne({ email: email }).exec();
 };
 
-exports.getMemberById = async (id) => {
-    return Member.findOne({ _id: id }).exec();
+exports.findMemberById = (id) => {
+    return Member.findById(id).exec();
 };
 
 exports.login = async (email, password) => {

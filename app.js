@@ -10,6 +10,7 @@ const xhbs = require('express-handlebars')
 const expressValidator = require('express-validator');
 const cookeParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const handlebarsIntl = require('handlebars-intl');
 
 const app = express();
 app.engine('hbs', xhbs({
@@ -17,6 +18,7 @@ app.engine('hbs', xhbs({
   extname: '.hbs'
 }));
 app.set('view engine', 'hbs');
+handlebarsIntl.registerWith(hbs);
 app.use(express.static('public'));
 app.use(express.json());
 app.use(morgan('tiny'));
@@ -25,6 +27,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookeParser());
 app.use(session({ secret: 'hemmelig', saveUninitialized: true, resave: true }));
 app.use(expressValidator());
+
+hbs.registerHelper("select", function (value, options) {
+  return options.fn(this)
+      .split('\n')
+      .map(function (v) {
+          var t = 'value="' + value + '"'
+          return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
+      })
+      .join('\n')
+})
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
@@ -50,6 +62,9 @@ app.use('/userprofiles', userProfiles);
 const profileRouter = require('./routes/profile');
 app.use('/profile', profileRouter);
 
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
+
 const statisticsRouter = require('./routes/statistics');
 app.use('/statistics', statisticsRouter);
 
@@ -61,6 +76,16 @@ app.use('/subscriptionStatistics', subsriptionStatisticsRouter);
 
 const shopStatisticsRouter = require('./routes/shopStatistics');
 app.use('/shopStatistics', shopStatisticsRouter);
+
+// Render error view, when server responds with status 404
+app.use(function(req, res, next){
+  res.locals.metaTags = {
+    title: '404 - not found',
+    description: 'Here goes the description',
+    keywords: 'Here goes keywords'
+};
+  res.status(404).render('error');
+});
 
 // START THE SERVER
 const port = process.env.PORT || config.localPort;

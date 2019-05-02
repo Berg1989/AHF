@@ -1,6 +1,7 @@
 const controller = require("../controllers/controller");
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator/check');
 const fetch = require('node-fetch');
 
 router
@@ -9,36 +10,58 @@ router
         if (!user) {
             response.redirect('/login');
         } else {
-            response.redirect('/profile/' + user._id)
+            response.redirect('/profile/id=' + user._id)
         }
     })
-    .get('/edit', (request, response) => {
-        const user = request.session.user;
-        if (!user) {
-            response.redirect('/login');
-        } else {
-            response.render('editProfile', { user });
-        }
-    })
-    .get('/:id', async (request, response) => {
-        const user = request.session.user;
-        const result = await controller.getMemberById(request.params.id);
-        if (result) {
-            response.locals.metaTags = {
-                title: 'Profile - ' + result.firstname,
-                description: 'Here goes the description',
-                keywords: 'Here goes keywords'
-            };
-            if (user && user._id === request.params.id) {
-                response.render('personalProfile', { user });
+    .get('/id=:id', async (request, response) => {
+        try {
+            const user = request.session.user;
+            const result = await controller.findMemberById(request.params.id);
+            if (result) {
+                response.locals.metaTags = {
+                    title: 'Profile - ' + result.firstname,
+                    description: 'Here goes the description',
+                    keywords: 'Here goes keywords'
+                };
+                if (user && user._id === request.params.id) {
+                    response.render('personalProfile', { 
+                        result,
+                        success: request.session.success,
+                        errors: request.session.errors,
+                        action: '/profile/id=' + request.params.id,
+                     });
+                } else {
+                    response.render('profile', { result });
+                }
             } else {
-                response.render('profile', { result });
+                response.render('error'); //render error
             }
-        } else {
-            response.sendStatus(404);
+        } catch(err) {
+            response.render('error');
         }
     })
-    .post('/logout', (request, response) => {
+    .post('/id=:id', [
+        check('firstname', 'Please enter your firstname')
+            .isLength({ min: 2 }),
+        check('lastname', 'Please enter your lastname')
+            .isLength({ min: 2 })
+    ], async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            request.session.success = false;
+            response.redirect('/profile/id=' + request.params.id);
+        } else {
+            const { firstname, lastname } = request.body;
+            const result = await controller.updateUser(request.params.id, firstname, lastname);
+
+            if (result) {
+                request.session.success = { msg: 'Bruger data opdateret!' };
+                response.redirect('/profile/id=' + request.params.id);
+            }
+        }
+    })
+    .post('/id=:id/logout', (request, response) => {
         request.session.destroy(err => {
             if (err) {
                 console.log(err);
