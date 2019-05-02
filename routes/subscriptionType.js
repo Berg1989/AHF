@@ -61,7 +61,30 @@ async (request,response) =>{
     };
 })
 
-.delete('/', async (request, require) => {
+
+// skal laves om vv
+.delete('/',[
+//skal tjekke om der er flere kontingenter før man sletter
+], async (request, response) => {
+    
+    const element = request.subType;
+    const errors = validationResult(request);
+    const goodErrors = validationResult(request);
+    //if(!errors.isEmpty()) {
+    //    request.session.errors = await errors.array();
+    //    response.redirect('/subscriptionType');
+    //}
+    if(element){
+        await controller.deleteSubType(element._id);
+        if(controller.findSubType(element.name) == null){
+            request.session.goodErrors = [{ message: 'Kontingent slettet' }];
+            response.redirect('/subscriptionType');
+        }
+    }else{
+        request.session.errors = [{ msg: 'Der er ikke nogle kontingenter at slette' }];
+        response.redirect('/subscriptionType');
+    }
+    console.log(element);
     //Sletningen kan gøres via:
     //radiobuttons
     //formcontrol med en selection list som viser information om det valgte kontingent

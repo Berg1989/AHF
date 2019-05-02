@@ -18,7 +18,7 @@
         <form method="post" action="/subscriptionType">
             <div class="form-group">
                 <label>vælg Kontigenttype</label>
-                <select name='subtype' class="form-control">
+                <select name='subtype' class="form-control" id="selectSubType">
                     {{# each subtypes }}
                     <option value="{{this._id}}">{{ this.name }}</option>
                     {{/each}}
@@ -45,6 +45,8 @@
         </form>
     </div>
 </div>
-<div class="row">
-    <dl id='subTypes'></dl>
-</div>
+
+<script>
+    //delete method
+    const id = selectSubType.value;
+</script>
