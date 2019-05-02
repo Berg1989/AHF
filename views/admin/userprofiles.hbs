@@ -28,15 +28,19 @@
     </div>
 </div>
 <script>
+    
     async function searchName() {
         try {
             const service = await fetch('/admin/userprofiles/' + document.getElementById("nameSearch").value);
             const json = await service.json();
+            
             const list = document.getElementById("userList");
             list.innerHTML = "";
             for (let member of json) {            
                 let options = document.createElement('option');
-                options.text = member.info.firstname + " " + member.info.lastname;
+                let link = document.createElement('a');
+                options.appendChild(link);
+                link.text = member.info.firstname + " " + member.info.lastname;
                 list.appendChild(options);
                 document.execCommand('copy');
             }
