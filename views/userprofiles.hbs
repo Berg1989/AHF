@@ -35,7 +35,7 @@
             for (let member of json) {
                 console.log(member);
                 let options = document.createElement('option');
-                options.text = member.firstname + " " + member.lastname;
+                options.text = member.info.firstname + " " + member.info.lastname;
                 list.appendChild(options);
                 document.execCommand('copy');
             }

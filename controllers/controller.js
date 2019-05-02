@@ -74,7 +74,7 @@ exports.findMember = (email) => {
 };
 
 exports.findMembersByText = async (text) => {
-    return Member.find({ firstname: { $regex: text } }).exec();
+    return Member.find({ 'info.firstname': { $regex: text } }).exec();
 };
 
 exports.findMemberById = (id) => {
