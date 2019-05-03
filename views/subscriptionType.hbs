@@ -21,23 +21,31 @@
         <form method="post" action="/subscriptionType">
             <div class="form-group">
                 <label>vælg Kontigenttype</label>
-                <select name='subtype' class="form-control" id="selectSubType">
+                <select name='subtype' class="form-control" id="selectSubType" onchange="subTypeOnChange()">
+                    <option value=""></option>
                     {{# each subtypes }}
-                    <option value="{{this._id}}">{{ this.name }}{{this.duration}}</option>
+                    <option value="{{this._id}}">{{ this.name }}, {{this.duration}} måneder</option>
+                    <!-- duration ikke nødvendigt -->
                     {{/each}}
                 </select>
             </div>
             <div class="form-group">
                 <label for="subscriptionInfoInput">Kontingent information</label>
-                <input type="subscriptionInfo" name="name" class="form-control" placeholder="Kontigent navn">
+                <input type="subscriptionInfo" name="name" class="form-control" placeholder="Kontigent navn" ,
+                    id="nameId">
             </div>
             <div class="form-group">
                 <label for="subLenghtInput">Kontingent længde</label>
-                <input type="subLenght" name="duration" class="form-control" placeholder="Kontingent længde">
+                <input type="subLenght" name="duration" class="form-control" placeholder="Kontingent længde"
+                    id="durationId">
             </div>
             <div class="form-group">
                 <label for="subPriceInput">Kontingent pris</label>
-                <input type="subPrice" name="mdrPrice" class="form-control" placeholder="Månedlig pris">
+                <input type="subPrice" name="mdrPrice" class="form-control" placeholder="Månedlig pris" id="priceId">
+            </div>
+            <div class="form-group">
+                <label for="subActiveInput">Kontingent aktivt</label>
+                <input type="checkbox" name="isActive" class="form-control" id="activeId">
             </div>
             <button type="submit" class="btn btn-primary">Opret</button>
         </form>
@@ -53,14 +61,18 @@
     //delete method
     async function deleteSubType() {
         if (selectSubType.value) {
+            //const data = { isActive: document.getElementById('activeId') };
             try {
                 const response = await fetch('/subscriptionType/' + selectSubType.value, {
                     method: 'DELETE',
+                    //body: JSON.stringify(data),
+                    //headers: { 'Content-Type': 'application/json' }
                 })
                 if (response.status >= 400 || !response) {
                     throw new Error('Failed to fetch');
+                } else if (response.status === 200) {
+                    location.reload(true);
                 }
-                location.reload(true);
             } catch (err) {
                 console.log(err);
             }
@@ -72,4 +84,40 @@
             document.getElementById('appendhere').appendChild(alert);
         }
     }
+
+    async function subTypeOnChange() {
+        console.log(selectSubType.value);
+
+        if (selectSubType.value) {
+            try {
+                const response = await fetch('/subscriptionType/' + selectSubType.value, {
+                    method: 'GET',
+                })
+                if (response.status >= 400 || !response) {
+                    throw new Error('Failed to fetch');
+                } else {
+                    const result = await response.json();
+                    document.getElementById('nameId').value = result.name;
+                    document.getElementById('durationId').value = result.duration;
+                    document.getElementById('priceId').value = result.mdrPrice;
+                    if (result.isActive == null) {
+                        document.getElementById('activeId').checked = false
+                    } else {
+                        document.getElementById('activeId').checked = true;
+                    }
+                    //location.reload(true);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            let alert = document.createElement('P');
+            alert.innerText = 'Der er ingen kontingenter';
+            alert.className = "alert alert-danger";
+            document.getElementById('appendhere').innerHTML = '';
+            document.getElementById('appendhere').appendChild(alert);
+        }
+
+    }
+
 </script>

@@ -89,17 +89,22 @@ exports.getSubTypes = () => {
     return SubscriptionType.find().exec();
 }
 
-exports.createSubType = async (name, duration, mdrPrice) => {
+exports.createSubType = async (name, duration, mdrPrice, isActive) => {
     const subType = new SubscriptionType({
         name,
         duration,
         mdrPrice,
+        isActive,
     });
     return subType.save();
 }
 
-exports.findSubType = async (name) => {
+exports.findSubTypeName = async (name) => {
     return SubscriptionType.findOne({ name: name }).exec();
+};
+
+exports.findSubTypeId = (_id) => {
+    return SubscriptionType.findOne({ _id: _id }).exec();
 };
 
 exports.deleteSubType = (_id) => {

@@ -37,8 +37,8 @@ router
             .isLength({ min: 1 })
     ],
         async (request, response) => {
-            const { name, duration, mdrPrice } = request.body;
-            const exists = await controller.findSubType(name);
+            const { name, duration, mdrPrice, isActive } = request.body;
+            const exists = await controller.findSubTypeName(name);
             const errors = validationResult(request);
             const goodErrors = validationResult(request);
             if (!errors.isEmpty()) {
@@ -46,7 +46,13 @@ router
                 response.redirect('/subscriptionType');
             }
             if (!exists) {
-                const result = await controller.createSubType(name, duration, mdrPrice)
+                let isActiveBoo;
+                if (isActive == null) {
+                    isActiveBoo = false;
+                } else {
+                    isActiveBoo = true;
+                }
+                const result = await controller.createSubType(name, duration, mdrPrice, isActiveBoo)
                 if (result) {
                     request.session.goodErrors = [{ message: 'Kontingent oprettet' }];
                     request.session.subType = result;
@@ -60,18 +66,38 @@ router
             };
         })
 
-    .delete('/:id', async (request, response) => {
+    .get('/:id', async (request, response) => {
         try {
-            const goodErrors = validationResult(request);
-            const result = await controller.deleteSubType(request.params.id);
-
-            if (result) {
-                request.session.goodErrors = [{ message: 'Kontingent slettet' }];
-                location.reload(true);
+            const subType = await controller.findSubTypeId(request.params.id);
+            if (subType) {
+                response.send(subType);
             }
         } catch (err) {
             response.render('error');
         }
+
+
+    })
+
+    .delete('/:id', async (request, response) => {
+        const subType = await controller.findSubTypeId(request.params.id);
+        if (subType.isActive == null) {
+            try {
+                const goodErrors = validationResult(request);
+                const result = await controller.deleteSubType(request.params.id);
+
+                if (result) {
+                    request.session.goodErrors = [{ message: 'Kontingent slettet' }];
+                    response.sendStatus(200);
+                }
+            } catch (err) {
+                response.render('error');
+            }
+        } else {
+            request.session.errors = [{ message: 'Kontingent er aktivt' }];
+            response.sendStatus(200);
+        }
+
     })
 
 module.exports = router;
