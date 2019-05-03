@@ -58,15 +58,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="func">Funktion:</label>
-                                <select name="func" class="form-control" id="userfunc">
-                                    {{#select user.func}}
-                                    <option value="0" disabled="true">Vælg</option>
-                                    <option value="bestyrelse">Bestyrelse</option>
-                                    <option value="kassér">Kassér</option>
-                                    <option value="frivillig">Frivillig</option>
-                                    <option value="medlem">Medlem</option>
-                                    {{/select}}
-                                </select>
+                                <input type="text" class="form-control" name="func" value="{{user.func}}" />
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4">Email: (Påkrævet)</label>
