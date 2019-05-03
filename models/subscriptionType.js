@@ -4,13 +4,7 @@ const Schema = mongoose.Schema;
 const subscriptionType = new Schema({
     name: String,
     duration: Number,
-    mdrPrice: Number,
+    price: Number,
 });
 
-const subTypeModel = mongoose.model('SubscriptionType', subscriptionType);
-
-module.exports = subTypeModel;
-
-//subscription.method = function timeLeft() {
-//    let timeSpend = Math.abs(startDate - Date.now);  
-//}
+module.exports = mongoose.model('SubscriptionType', subscriptionType);

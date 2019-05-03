@@ -1,4 +1,4 @@
-const controller = require("../controllers/controller");
+const controller = require("../../controllers/controller");
 const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
@@ -14,11 +14,10 @@ router
             response.render('register', {
                 errors: request.session.errors,
                 user: request.session.user,
-                email: request.session.email,
-                firstname: request.session.firstname,
-                lastname: request.session.lastname
+                inputs: request.session.inputs,
             });
             request.session.errors = null;
+            request.session.inputs = null;
         } else {
             response.redirect('/');
         }
@@ -43,9 +42,7 @@ router
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
-            request.session.email = request.body.email;
-            request.session.firstname = request.body.firstname;
-            request.session.lastname = request.body.lastname;
+            request.session.inputs = { email: request.body.email, firstname: request.body.firstname, lastname: request.body.lastname };
             response.redirect('/register');
         } else {
             const { email, password, firstname, lastname } = request.body;
@@ -53,7 +50,7 @@ router
             const result = await controller.createMember(email, password, firstname, lastname, 3, 'medlem');
             if (result) {
                 request.session.user = result;
-                response.redirect('/profile');
+                response.redirect('/user');
             }
         }
     });

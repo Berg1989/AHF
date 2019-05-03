@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col">
         <div class="panel panel-primary">
-            {{# if errors }}
-            {{# each errors }}
+            {{#if errors }}
+            {{#each errors }}
             <p class="alert alert-danger">{{ this.msg }}</p>
             {{/each}}
             {{/if}}
-            {{# if success }}
+            {{#if success }}
             <p class="alert alert-success">{{ success.msg }}</p>
             {{/if}}
             <div class="panel-heading">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-md-4">Email*</label>
-                        <input type="email" class="form-control" name="email" value="{{email}}" />
+                        <input type="email" class="form-control" name="email" value="{{inputs.email}}" />
                     </div>
                     <div class="form-group">
                         <label class="col-md-4">Password*</label>
@@ -35,11 +35,11 @@
                     </div>
                     <div class="form-group">
                         <label class="col-md-4">Fornavn*</label>
-                        <input type="text" class="form-control" name="firstname" value="{{firstname}}" />
+                        <input type="text" class="form-control" name="firstname" value="{{inputs.firstname}}" />
                     </div>
                     <div class="form-group">
                         <label class="col-md-4">Efternavn*</label>
-                        <input type="text" class="form-control" name="lastname" value="{{lastname}}" />
+                        <input type="text" class="form-control" name="lastname" value="{{inputs.lastname}}" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Registrer</button>
@@ -60,7 +60,7 @@
                 </tr>
             </thead>
             <tbody>
-                {{# each users }}
+                {{#each users }}
                 <tr>
                     <td>{{this.info.firstname}} {{this.info.lastname}}</td>
                     <td>{{this.type.title}}</td>

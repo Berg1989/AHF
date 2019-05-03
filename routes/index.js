@@ -11,8 +11,18 @@ router
             description: 'Here goes the description',
             keywords: 'Here goes keywords'
         };
-            response.render('index', { layout: 'main' });
+            response.render('index', { user: request.session.user });
             request.session.errors = null;
+    })
+
+    .get('/logout', (request, response) => {
+        request.session.destroy(err => {
+            if (err) {
+                console.log(err);
+            } else {
+                response.redirect('/login');
+            }
+        });
     });
 
 module.exports = router;

@@ -36,7 +36,7 @@ hbs.registerHelper("select", function (value, options) {
           return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
       })
       .join('\n')
-})
+});
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
@@ -45,31 +45,28 @@ mongoose.connect(config.mongodb, { useNewUrlParser: true });
 
 // ROUTES FOR THE APP
 // PUBLIC
-const indexRouter = require('./routes/index');
-app.use('/', indexRouter);
+const index = require('./routes/index');
+app.use('/', index);
 
-const registerRouter = require('./routes/register');
-app.use('/register', registerRouter);
+const register = require('./routes/public/register');
+app.use('/register', register);
 
-const loginRouter = require('./routes/login');
-app.use('/login', loginRouter);
+const login = require('./routes/public/login');
+app.use('/login', login);
 
-const subscriptionTypeRouter = require('./routes/subscriptionType');
-app.use('/subscriptionType', subscriptionTypeRouter);
-
-const userProfiles = require('./routes/userprofiles');
-app.use('/userprofiles', userProfiles);
-
-// PROFILE
-const profileRouter = require('./routes/public/profile');
-app.use('/profile', profileRouter);
-
-const profileSubRouter = require('./routes/public/subscription');
-app.use('/profile/id=:id/subscription', profileSubRouter);
+// USER
+const user = require('./routes/public/user');
+app.use('/user', user);
 
 // ADMIN
-const adminRouter = require('./routes/admin');
-app.use('/admin', adminRouter);
+const adminIndex = require('./routes/admin/index');
+app.use('/admin', adminIndex);
+
+const adminUsers = require('./routes/admin/users');
+app.use('/admin/users', adminUsers);
+
+const adminSubscriptions = require('./routes/admin/subscriptions');
+app.use('/admin/subscriptions', adminSubscriptions);
 
 // Render error view, when server responds with status 404
 app.use(function(req, res, next){

@@ -10,12 +10,14 @@ const saltRounds = 10;
 exports.createMember = async (email, password, firstname, lastname, level, func) => {
     const type = { title: exports.userTitle(level), level };
     const info = { firstname: firstname, lastname: lastname };
+    const created = Date.now();
     password = await bcrypt.hash(password, saltRounds);
 
     const member = new Member({
         password,
         email,
         func,
+        created,
         info,
         type
     });
@@ -74,22 +76,6 @@ exports.findMembers = () => {
     return Member.find().exec();
 };
 
-exports.findUserTypes = () => {
-    return Usertype.find().exec();
-};
-
-exports.findUsertype = (id) => {
-    return Usertype.findOne({ _id: id }).exec();
-};
-
-exports.saveUsertype = (title, accesslevel) => {
-    const usertype = new Usertype({
-        title,
-        accesslevel,
-    });
-    return usertype.save();
-};
-
 exports.findMember = (email) => {
     return Member.findOne({ email: email }).exec();
 };
@@ -106,31 +92,18 @@ exports.login = async (email, password) => {
     } else return false;
 };
 
-exports.getSubTypes = function () {
-    return SubscriptionType.find().exec();
-}
-
-exports.createSubType = function (name, duration, mdrPrice) {
+exports.createSubscription = function (name, frequenzy, price) {
     const subType = new SubscriptionType({
         name,
-        duration,
-        mdrPrice,
+        frequenzy,
+        price
     });
     return subType.save();
-}
+};
 
-exports.getSubTypes = function () {
+exports.findSubscriptions = () => {
     return SubscriptionType.find().exec();
-}
-
-exports.createSubType = function (name, duration, mdrPrice) {
-    const subType = new SubscriptionType({
-        name,
-        duration,
-        mdrPrice,
-    });
-    return subType.save();
-}
+};
 
 exports.checkpassword = async (plaintextPassword, hash) => {
     return await bcrypt.compare(plaintextPassword, hash);

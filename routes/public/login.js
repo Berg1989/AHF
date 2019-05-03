@@ -1,4 +1,4 @@
-const controller = require("../controllers/controller");
+const controller = require("../../controllers/controller");
 const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
@@ -6,19 +6,24 @@ const fetch = require('node-fetch');
 
 router
     .get('/', function (request, response) {
-        response.locals.metaTags = {
-            title: 'Login',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
-        };
-        response.render('login', {
-            action: '/login',
-            errors: request.session.errors,
-            email: request.session.email,
-            user: request.session.user
-        });
-        request.session.errors = null;
+        if (request.session.user) response.redirect('/profile/id=' + request.session.user._id);
+        else {
+            response.locals.metaTags = {
+                title: 'Login',
+                description: 'Here goes the description',
+                keywords: 'Here goes keywords'
+            };
+            response.render('login', {
+                action: '/login',
+                errors: request.session.errors,
+                email: request.session.email,
+                user: request.session.user
+            });
+            request.session.errors = null;
+            request.session.email = null;
+        }
     })
+    
     .post('/', [
         //check email og om den findes i db
         check('email', 'Email is required')
@@ -26,11 +31,10 @@ router
         //check password
         check('password', 'Password is required')
             .isLength({ min: 5 })
-        /*.custom(async (password, { req }) => {
-            const result = await controller.login(req.body.email, password);
-            if (!result)
-                return Promise.reject('Password and email do not match');
-        })*/
+            .custom(async (password, { req }) => {
+                if (!await controller.login(req.body.email, password))
+                    return Promise.reject('Password and email do not match');
+            })
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
@@ -38,6 +42,9 @@ router
             request.session.email = request.body.email;
             response.redirect('/login');
         } else {
+            request.session.user = await controller.findMember(request.body.email);
+            response.redirect('/user');
+            /*
             const { email, password } = request.body;
             const result = await controller.login(email, password);
             if (result) {
@@ -47,7 +54,7 @@ router
                 request.session.errors = [{ msg: 'Username and password do not match' }];
                 request.session.email = request.body.email;
                 response.redirect('/login');
-            }
+            }*/
         }
     });
 
