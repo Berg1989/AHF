@@ -138,8 +138,6 @@ router
     })
 
     .post('/users/passwordreset/id=:id', async function (request, response) {
-        console.log(request.body);
-        console.log("pølse");
         let password = await controller.resetPassword(request.params.id);
         response.redirect('/admin/users/id=' + request.params.id);
         //response.send(password);
