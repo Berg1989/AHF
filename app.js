@@ -44,6 +44,7 @@ mongoose.Promise = Promise;
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
 
 // ROUTES FOR THE APP
+// PUBLIC
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
 
@@ -59,9 +60,14 @@ app.use('/subscriptionType', subscriptionTypeRouter);
 const userProfiles = require('./routes/userprofiles');
 app.use('/userprofiles', userProfiles);
 
-const profileRouter = require('./routes/profile');
+// PROFILE
+const profileRouter = require('./routes/public/profile');
 app.use('/profile', profileRouter);
 
+const profileSubRouter = require('./routes/public/subscription');
+app.use('/profile/id=:id/subscription', profileSubRouter);
+
+// ADMIN
 const adminRouter = require('./routes/admin');
 app.use('/admin', adminRouter);
 

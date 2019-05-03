@@ -22,6 +22,15 @@ exports.createMember = async (email, password, firstname, lastname, level, func)
     return member.save();
 };
 
+exports.updatePublicUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, email) => {
+    const info = { firstname, lastname, birth, phone, zipcode, street };
+    
+    return Member.findByIdAndUpdate(id, {
+        email: email,
+        info: info
+    }).exec();
+};
+
 exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, level, func, email) => {
     const type = { title: exports.userTitle(level), level };
     return Member.findByIdAndUpdate(
