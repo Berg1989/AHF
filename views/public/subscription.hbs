@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col">
+        {{#if errors }}
+        {{#each errors }}
+        <p class="alert alert-danger">{{ this.msg }}</p>
+        {{/each}}
+        {{/if}}
+        {{#if success }}
+        <p class="alert alert-success">{{ success.msg }}</p>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <p>Dit nye kontingent starter først, når det nuværende ophører.</p>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Kontingent detaljer</h2>
+            </div>
+            <div class="panel-body">
+                <form method="POST" action="/user/subscription">
+                    <div class="form-group">
+                        <select name="subscriptionModel">
+                            {{#select "0"}}
+                            <option value="0">Vælg</option>
+                            {{#each subscriptions}}
+                            <option value="{{this._id}}">{{this.name}} - {{this.duration}} måneder - Pris: {{this.price}}DKK/måned</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id="{{user._id}}" class="btn btn-primary">Vælg</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

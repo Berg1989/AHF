@@ -24,7 +24,7 @@
                 <h2>Bruger info:</h2>
             </div>
             <div class="panel-body">
-                <form method="POST" action="/profile/id={{user._id}}">
+                <form method="POST" action="/user/id={{user._id}}">
                     <div class="form-group">
                         <label class="label">Fornavn: (Påkrævet)</label>
                         <input type="text" id="firstname" class="form-control" name="firstname"
@@ -67,6 +67,15 @@
         </div>
     </div>
     <div class="col">
+        <p>Nuværende kontingent: {{user.submodel.duration}} måneder</p>
+        <p>Pris pr måned: {{user.submodel.price}}DKK</p>
+        <p>Start dato: {{user.subscription.startdate}}</p>
+        <p>Fornyelsesdato: {{user.subscription.enddate}}</p>
+        <br>
+        <a href="/user/subscription" class="btn btn-primary">Skift kontingent</a>
+        <button type="submit" id="{{user._id}}" class="btn btn-primary">Cancel kontingent</button>
+
+        <br>
         <p>Funktion: {{user.info.func}}</p>
         <p>Medlem siden: {{user.created}}</p>
     </div>

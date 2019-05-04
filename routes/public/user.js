@@ -24,10 +24,9 @@ router
                 };
                 if (user && user._id === request.params.id) {
                     response.render('public/pUser', {
-                        user,
+                        user: result,
                         success: request.session.success,
-                        errors: request.session.errors,
-                        action: '/user/id=' + request.params.id,
+                        errors: request.session.errors
                     });
                     request.session.success = null;
                     request.session.errors = null;
@@ -35,10 +34,10 @@ router
                     response.render('public/user', { result });
                 }
             } else {
-                response.render('error'); //render error
+                throw new Error(result);
             }
         } catch (err) {
-            response.render('error');
+            console.log(err);
         }
     })
 
@@ -77,6 +76,37 @@ router
                 console.log(err);
             }
 
+        }
+    })
+
+    .get('/subscription', async (request, response) => {
+        const user = request.session.user;
+        //const result = await controller.findUser(request.params.id);
+        response.render('public/subscription', {
+            user,
+            subscriptions: await controller.findSubscriptionModels(),
+            success: request.session.success,
+            errors: request.session.errors,
+        });
+        request.session.success = null;
+        request.session.errors = null;
+    })
+
+    .post('/subscription', async (request, response) => {
+        const subModel = await controller.findSubscriptionModel(request.body.subscriptionModel);
+        if (subModel) {
+            const startdate = new Date();
+            const enddate = new Date().setMonth(startdate.getMonth() + parseInt(subModel.duration));
+            try {
+                const result = await controller.updateUserSubscription(request.session.user._id, subModel, startdate, enddate, true);
+                if (result) {
+                    request.session.success = { msg: 'Updated' };
+                    response.redirect('/user');
+                }
+            } catch (err) {
+                console.log(err);
+            }
+           
         }
     });
 

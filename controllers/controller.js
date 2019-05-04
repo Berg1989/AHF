@@ -38,8 +38,8 @@ exports.deleteSubscriptionModel = (id) => {
 
 // USER
 exports.createUser = async (email, password, firstname, lastname, title, level, func) => {
-    const date = new Date();
-    const created = date.toLocaleDateString();
+    const created = new Date();
+    //const created = date.toLocaleDateString();
     const newHash = await bcrypt.hash(password, saltRounds);
 
     const user = new User({
@@ -69,6 +69,17 @@ exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street
             zipcode: zipcode,
             street: street,
             func: func
+        }
+    }).exec();
+};
+
+exports.updateUserSubscription = (id, subModelId, startdate, enddate, active) => {
+    return User.findByIdAndUpdate(id, {
+        submodel: subModelId,
+        subscription: {
+            startdate: startdate,
+            enddate: enddate,
+            active
         }
     }).exec();
 };
@@ -103,8 +114,12 @@ exports.findUsers = () => {
     return User.find().exec();
 };
 
-exports.findUser = (id) => {
+exports.findUserr = (id) => {
     return User.findById(id).exec();
+};
+
+exports.findUser = (id) => {
+    return User.findById(id).populate('submodel').exec();
 };
 
 exports.checkEmail = (email) => {
