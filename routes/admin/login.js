@@ -5,17 +5,16 @@ const router = express.Router();
 
 router
     .get('/', function (request, response) {
-        if (!request.session.user) {
+        if (!request.session.admin) {
             response.locals.metaTags = {
                 title: 'Admin Login',
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
             };
-            response.render('login', {
-                action: '/admin/login',
+            response.render('admin/login', {
                 errors: request.session.errors,
                 email: request.session.email,
-                user: request.session.user
+                admin: request.session.admin
             });
             request.session.errors = null;
             request.session.email = null;
@@ -39,8 +38,9 @@ router
             request.session.email = request.body.loginEmail;
             response.redirect('/admin/login');
         } else {
-            request.session.user = await controller.checkEmail(request.body.loginEmail);
+            request.session.admin = await controller.checkEmail(request.body.loginEmail);
             response.redirect('/admin');
+
         }
     });
 

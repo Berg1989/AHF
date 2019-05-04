@@ -81,32 +81,47 @@ router
 
     .get('/subscription', async (request, response) => {
         const user = request.session.user;
-        //const result = await controller.findUser(request.params.id);
-        response.render('public/subscription', {
-            user,
-            subscriptions: await controller.findSubscriptionModels(),
-            success: request.session.success,
-            errors: request.session.errors,
-        });
-        request.session.success = null;
-        request.session.errors = null;
+        if (!user) response.redirect('/login');
+        else {
+            //const result = await controller.findUser(request.params.id);
+            response.render('public/subscription', {
+                user,
+                subscriptions: await controller.findSubscriptionModels(),
+                success: request.session.success,
+                errors: request.session.errors,
+            });
+            request.session.success = null;
+            request.session.errors = null;
+        }
     })
 
     .post('/subscription', async (request, response) => {
+        // # dato krig
         const subModel = await controller.findSubscriptionModel(request.body.subscriptionModel);
         if (subModel) {
-            const startdate = new Date();
-            const enddate = new Date().setMonth(startdate.getMonth() + parseInt(subModel.duration));
+            const oldEndDate = new Date(request.session.user.subscription.enddate);
+            let startdate = new Date();
+            let enddate = await controller.addMonths(startdate, parseInt(subModel.duration));
+           
+            /*if (oldEndDate && oldEndDate > startdate) {
+                startdate = oldEndDate;
+                enddate = oldEndDate.setMonth(oldEndDate.getMonth() + parseInt(subModel.duration));
+            }*/
+
+            console.log(parseInt(subModel.duration));
+            console.log(startdate);
+            console.log(enddate);
+
             try {
                 const result = await controller.updateUserSubscription(request.session.user._id, subModel, startdate, enddate, true);
                 if (result) {
-                    request.session.success = { msg: 'Updated' };
+                    request.session.success = { msg: 'Kontingent opdateret' };
                     response.redirect('/user');
                 }
             } catch (err) {
                 console.log(err);
             }
-           
+
         }
     });
 

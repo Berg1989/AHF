@@ -79,7 +79,7 @@ exports.updateUserSubscription = (id, subModelId, startdate, enddate, active) =>
         subscription: {
             startdate: startdate,
             enddate: enddate,
-            active
+            active: active
         }
     }).exec();
 };
@@ -131,4 +131,8 @@ exports.login = async (email, password) => {
     if (user) {
         if (await bcrypt.compare(password, user.password)) return true;
     } else return false;
+};
+
+exports.addMonths = (date, n) => {
+    return new Date(date.setMonth(date.getMonth() + n));
 };

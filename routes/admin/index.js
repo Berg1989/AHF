@@ -13,15 +13,20 @@ router
             description: 'Here goes the description',
             keywords: 'Here goes keywords'
         };
-        response.render('admin/index', { layout: 'admin', user: request.session.user });
+        response.render('admin/index', { 
+            layout: 'admin', 
+            admin: request.session.admin 
+        });
+
+        console.log(request.session.admin);
         /*
-        if (user && user.usertype.accesslevel < 3) {
+        if (admin && admin.admintype.accesslevel < 3) {
             response.locals.metaTags = {
                 title: 'Frontpage',
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
             };
-            response.render('admin/index', { user, usertypes });
+            response.render('admin/index', { admin, admintypes });
         } else {
             response.redirect('/');
         }*/

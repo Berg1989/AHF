@@ -1,12 +1,5 @@
 <div class="row">
     <div class="col">
-        <form method="GET" action="/logout">
-            <button class="btn btn-primary" type="submit">Logout</button>
-        </form>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
         {{#if errors }}
         {{#each errors }}
         <p class="alert alert-danger">{{ this.msg }}</p>
@@ -21,7 +14,7 @@
     <div class="col">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2>Bruger info:</h2>
+                <h2>Bruger info</h2>
             </div>
             <div class="panel-body">
                 <form method="POST" action="/user/id={{user._id}}">
@@ -65,18 +58,19 @@
                 </form>
             </div>
         </div>
+           <br>
+        <p>Funktion: {{user.info.func}}</p>
+        <p>Medlem siden: {{user.created}}</p>
     </div>
     <div class="col">
-        <p>Nuværende kontingent: {{user.submodel.duration}} måneder</p>
+        <h2>Kontingent info</h2>
+        <p>Nuværende kontingent: {{user.submodel.name}}</p>
+        <p>Varighed: {{user.submodel.duration}} måneder</p>
         <p>Pris pr måned: {{user.submodel.price}}DKK</p>
         <p>Start dato: {{user.subscription.startdate}}</p>
         <p>Fornyelsesdato: {{user.subscription.enddate}}</p>
         <br>
         <a href="/user/subscription" class="btn btn-primary">Skift kontingent</a>
-        <button type="submit" id="{{user._id}}" class="btn btn-primary">Cancel kontingent</button>
-
-        <br>
-        <p>Funktion: {{user.info.func}}</p>
-        <p>Medlem siden: {{user.created}}</p>
+        <button type="submit" id="{{user._id}}" class="btn btn-primary">Cancel kontingent</button>   
     </div>
 </div>

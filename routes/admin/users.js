@@ -7,7 +7,7 @@ router
     .get('/', async (request, response) => {
         // Get users
         //const usertypes = await controller.findUserTypes();
-        //const user = request.session.user;
+        //const admin = request.session.admin;
         response.locals.metaTags = {
             title: 'Admin - users',
             description: 'Here goes the description',
@@ -19,7 +19,7 @@ router
             inputs: request.session.inputs,
             success: request.session.success,
             errors: request.session.errors,
-            //user: request.session.user,
+            //admin: request.session.admin,
         });
         request.session.errors = null;
         request.session.success = null;

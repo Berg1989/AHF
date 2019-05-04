@@ -59,6 +59,9 @@ app.use('/user', user);
 const adminIndex = require('./routes/admin/index');
 app.use('/admin', adminIndex);
 
+const adminLogin = require('./routes/admin/login');
+app.use('/admin/login', adminLogin);
+
 const adminUsers = require('./routes/admin/users');
 app.use('/admin/users', adminUsers);
 
