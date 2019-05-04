@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const member = new Schema({
+const user = new Schema({
     password: String,
     email: String,
-    func: String,
     created: String,
     info: {
         firstname: String,
@@ -12,21 +11,18 @@ const member = new Schema({
         birth: String,
         phone: String,
         zipcode: Number,
-        street: String
+        street: String,
+        func: String
     },
     type: {
         title: String,
         level: Number
     },
     subscription: {
-        type: { type: Schema.Types.ObjectId, ref: 'subtype' },
-        date: Date,
+        type: { type: Schema.Types.ObjectId, ref: 'subscriptionModel' },
+        date: String,
         active: Boolean
     }    
 });
 
-member.methods.toString = function () {
-    return "Navn: " + this.firstname + ", Efternavn: " + this.lastname;
-};
-
-module.exports = mongoose.model('member', member);
+module.exports = mongoose.model('user', user);

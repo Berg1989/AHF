@@ -15,7 +15,7 @@ router
     .get('/id=:id', async (request, response) => {
         try {
             const user = request.session.user;
-            const result = await controller.findMemberById(request.params.id);
+            const result = await controller.findUser(request.params.id);
             if (result) {
                 response.locals.metaTags = {
                     title: 'User - ' + result.info.firstname,
@@ -23,9 +23,8 @@ router
                     keywords: 'Here goes keywords'
                 };
                 if (user && user._id === request.params.id) {
-                    response.render('pUser', {
+                    response.render('public/pUser', {
                         user,
-                        result,
                         success: request.session.success,
                         errors: request.session.errors,
                         action: '/user/id=' + request.params.id,
@@ -33,7 +32,7 @@ router
                     request.session.success = null;
                     request.session.errors = null;
                 } else {
-                    response.render('user', { result, user });
+                    response.render('public/user', { result });
                 }
             } else {
                 response.render('error'); //render error
@@ -55,23 +54,21 @@ router
             .optional({ checkFalsy: true }) // Can be falsy
             .isEmail()
             .custom(async email => {
-                const result = await controller.findMember(email);
-                if (result)
+                if (await controller.checkEmail(email))
                     return Promise.reject('Email already in use');
             })
     ], async (request, response) => {
-        // handle post requests of a user edit
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             response.redirect('/user/id=' + request.params.id);
         } else {
-            //const user = await controller.findMemberById(request.params.id);
-            let { firstname, lastname, birth, phone, zipcode, street, email } = request.body;
-            if (!email) email = request.session.user.email;
+            const { firstname, lastname, birth, phone, zipcode, street, email } = request.body;
 
             try {
-                const result = await controller.updatePublicUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, email);
+                const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, email, request.session.user.info.func);
+                if (email) await controller.updateUserEmail(request.params.id, email);
+
                 if (result) {
                     request.session.success = { msg: 'Success - opdatering gennemført' };
                     response.redirect('/user/id=' + request.params.id);

@@ -6,8 +6,12 @@
         {{/each}}
         {{/if}}
         {{#if success}}
-        <p class="alert alert-danger">{{ success.msg }}</p>
+        <p class="alert alert-success">{{ success.msg }}</p>
         {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h1>Opret kontingent</h1>
@@ -15,72 +19,72 @@
             <div class="panel-body">
                 <form method="POST" action="/admin/subscriptions">
                     <div class="form-group">
-                        <label></label>Navn:<font color="red">*</font></label>
-                        <input type="text" class="form-control" name="name" value="{{inputs.name}}"/>
+                        <label></label>Navn (Påkrævet):</label>
+                        <input type="text" class="form-control" name="name" value="{{inputs.name}}" />
                     </div>
                     <div class="form-group">
-                        <label>Varighed/Betalingsfrekvens (i antal måneder):<font color="red">*</font></label>
-                        <input type="number" class="form-control" name="frequency" value="{{inputs.frequency}}" />
-                        <!--<select name="frequency" class="form-control" id="frequency">
-                            {{#select "5"}}
-                            <option value="0" disabled="true">Vælg</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            {{/select}}
-                        </select>-->
+                        <label>Varighed/Betalingsfrekvens (Påkrævet):</label>
+                        <input type="number" class="form-control" name="duration" value="{{inputs.duration}}" placeholder="Antal måneder" />
                     </div>
                     <div class="form-group">
-                        <label></label>Pris pr måned (DKK):<font color="red">*</font></label>
-                        <input type="number" class="form-control" name="price" value="{{inputs.price}}" />
+                        <label></label>Pris pr måned (Påkrævet):</label>
+                        <input type="number" step="0.01" class="form-control" name="price" value="{{inputs.price}}" placeholder="DKK" />
                     </div>
-
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Opret</button>
                     </div>
                 </form>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <h2>Synlige kontingenter</h2>
-                <table cellpadding='2' style="width:100%;">
-                    <thead>
-                        <tr>
-                            <th>Navn</th>
-                            <th>Varihed</th>
-                            <th>Pris</th>
-                            <th>Rediger</th>
-                            <th>Slet</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each subscriptions}}
-                        <tr>
-                            <td>{{this.name}}</td>
-                            <td>{{this.frequency}}</td>
-                            <td>{{this.price}}</td>
-                            <td><a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i
-                                        class="fas fa-wrench"></i></a></td>
-                            <td> <button type="submit" id="{{this._id}}" onclick="deleteSubscription(this.id)"
-                                    class="btn btn-danger"><i class="fas fa-times"></i></button></td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </div>
-            <div class="col">
-                <h2>Arkiverede kontingenter</h2>
-            </div>
-        </div>
     </div>
 </div>
+<div class="row">
+    <div class="col">
+        <h2>Synlige kontingenter</h2>
+        <table cellpadding='2' style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Varihed</th>
+                    <th>Pris</th>
+                    <th>Rediger</th>
+                    <th>Slet</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each subscriptions}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.duration}}</td>
+                    <td>{{this.price}}</td>
+                    <td><a href="/admin/subscriptions/id={{this._id}}" class="btn btn-primary"><i
+                                class="fas fa-wrench"></i></a></td>
+                    <td> <button type="submit" id="{{this._id}}" onclick="deleteSubscription(this.id)"
+                            class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="col">
+        <h2>Arkiverede kontingenter</h2>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    async function deleteSubscription(id) {
+        const res = window.confirm('Vil du slette dette kontingent?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/subscriptions/id=' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>

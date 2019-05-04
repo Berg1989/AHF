@@ -1,14 +1,18 @@
 <div class="row">
     <div class="col">
+        {{#if errors }}
+        {{#each errors }}
+        <p class="alert alert-danger">{{ this.msg }}</p>
+        {{/each}}
+        {{/if}}
+        {{#if success }}
+        <p class="alert alert-success">{{ success.msg }}</p>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         <div class="panel panel-primary">
-            {{#if errors }}
-            {{#each errors }}
-            <p class="alert alert-danger">{{ this.msg }}</p>
-            {{/each}}
-            {{/if}}
-            {{#if success }}
-            <p class="alert alert-success">{{ success.msg }}</p>
-            {{/if}}
             <div class="panel-heading">
                 <h2>Registrer ny bruger</h2>
             </div>
@@ -17,7 +21,7 @@
                     <div class="form-group">
                         <label for="typeselect">Vælg en bruger type</label>
                         <select name="level" class="form-control" id="typeselect">
-                            {{#select "1"}}
+                            {{#select "3"}}
                             <option value="0" disabled="true">Vælg</option>
                             <option value="1">Admin</option>
                             <option value="2">Frivillig</option>
@@ -26,20 +30,24 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4">Email*</label>
+                        <label>Email*</label>
                         <input type="email" class="form-control" name="email" value="{{inputs.email}}" />
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4">Password*</label>
+                        <label>Password*</label>
                         <input type="password" class="form-control" name="password" />
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4">Fornavn*</label>
+                        <label>Fornavn*</label>
                         <input type="text" class="form-control" name="firstname" value="{{inputs.firstname}}" />
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4">Efternavn*</label>
+                        <label>Efternavn*</label>
                         <input type="text" class="form-control" name="lastname" value="{{inputs.lastname}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Funktion:</label>
+                        <input type="text" class="form-control" name="func" value="{{inputs.func}}" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Registrer</button>
@@ -55,6 +63,7 @@
                 <tr>
                     <th>Navn</th>
                     <th>Type</th>
+                    <th>Funktion</th>
                     <th>Rediger</th>
                     <th>Slet</th>
                 </tr>
@@ -64,9 +73,11 @@
                 <tr>
                     <td>{{this.info.firstname}} {{this.info.lastname}}</td>
                     <td>{{this.type.title}}</td>
-                    <td><a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a></td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deleteUser(this.id)"
-                            class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                    <td>{{this.info.func}}</td>
+                    <td><a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                    </td>
+                    <td> <button type="submit" id="{{this._id}}" onclick="deleteUser(this.id)" class="btn btn-danger"><i
+                                class="fas fa-times"></i></button></td>
                 </tr>
                 {{/each}}
             </tbody>

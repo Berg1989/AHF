@@ -28,6 +28,7 @@ app.use(cookeParser());
 app.use(session({ secret: 'hemmelig', saveUninitialized: true, resave: true }));
 app.use(expressValidator());
 
+// Select hbs-helper
 hbs.registerHelper("select", function (value, options) {
   return options.fn(this)
       .split('\n')
@@ -45,16 +46,12 @@ mongoose.connect(config.mongodb, { useNewUrlParser: true });
 
 // ROUTES FOR THE APP
 // PUBLIC
-const index = require('./routes/index');
+const index = require('./routes/public/index');
 app.use('/', index);
-
-const register = require('./routes/public/register');
-app.use('/register', register);
 
 const login = require('./routes/public/login');
 app.use('/login', login);
 
-// USER
 const user = require('./routes/public/user');
 app.use('/user', user);
 
@@ -68,7 +65,7 @@ app.use('/admin/users', adminUsers);
 const adminSubscriptions = require('./routes/admin/subscriptions');
 app.use('/admin/subscriptions', adminSubscriptions);
 
-// Render error view, when server responds with status 404
+// Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
 app.use(function(req, res, next){
   res.locals.metaTags = {
     title: '404 - not found',

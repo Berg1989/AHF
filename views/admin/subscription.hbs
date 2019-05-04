@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col">
+        {{#if errors }}
+        {{#each errors }}
+        <p class="alert alert-danger">{{ this.msg }}</p>
+        {{/each}}
+        {{/if}}
+        {{#if success}}
+        <p class="alert alert-success">{{ success.msg }}</p>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1>Opret kontingent</h1>
+            </div>
+            <div class="panel-body">
+                <form method="POST" action="/admin/subscriptions/id={{subscription._id}}">
+                    <div class="form-group">
+                        <label></label>Navn (Påkrævet):</label>
+                        <input type="text" class="form-control" name="name" value="{{subscription.name}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Varighed/Betalingsfrekvens (Påkrævet):</label>
+                        <input type="number" class="form-control" name="duration" value="{{subscription.duration}}"
+                            placeholder="Antal måneder" />
+                    </div>
+                    <div class="form-group">
+                        <label></label>Pris pr måned (Påkrævet):</label>
+                        <input type="number" step="0.01" class="form-control" name="price" value="{{subscription.price}}"
+                            placeholder="DKK" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opdater</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

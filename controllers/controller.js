@@ -1,110 +1,119 @@
 "use strict";
 
-const Member = require('../models/member');
-const SubscriptionType = require('../models/subscriptionType')
-const fetch = require('node-fetch');
+const User = require('../models/user');
+const SubscriptionModel = require('../models/subscriptionModel');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
-// Returns a promise that resolves when the user is created
-exports.createMember = async (email, password, firstname, lastname, level, func) => {
-    const type = { title: exports.userTitle(level), level };
-    const info = { firstname: firstname, lastname: lastname };
-    const created = Date.now();
-    password = await bcrypt.hash(password, saltRounds);
-
-    const member = new Member({
-        password,
-        email,
-        func,
-        created,
-        info,
-        type
-    });
-    return member.save();
+// SUBSCRIPTIONMODEL
+exports.createSubscriptionModel = (name, duration, price, active) => {
+    return new SubscriptionModel({
+        name: name,
+        duration: duration,
+        price: price,
+        active: active
+    }).save();
 };
 
-exports.updatePublicUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, email) => {
-    const info = { firstname, lastname, birth, phone, zipcode, street };
-    
-    return Member.findByIdAndUpdate(id, {
-        email: email,
-        info: info
+exports.findSubscriptionModels = () => {
+    return SubscriptionModel.find().exec();
+};
+
+exports.updateSubscriptionModel = (id, name, duration, price, active) => {
+    return SubscriptionModel.findByIdAndUpdate(id, {
+        name: name,
+        duration: duration,
+        price: price,
+        active: active
     }).exec();
 };
 
-exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, level, func, email) => {
-    const type = { title: exports.userTitle(level), level };
-    return Member.findByIdAndUpdate(
-        id,
-        {
-            email: email,
-            func: func,
-            info: {
-                firstname: firstname,
-                lastname: lastname,
-                birth: birth,
-                phone: phone,
-                zipcode: zipcode,
-                street: street
-            },
-            type: type
-        }
-    ).exec();
+exports.findSubscriptionModel = (id) => {
+    return SubscriptionModel.findById(id).exec();
 };
 
-exports.updateUser = (id, firstname, lastname) => {
-    return Member.findByIdAndUpdate(
-        id,
-        { info: { firstname: firstname, lastname: lastname } }
-    ).exec();
+exports.deleteSubscriptionModel = (id) => {
+    return SubscriptionModel.findByIdAndDelete(id).exec();
+}
+
+// USER
+exports.createUser = async (email, password, firstname, lastname, title, level, func) => {
+    const date = new Date();
+    const created = date.toLocaleDateString();
+    const newHash = await bcrypt.hash(password, saltRounds);
+
+    const user = new User({
+        password: newHash,
+        email: email,
+        created: created,
+        info: {
+            firstname: firstname,
+            lastname: lastname,
+            func: func
+        },
+        type: {
+            title: title,
+            level: level
+        }
+    });
+    return user.save();
+};
+
+exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, func) => {
+    return User.findByIdAndUpdate(id, {
+        info: {
+            firstname: firstname,
+            lastname: lastname,
+            birth: birth,
+            phone: phone, 
+            zipcode: zipcode,
+            street: street,
+            func: func
+        }
+    }).exec();
+};
+
+exports.updateUserEmail = (id, email) => {
+    return User.findByIdAndUpdate(id, {
+        email: email
+    }).exec();
+};
+
+exports.updateUserType = (id, title, level) => {
+    return User.findByIdAndUpdate(id, {
+        type: {
+            title: title,
+            level: level
+        }
+    }).exec();
 };
 
 exports.deleteUser = (id) => {
-    //return Member.findOneAndDelete({ _id : id }).exec();
-    return Member.findByIdAndDelete(id);
+    return User.findByIdAndDelete(id).exec();
 };
 
-exports.userTitle = (level) => {
+exports.getUserTitle = (level) => {
     if (level === '1') level = 'admin';
     else if (level === '2') level = 'frivillig';
     else level = 'medlem';
     return level;
 };
 
-exports.findMembers = () => {
-    return Member.find().exec();
+exports.findUsers = () => {
+    return User.find().exec();
 };
 
-exports.findMember = (email) => {
-    return Member.findOne({ email: email }).exec();
+exports.findUser = (id) => {
+    return User.findById(id).exec();
 };
 
-exports.findMemberById = (id) => {
-    return Member.findById(id).exec();
+exports.checkEmail = (email) => {
+    return User.findOne({ email: email }).exec();
 };
 
 exports.login = async (email, password) => {
-    const member = await exports.findMember(email);
-    if (member) {
-        const result = await bcrypt.compare(password, member.password);
-        if (result) return member;
+    const user = await exports.checkEmail(email);
+    if (user) {
+        if (await bcrypt.compare(password, user.password)) return true;
     } else return false;
-};
-
-exports.createSubscription = function (name, frequenzy, price) {
-    const subType = new SubscriptionType({
-        name,
-        frequenzy,
-        price
-    });
-    return subType.save();
-};
-
-exports.findSubscriptions = () => {
-    return SubscriptionType.find().exec();
-};
-
-exports.checkpassword = async (plaintextPassword, hash) => {
-    return await bcrypt.compare(plaintextPassword, hash);
 };

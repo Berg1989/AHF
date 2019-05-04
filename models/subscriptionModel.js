@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const subscriptionType = new Schema({
+const subscriptionModel = new Schema({
     name: String,
     duration: Number,
     price: Number,
+    active: Boolean,   
 });
 
-module.exports = mongoose.model('SubscriptionType', subscriptionType);
+module.exports = mongoose.model('subscriptionModel', subscriptionModel);

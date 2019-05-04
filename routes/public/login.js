@@ -13,48 +13,66 @@ router
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
             };
-            response.render('login', {
+            response.render('public/login', {
                 action: '/login',
                 errors: request.session.errors,
                 email: request.session.email,
+                inputs: request.session.inputs,
                 user: request.session.user
             });
             request.session.errors = null;
             request.session.email = null;
+            request.session.inputs = null;
         }
     })
     
     .post('/', [
-        //check email og om den findes i db
-        check('email', 'Email is required')
+        check('loginEmail', 'Email is required')
             .isEmail(),
-        //check password
-        check('password', 'Password is required')
-            .isLength({ min: 5 })
-            .custom(async (password, { req }) => {
-                if (!await controller.login(req.body.email, password))
+        check('loginPassword', 'Password is required')
+            .isLength({ min: 5 }).custom(async (password, { req }) => {
+                if (!await controller.login(req.body.loginEmail, password))
                     return Promise.reject('Password and email do not match');
             })
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
-            request.session.email = request.body.email;
+            request.session.email = request.body.loginEmail;
             response.redirect('/login');
         } else {
-            request.session.user = await controller.findMember(request.body.email);
+            request.session.user = await controller.checkEmail(request.body.loginEmail);
             response.redirect('/user');
-            /*
-            const { email, password } = request.body;
-            const result = await controller.login(email, password);
+        }
+    })
+
+    .post('/register', [
+        check('email', 'Please enter a valid email')
+            .isEmail()
+            .custom(async email => {
+                if (await controller.checkEmail(email))
+                    return Promise.reject('Email already in use');
+            }),
+        check('password', 'Password must be atleast 5 characters or longer')
+            .isString().isLength({ min: 5 }),
+        check('firstname', 'Please enter your firstname')
+            .isString().isLength({ min: 2 }),
+        check('lastname', 'Please enter your lastname')
+            .isString().isLength({ min: 2 })
+    ], async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            request.session.inputs = { email: request.body.email, firstname: request.body.firstname, lastname: request.body.lastname };
+            response.redirect('/login');
+        } else {
+            const { email, password, firstname, lastname } = request.body;
+            const result = await controller.createUser(email, password, firstname, lastname, await controller.getUserTitle(3), 3, 'medlem');
+
             if (result) {
                 request.session.user = result;
-                response.redirect('/profile/id=' + result._id);
-            } else {
-                request.session.errors = [{ msg: 'Username and password do not match' }];
-                request.session.email = request.body.email;
-                response.redirect('/login');
-            }*/
+                response.redirect('/user');
+            }
         }
     });
 

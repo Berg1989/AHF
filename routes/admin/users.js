@@ -15,7 +15,7 @@ router
         };
         response.render('admin/users', {
             layout: 'admin',
-            users: await controller.findMembers(),
+            users: await controller.findUsers(),
             inputs: request.session.inputs,
             success: request.session.success,
             errors: request.session.errors,
@@ -27,43 +27,41 @@ router
     })
 
     .post('/', [
-        //check email og om denne allerede existere i database
         check('email', 'Please enter a valid email')
-            .isEmail()
-            .custom(async email => {
-                const result = await controller.findMember(email);
-                if (result)
+            .isEmail().custom(async email => {
+                if (await controller.checkEmail(email))
                     return Promise.reject('Email already in use');
             }),
-        //check om password er min 5 chars lang
         check('password', 'Password must be 5 characters or longer')
             .isLength({ min: 5 }),
         check('firstname', 'Please enter your firstname')
             .isLength({ min: 2 }),
         check('lastname', 'Please enter your lastname')
             .isLength({ min: 2 }),
-        check('select', 'Please select a usertype')
-            .not().isEmpty()
+        check('level', 'Please select a usertype')
+            .not().isEmpty(),
+        check('func')
+            .optional({ checkFalsy: true }).isString()
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
-            request.session.inputs = { email: request.body.email, firstname: request.body.firstname, lastname: request.body.lastname };
+            request.session.inputs = { email: request.body.email, firstname: request.body.firstname, lastname: request.body.lastname, func: request.body.func };
             response.redirect('/admin/users');
         } else {
-            const { level, email, password, firstname, lastname } = request.body;
-            const result = await controller.createMember(email, password, firstname, lastname, level);
+            const { level, email, password, firstname, lastname, func } = request.body;
+            const title = await controller.getUserTitle(level);
 
-            if (result) {
+            if (await controller.createUser(email, password, firstname, lastname, title, level, func)) {
                 request.session.success = { msg: 'Success - ny bruger: ' + email + ', er oprettet' };
                 response.redirect('/admin/users');
             }
         }
     })
 
-    .get('/users/id=:id', async (request, response) => {
+    .get('/id=:id', async (request, response) => {
         try {
-            const user = await controller.findMemberById(request.params.id);
+            const user = await controller.findUser(request.params.id);
             if (user) {
                 response.locals.metaTags = {
                     title: 'Admin - edit user: ' + user.info.firstname,
@@ -84,7 +82,7 @@ router
         }
     })
 
-    .post('/users/id=:id', [
+    .post('/id=:id', [
         check('firstname', 'Fornavn skal udfyldes')
             .isLength({ min: 2 }),
         check('lastname', 'Efternavn skal udfyldes')
@@ -96,36 +94,33 @@ router
             .optional({ checkFalsy: true }) // Can be falsy
             .isEmail()
             .custom(async email => {
-                const result = await controller.findMember(email);
-                if (result)
+                if (await controller.checkEmail(email))
                     return Promise.reject('Email already in use');
             })
     ], async (request, response) => {
-        // handle post requests of a user edit
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             response.redirect('/admin/users/id=' + request.params.id);
         } else {
-            const user = await controller.findMemberById(request.params.id);
-            let { firstname, lastname, birth, phone, zipcode, street, level, func, email } = request.body;
-            if (!email) email = user.email;
-            const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, level, func, email);
+            const { firstname, lastname, birth, phone, zipcode, street, level, func, email } = request.body;
+            const res1 = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, func);
+            const res2 = await controller.updateUserType(request.params.id, await controller.getUserTitle(level), level);
+            if (email) await controller.updateUserEmail(request.params.id, email);
 
-            if (result) {
+            if (res1 && res2) {
                 request.session.success = { msg: 'Success - bruger opdateret' };
                 response.redirect('/admin/users/id=' + request.params.id);
             }
         }
     })
 
-    .delete('/users/id=:id', async (request, response) => {
+    .delete('/id=:id', async (request, response) => {
         try {
-            //const result = await controller.deleteUser(request.params.id);
             if (await controller.deleteUser(request.params.id)) response.sendStatus(200);
         } catch (err) {
             response.sendStatus(405);
         }
-    })
+    });
 
 module.exports = router;
