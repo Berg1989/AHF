@@ -133,6 +133,15 @@ exports.login = async (email, password) => {
     } else return false;
 };
 
+exports.unsubscribe = (id) => {
+    return User.findByIdAndUpdate(id, {
+        submodel: null,
+        subscription: {
+            active: false
+        }
+    }).exec();
+};
+
 exports.addMonths = (date, n) => {
     return new Date(date.setMonth(date.getMonth() + n));
 };

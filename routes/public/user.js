@@ -123,6 +123,12 @@ router
             }
 
         }
+    })
+
+    .post('/unsubscribe', async (request, response) => {
+        if(await controller.unsubscribe(request.session.user)) {
+            response.redirect('/user');
+        }
     });
 
 module.exports = router;
