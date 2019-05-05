@@ -30,6 +30,7 @@ router
                     });
                     request.session.success = null;
                     request.session.errors = null;
+                    request.session.user = result; //update user session
                 } else {
                     response.render('public/user', { result });
                 }
@@ -42,35 +43,26 @@ router
     })
 
     .post('/id=:id', [
-        check('firstname', 'Fornavn skal udfyldes')
-            .isLength({ min: 2 }),
-        check('lastname', 'Efternavn skal udfyldes')
-            .isLength({ min: 2 }),
-        check('zipcode', 'Postnummer skal være et tal')
-            .optional({ checkFalsy: true }) // Can be falsy
-            .isDecimal(),
-        check('email', 'Please enter a valid email')
-            .optional({ checkFalsy: true }) // Can be falsy
-            .isEmail()
-            .custom(async email => {
-                if (await controller.checkEmail(email))
-                    return Promise.reject('Email already in use');
-            })
+        check('firstname', 'Fornavn skal udfyldes').isString().isLength({ min: 2 }),
+        check('lastname', 'Efternavn skal udfyldes').isString().isLength({ min: 2 }),
+        check('birth', 'Invalid input').optional({ checkFalsy: true }).isString(),
+        check('phone', 'Invalid input').optional({ checkFalsy: true }).isString(),
+        check('zipcode', 'Postnummer skal være et tal').optional({ checkFalsy: true }).isDecimal(),
+        check('street', 'Invalid input').optional({ checkFalsy: true }).isString()
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             response.redirect('/user/id=' + request.params.id);
         } else {
-            const { firstname, lastname, birth, phone, zipcode, street, email } = request.body;
+            const { firstname, lastname, birth, phone, zipcode, street } = request.body;
 
             try {
-                const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, email, request.session.user.info.func);
-                if (email) await controller.updateUserEmail(request.params.id, email);
+                const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, request.session.user.info.func);
 
                 if (result) {
-                    request.session.success = { msg: 'Success - opdatering gennemført' };
-                    response.redirect('/user/id=' + request.params.id);
+                    request.session.success = { msg: 'Success - Dine informationer er opdateret' };
+                    response.redirect('/user');
                 }
             } catch (err) {
                 console.log(err);
@@ -99,14 +91,9 @@ router
         // # dato krig
         const subModel = await controller.findSubscriptionModel(request.body.subscriptionModel);
         if (subModel) {
-            const oldEndDate = new Date(request.session.user.subscription.enddate);
-            let startdate = new Date();
-            let enddate = await controller.addMonths(startdate, parseInt(subModel.duration));
-           
-            /*if (oldEndDate && oldEndDate > startdate) {
-                startdate = oldEndDate;
-                enddate = oldEndDate.setMonth(oldEndDate.getMonth() + parseInt(subModel.duration));
-            }*/
+            const today = new Date();
+            let startdate = new Date().toDateString();
+            let enddate = new Date(today.setMonth(today.getMonth() + parseInt(subModel.duration))).toDateString();
 
             console.log(parseInt(subModel.duration));
             console.log(startdate);
@@ -126,8 +113,60 @@ router
     })
 
     .post('/unsubscribe', async (request, response) => {
-        if(await controller.unsubscribe(request.session.user)) {
+        if (await controller.unsubscribe(request.session.user)) {
+            request.session.success = { msg: 'Kontingent deaktiveret' };
             response.redirect('/user');
+        }
+    })
+
+    .post('/email', [
+        check('pw', 'Indtast venligst dit password').isString().custom(async (pw, { req }) => {
+            if (!await controller.checkPassword(pw, req.session.user.password))
+                return Promise.reject('Forkert password indtastet');
+        }),
+        check('newEmail', 'Please enter a valid email').isEmail().custom(async (email) => {
+            if (await controller.checkEmail(email))
+                return Promise.reject('Email already in use');
+        })
+    ], async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            response.redirect('/user');
+        } else {
+            const { pw, newEmail } = request.body;
+            const result = await controller.updateUserEmail(request.session.user._id, newEmail);
+            if (result) {
+                request.session.success = { msg: 'Success - Email ændret' };
+                response.redirect('/user');
+            }
+        }
+    })
+
+    .post('/pw', [
+        check('oldpw').custom(async (oldpw, { req }) => {
+            if (!await controller.checkPassword(oldpw, req.session.user.password))
+                return Promise.reject('Forkert password indtastet');
+        }),
+        check('newpw', 'Nyt password skal være min. 5 karaktere lang').isLength({ min: 5 }).custom((newpw, { req }) => {
+                if (newpw === req.body.oldpw) {
+                    throw new Error('Find venligst på et nyt password :)');
+                } else {
+                    return true;
+                }
+            })
+    ], async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            response.redirect('/user');
+        } else {
+            const { oldpw, newpw } = request.body;
+            const result = await controller.updateUserPassword(request.session.user._id, newpw);
+            if (result) {
+                request.session.success = { msg: 'Success - Password ændret' };
+                response.redirect('/user');
+            }
         }
     });
 

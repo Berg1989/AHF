@@ -115,6 +115,14 @@ router
         }
     })
 
+    .post('/id=:id/resetpw', async (request, response) => {
+        const result = await controller.resetPassword(request.params.id);
+        if (result) {
+            request.session.success = { msg: 'Succes password reset to: ' + result };
+            response.redirect('/admin/users/id=' + request.params.id);
+        }
+    })
+
     .delete('/id=:id', async (request, response) => {
         try {
             if (await controller.deleteUser(request.params.id)) response.sendStatus(200);

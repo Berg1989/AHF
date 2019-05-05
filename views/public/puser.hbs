@@ -47,11 +47,6 @@
                             value="{{user.info.street}}" />
                     </div>
                     <div class="form-group">
-                        <label class="label">Email: (Påkrævet)</label>
-                        <input type="text" id="email" class="form-control" name="email"
-                            placeholder="Nuværende: {{user.email}}" />
-                    </div>
-                    <div class="form-group">
                         <button type="submit" id="{{user._id}}" class="btn btn-primary">Updater
                             info</button>
                     </div>
@@ -71,7 +66,7 @@
         <p>Start dato: {{user.subscription.startdate}}</p>
         <p>Fornyelsesdato: {{user.subscription.enddate}}</p>
         <a href="/user/subscription" class="btn btn-primary">Skift kontingent</a>
-          <form method="POST" action="/user/unsubscribe">
+        <form method="POST" action="/user/unsubscribe">
             <button type="submit" id="{{user._id}}" class="btn btn-primary">Stop kontingent</button>
         </form>
         {{else}}
@@ -79,7 +74,39 @@
         <a href="/user/subscription" class="btn btn-primary">Vælg kontingent</a>
         {{/if}}
         <br>
-        
-      
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h2>Skift password:</h2>
+        <form action="/user/pw" method="POST">
+            <div class="form-group">
+                <label class="label">Nuværende password: (Påkrævet)</label>
+                <input type="password" class="form-control" name="oldpw" />
+            </div>
+            <div class="form-group">
+                <label class="label">Nyt password: (Påkrævet)</label>
+                <input type="password" class="form-control" name="newpw" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+    <div class="col">
+        <h2>Skift Email:</h2>
+        <form action="/user/email" method="POST">
+            <div class="form-group">
+                <label class="label">Password: (Påkrævet)</label>
+                <input type="password" class="form-control" name="pw" />
+            </div>
+            <div class="form-group">
+                <label class="label">Ny email: (Påkrævet)</label>
+                <input type="email" class="form-control" name="newEmail" placeholder="Nuværende: {{user.email}}" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
     </div>
 </div>

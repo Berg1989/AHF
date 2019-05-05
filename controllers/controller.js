@@ -38,8 +38,7 @@ exports.deleteSubscriptionModel = (id) => {
 
 // USER
 exports.createUser = async (email, password, firstname, lastname, title, level, func) => {
-    const created = new Date();
-    //const created = date.toLocaleDateString();
+    const created = new Date().toDateString();
     const newHash = await bcrypt.hash(password, saltRounds);
 
     const user = new User({
@@ -49,12 +48,18 @@ exports.createUser = async (email, password, firstname, lastname, title, level, 
         info: {
             firstname: firstname,
             lastname: lastname,
-            func: func
+            func: func,
+            birth: null,
+            zipcode: null,
+            street: null,
+            phone: null
         },
         type: {
             title: title,
             level: level
-        }
+        },
+        submodel: null,
+        subscription: null,
     });
     return user.save();
 };
@@ -65,7 +70,7 @@ exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street
             firstname: firstname,
             lastname: lastname,
             birth: birth,
-            phone: phone, 
+            phone: phone,
             zipcode: zipcode,
             street: street,
             func: func
@@ -88,6 +93,13 @@ exports.updateUserEmail = (id, email) => {
     return User.findByIdAndUpdate(id, {
         email: email
     }).exec();
+};
+
+exports.updateUserPassword = async (id, password) => {
+    const newHash = await bcrypt.hash(password, saltRounds);
+    return User.findByIdAndUpdate(id, {
+        password: newHash
+    }).exec()
 };
 
 exports.updateUserType = (id, title, level) => {
@@ -128,9 +140,12 @@ exports.checkEmail = (email) => {
 
 exports.login = async (email, password) => {
     const user = await exports.checkEmail(email);
-    if (user) {
-        if (await bcrypt.compare(password, user.password)) return true;
-    } else return false;
+    const result = await bcrypt.compare(password, user.password);
+    return user && result ? true : false;
+};
+
+exports.checkPassword = async (plaintext, hash) => {
+    return await bcrypt.compare(plaintext, hash);
 };
 
 exports.unsubscribe = (id) => {
@@ -143,5 +158,15 @@ exports.unsubscribe = (id) => {
 };
 
 exports.addMonths = (date, n) => {
-    return new Date(date.setMonth(date.getMonth() + n));
+    return new Date(date.setMonth(date.getMonth() + n)).toLocaleDateString();
+};
+
+exports.resetPassword = async (id) => {
+    const newpw = Math.random().toString(36).substring(2);
+    const newHash = await bcrypt.hash(newpw, saltRounds);
+    const result =  await User.findByIdAndUpdate(id, {
+        password: newHash
+    }).exec();
+   
+    return result ? newpw : false;
 };

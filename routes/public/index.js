@@ -5,7 +5,7 @@ const router = express.Router();
 const fetch = require('node-fetch');
 
 router
-    .get('/', function (request, response) {
+    .get('/', async (request, response) => {
         response.locals.metaTags = {
             title: 'Home',
             description: 'Here goes the description',

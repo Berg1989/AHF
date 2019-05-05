@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const user = new Schema({
     password: String,
     email: String,
-    created: Date,
+    created: String,
     info: {
         firstname: String,
         lastname: String,
@@ -20,8 +20,8 @@ const user = new Schema({
     },
     submodel: { type: Schema.Types.ObjectId, ref: 'subscriptionModel' },
     subscription: {
-        startdate: Date,
-        enddate: Date,
+        startdate: String,
+        enddate: String,
         active: Boolean
     }    
 });
