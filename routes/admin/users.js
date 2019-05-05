@@ -123,6 +123,17 @@ router
         }
     })
 
+    .post('/id=:id/unsubscribe', async (request, response) => {
+        const user = await controller.findUser(request.params.id);
+        if (user) {
+            const result = await controller.unsubscribe(request.params.id, user.subscription.startdate, user.subscription.enddate)
+            if (result) {
+                request.session.success = { msg: 'Kontingent deaktiveret' };
+                response.redirect('/admin/users/id=' + request.params.id);
+            }
+        }
+    })
+
     .delete('/id=:id', async (request, response) => {
         try {
             if (await controller.deleteUser(request.params.id)) response.sendStatus(200);

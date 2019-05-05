@@ -60,20 +60,21 @@
     <div class="col">
         <h2>Kontingent info</h2>
         {{#if user.subscription.active}}
-        <p>Nuværende kontingent: {{user.submodel.name}}</p>
-        <p>Varighed: {{user.submodel.duration}} måneder</p>
-        <p>Pris pr måned: {{user.submodel.price}}DKK</p>
+        <p>Model: {{user.submodel.name}}: {{user.submodel.duration}} måneder af {{user.submodel.price}}DKK/pr måned</p>
         <p>Start dato: {{user.subscription.startdate}}</p>
-        <p>Fornyelsesdato: {{user.subscription.enddate}}</p>
-        <a href="/user/subscription" class="btn btn-primary">Skift kontingent</a>
-        <form method="POST" action="/user/unsubscribe">
-            <button type="submit" id="{{user._id}}" class="btn btn-primary">Stop kontingent</button>
+        <p>Slut dato: {{user.subscription.enddate}}</p>
+        <a href="/user/subscription" class="btn btn-primary" style="display: inline-block">Skift kontingent</a>
+        <form method="POST" action="/user/unsubscribe" style="display: inline-block">
+            <button type="submit" id="{{user._id}}" onclick="confirm('Er du sikker?')" class="btn btn-danger">Stop
+                kontingent</button>
         </form>
         {{else}}
-        <p>WHAT!</p>
-        <a href="/user/subscription" class="btn btn-primary">Vælg kontingent</a>
+        <p>Du har ingen aktivt kontingent plan</p>
+        {{#if user.subscription.enddate}}
+        <p>Tidligere kontingent plan betalt indtil: {{user.subscription.enddate}}</p>
+        <a href="/user/subscription" class="btn btn-primary">Opret kontingent</a>
         {{/if}}
-        <br>
+        {{/if}}
     </div>
 </div>
 <div class="row">

@@ -113,7 +113,7 @@ router
     })
 
     .post('/unsubscribe', async (request, response) => {
-        if (await controller.unsubscribe(request.session.user)) {
+        if (await controller.unsubscribe(request.session.user._id, request.session.user.subscription.startdate, request.session.user.subscription.enddate)) {
             request.session.success = { msg: 'Kontingent deaktiveret' };
             response.redirect('/user');
         }

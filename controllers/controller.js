@@ -148,10 +148,12 @@ exports.checkPassword = async (plaintext, hash) => {
     return await bcrypt.compare(plaintext, hash);
 };
 
-exports.unsubscribe = (id) => {
+exports.unsubscribe = (id, startdate, enddate) => {
     return User.findByIdAndUpdate(id, {
         submodel: null,
         subscription: {
+            startdate: startdate,
+            enddate: enddate,
             active: false
         }
     }).exec();

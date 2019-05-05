@@ -17,8 +17,6 @@ router
             layout: 'admin', 
             admin: request.session.admin 
         });
-
-        console.log(request.session.admin);
         /*
         if (admin && admin.admintype.accesslevel < 3) {
             response.locals.metaTags = {
