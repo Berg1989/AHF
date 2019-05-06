@@ -31,6 +31,7 @@ router
             .isEmail().custom(async (email) => {
                 if (!await controller.checkEmail(email))
                     return Promise.reject('Ukendt email');
+                else return true;
             }),
         check('loginPassword', 'Password er påkrævet')
             .isLength({ min: 5 }),/*.custom(async (password, { req }) => {
@@ -59,8 +60,7 @@ router
 
     .post('/register', [
         check('email', 'Email er påkrævet')
-            .isEmail()
-            .custom(async email => {
+            .isEmail().custom(async email => {
                 if (await controller.checkEmail(email))
                     return Promise.reject('Email er allerede i brug');
             }),

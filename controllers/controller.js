@@ -60,7 +60,11 @@ exports.createUser = async (email, password, firstname, lastname, title, level, 
             level: level
         },
         submodel: null,
-        subscription: null,
+        subscription: {
+            startdate: null,
+            enddate: null,
+            active: false
+        }
     });
     return user.save();
 };
