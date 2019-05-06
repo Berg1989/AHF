@@ -12,7 +12,8 @@ exports.createSubscriptionModel = (name, duration, price, active) => {
         duration: duration,
         price: price,
         active: active
-    }).save();
+    })
+    .save();
 };
 
 exports.findSubscriptionModels = () => {
