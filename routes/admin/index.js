@@ -28,6 +28,16 @@ router
         } else {
             response.redirect('/');
         }*/
+    })
+
+    .get('/logout', (request, response) => {
+        request.session.destroy(err => {
+            if (err) {
+                console.log(err);
+            } else {
+                response.redirect('/admin/login');
+            }
+        });
     });
 
 module.exports = router;
