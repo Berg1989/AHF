@@ -24,12 +24,12 @@ router
     })
 
     .post('/', [
-        check('loginEmail', 'Email is required')
+        check('loginEmail', 'Email er påkrævet')
             .isEmail(),
-        check('loginPassword', 'Password is required')
+        check('loginPassword', 'Password er påkrævet')
             .isLength({ min: 5 }).custom(async (password, { req }) => {
                 if (!await controller.login(req.body.loginEmail, password))
-                    return Promise.reject('Password and email do not match');
+                    return Promise.reject('Forkert email og/eller password');
             })
     ], async (request, response) => {
         const errors = validationResult(request);
@@ -38,9 +38,15 @@ router
             request.session.email = request.body.loginEmail;
             response.redirect('/admin/login');
         } else {
-            request.session.admin = await controller.checkEmail(request.body.loginEmail);
-            response.redirect('/admin');
-
+            const { loginEmail, loginPassword } = request.body;
+            const result = await controller.login(loginEmail, loginPassword);
+            if (result) {
+                request.session.admin = result;
+                response.redirect('/admin');
+            } else {
+                request.session.errors = { msg: 'Forkert email og/eller password' };
+                response.redirect('/admin/login');
+            }
         }
     });
 
