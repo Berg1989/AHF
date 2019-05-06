@@ -140,8 +140,11 @@ exports.checkEmail = (email) => {
 
 exports.login = async (email, password) => {
     const user = await exports.checkEmail(email);
-    const result = await bcrypt.compare(password, user.password);
-    return user && result ? true : false;
+    if (user) {
+        if (await bcrypt.compare(password, user.password)) return user;
+    } else {
+        return false;
+    }
 };
 
 exports.checkPassword = async (plaintext, hash) => {

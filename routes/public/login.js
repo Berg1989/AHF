@@ -25,15 +25,18 @@ router
             request.session.inputs = null;
         }
     })
-    
+
     .post('/', [
-        check('loginEmail', 'Email is required')
-            .isEmail(),
-        check('loginPassword', 'Password is required')
-            .isLength({ min: 5 }).custom(async (password, { req }) => {
+        check('loginEmail', 'Email er påkrævet')
+            .isEmail().custom(async (email) => {
+                if (!await controller.checkEmail(email))
+                    return Promise.reject('Ukendt email');
+            }),
+        check('loginPassword', 'Password er påkrævet')
+            .isLength({ min: 5 }),/*.custom(async (password, { req }) => {
                 if (!await controller.login(req.body.loginEmail, password))
-                    return Promise.reject('Password and email do not match');
-            })
+                    return Promise.reject('Password og email matcher ikke');
+            })*/
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
@@ -41,23 +44,31 @@ router
             request.session.email = request.body.loginEmail;
             response.redirect('/login');
         } else {
-            request.session.user = await controller.checkEmail(request.body.loginEmail);
-            response.redirect('/user');
+            const { loginEmail, loginPassword } = request.body;
+            const user = await controller.login(loginEmail, loginPassword);
+
+            if (user) {
+                request.session.user = user;
+                response.redirect('/user');
+            } else {
+                request.session.errors = [{ msg: 'Password og email matcher ikke' }];
+                response.redirect('/login');
+            }
         }
     })
 
     .post('/register', [
-        check('email', 'Please enter a valid email')
+        check('email', 'Email er påkrævet')
             .isEmail()
             .custom(async email => {
                 if (await controller.checkEmail(email))
-                    return Promise.reject('Email already in use');
+                    return Promise.reject('Email er allerede i brug');
             }),
-        check('password', 'Password must be atleast 5 characters or longer')
+        check('password', 'Password skal min. være 5 karaktere')
             .isString().isLength({ min: 5 }),
-        check('firstname', 'Please enter your firstname')
+        check('firstname', 'Fornavn er påkrævet')
             .isString().isLength({ min: 2 }),
-        check('lastname', 'Please enter your lastname')
+        check('lastname', 'Efternavn er påkrævet')
             .isString().isLength({ min: 2 })
     ], async (request, response) => {
         const errors = validationResult(request);
