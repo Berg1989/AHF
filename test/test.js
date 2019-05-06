@@ -23,6 +23,7 @@ describe('Controller test', function () {
         assert.equal(member.info.firstname, "Danieltest");
         assert.equal(member.info.lastname, "Bergtest");
         assert.isTrue(testpass);
+        controller.deleteUser(member._id);
     });
 });
 
@@ -34,6 +35,7 @@ describe('Controller test', function () {
         const findMember = await controller.findMember("bergtest10@gmail.com");
         assert.equal(findMember.email, "bergtest10@gmail.com");
         assert.equal(findMember.info.firstname, "Danieltest")
+        controller.deleteUser(member._id);
     });
 });
 
@@ -45,6 +47,7 @@ describe('Controller test', function () {
         const member = await controller.createMember("bergtest10@gmail.com", "123ab", "Danieltest", "Bergtest");
         const findMember = await controller.findMemberById(member.id);
         assert.equal(findMember.email, member.email);
+        controller.deleteUser(member._id);
     });
 });
 
