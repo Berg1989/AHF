@@ -87,11 +87,10 @@
                 <button type="submit" class="btn btn-danger">Deaktiv kontingent</button>
             </div>
         </form>
+        {{else if user.subscription.enddate}}
+        <p>Denne bruger har stoppet sit kontingent, men dette er betalt til og med: {{user.subscription.enddate}}</p>
         {{else}}
-        <p>Denne bruger har intet aktivt kontingent</p>
-        {{#if user.subscription.enddate}}
-        <p>Kontingent betalt indtil: {{user.subscription.enddate}}</p>
-        {{/if}}
+        <p>Denne bruger har intet aktivt kontingent</p>  
         {{/if}}
     </div>
 </div>
