@@ -16,7 +16,6 @@ router
         /* } else {
             response.redirect('/');
         } */
-        const result = await controller.resetPassword("entestmail@ff.dd");
     })
 
     .get('/:searchid', async (request, response) => {

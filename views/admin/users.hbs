@@ -7,7 +7,7 @@
             {{/each}}
             {{/if}}
             {{# if success }}
-                <p class="alert alert-success">{{ success.msg }}</p>
+            <p class="alert alert-success">{{ success.msg }}</p>
             {{/if}}
             <div class="panel-heading">
                 <h2>Registrer ny bruger</h2>
@@ -50,14 +50,40 @@
     </div>
     <div class="col">
         <h2>Rediger eksisterende brugere</h2>
-        <ul>
-            {{# each users }}
+        <input type="text" id="nameSearch" onchange="searchName()">
+        <ul id="userList">
+            {{#each users }}
             <li><a href="/admin/users/id={{this._id}}">{{this.info.firstname}} {{this.info.lastname}}</a>
-                <form action="">
-                    <button></button>
+                <form action="/admin/users/userdelete/id={{ this._id }}" method="post">
+                    <button type="submit" class="col-lg-2 btn btn-danger" id="resetBtn" data-dismiss="Alert">Delete
+                        user</button>
                 </form>
             </li>
             {{/each}}
         </ul>
     </div>
 </div>
+<script>
+
+    async function searchName() {
+
+        try {
+            const service = await fetch('/admin/users/search/name=' + document.getElementById("nameSearch").value);
+            const json = await service.json();
+            console.log(json);
+            const list = document.getElementById("userList");
+            list.innerHTML = "";
+
+            let template = document.getElementById("member-list-template").innerHTML;
+            let renderMembers = Handlebars.compile(template);
+
+
+            list.innerHTML = renderMembers({
+                member: json
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+</script>

@@ -56,10 +56,10 @@
             </div>
 
             <form action="/admin/users/passwordreset/id={{ user._id }}" method="post">
-                <button type="submit" class="col-lg-2 btn btn-danger" id="resetBtn" data-dismiss="Alert"{{!--  onclick="resetPassword()" --}}>Reset
+                <button type="submit" class="col-lg-2 btn btn-danger" id="resetBtn" data-dismiss="Alert">Reset
                     password</button>
-
             </form>
+
 
             <!--<div class="form-group">
                 <label class="col-md-4">Email*</label>
@@ -81,7 +81,7 @@
         if (response.status >= 400 || !response) {
             throw new Error('Failed to fetch');
         } location.reload(true);
-        } catch (err) { console.log(err); }
+    } catch (err) { console.log(err); }
         
     } 
 </script> --}}

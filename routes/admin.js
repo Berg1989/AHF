@@ -142,8 +142,22 @@ router
         response.redirect('/admin/users/id=' + request.params.id);
         //response.send(password);
         // nedenstående er fjernet da jeg vil gå hen til label fremfor alert
-        // request.session.resetPasswordErr = [{ message: password }]
-        
+        // request.session.resetPasswordErr = [{ message: password }]  
+    })
+
+    .post('/users/userdelete/id=:id', async function (request, response) {
+        let isdeleted = await controller.removeUser(request.params.id);
+        response.redirect('/admin/users');
+    })
+
+    .get('/users/search/name=:searchname', async (request, response) => {
+        /* const user = request.session.user;
+        if (user && user.type.level == 1) { */
+        console.log(request.params.searchname);
+        response.json(await controller.findMembersByText(request.params.searchname));
+        /* } else {
+            response.redirect('/');
+        } */
     })
 
     .get('/subsciptions', async (request, response) => {
@@ -153,7 +167,9 @@ router
         // Render subscriptions and a create sub form
     })
 
-
+    .get('/membercount', async (request, response) => {
+        //get memebercount
+    })
 
     //Login 
     .get('/login', function (request, response) {

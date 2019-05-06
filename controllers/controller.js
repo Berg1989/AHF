@@ -74,7 +74,8 @@ exports.findMember = (email) => {
 };
 
 exports.findMembersByText = async (text) => {
-    return Member.find({ 'info.firstname': { $regex: text } }).exec();
+    const temp = text.charAt(0).toUpperCase() + text.slice(1);
+    return Member.find({ 'info.firstname': { $regex: temp } }).exec();
 };
 
 exports.findMemberById = (id) => {
@@ -126,7 +127,15 @@ exports.resetPassword = async function (_id) {
         { password: newPassword }
     ).exec();
     if (result) return randomPassword;
-    else console.log('øv');
+    else throw "No result exists";
+}
+
+exports.removeUser = async function(_id) {
+    const result = await Member.findByIdAndDelete(
+        { _id: _id }
+    ).exec();
+    if(result) return true;
+    else con
 }
 
 exports.checkpassword = async (plaintextPassword, hash) => {
