@@ -12,6 +12,7 @@ describe('Create Sub test', function () {
         assert.equal(subType.duration, data.duration);
         assert.equal(subType.mdrPrice, data.mdrPrice);
         assert.equal(subType.active, data.active);
+        await controller.deleteSubscriptionModel(subType._id);
     });
 });
 
