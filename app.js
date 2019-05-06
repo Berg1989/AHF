@@ -43,6 +43,8 @@ hbs.registerHelper("select", function (value, options) {
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
+
 
 // ROUTES FOR THE APP
 // PUBLIC
