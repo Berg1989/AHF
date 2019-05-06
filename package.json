@@ -18,6 +18,6 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "test": "mocha --timeout 3000"
+    "test": "mocha --timeout 3000 --exit"
   }
 }
