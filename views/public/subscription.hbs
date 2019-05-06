@@ -21,16 +21,15 @@
                 <form method="POST" action="/user/subscription">
                     <div class="form-group">
                         <select name="subscriptionModel">
-                            {{#select "0"}}
-                            <option value="0">Vælg</option>
-                            {{#each subscriptions}}
+                            {{#select subscriptionModels._id}}
+                            {{#each subscriptionModels}}
                             <option value="{{this._id}}">{{this.name}} - {{this.duration}} måneder - Pris: {{this.price}}DKK/måned</option>
                             {{/each}}
                             {{/select}}
                         </select>
                     </div>
                     <div class="form-group">
-                        <button type="submit" id="{{user._id}}" class="btn btn-primary">Vælg</button>
+                        <button type="submit" id="{{user._id}}" onclick="confirm('Betalingsvindue!')" class="btn btn-primary">Vælg</button>
                     </div>
                 </form>
             </div>

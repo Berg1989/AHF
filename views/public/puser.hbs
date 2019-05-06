@@ -59,17 +59,18 @@
     </div>
     <div class="col">
         <h2>Kontingent info</h2>
-        {{#if user.subscription.active}}
-        <p>Model: {{user.submodel.name}}: {{user.submodel.duration}} måneder af {{user.submodel.price}}DKK/pr måned</p>
-        <p>Start dato: {{user.subscription.startdate}}</p>
-        <p>Slut dato: {{user.subscription.enddate}}</p>
+        <!-- redo this part -->
+        {{#if subscription}}
+        <p>Model: {{subscription.model.name}}: {{subscription.model.duration}} måneder af {{subscription.model.price}}DKK/pr måned</p>
+        <p>Start dato: {{subscription.startdate}}</p>
+        <p>Slut dato: {{subscription.enddate}}</p>
         <a href="/user/subscription" class="btn btn-primary" style="display: inline-block">Skift kontingent</a>
         <form method="POST" action="/user/unsubscribe" style="display: inline-block">
             <button type="submit" id="{{user._id}}" onclick="confirm('Er du sikker?')" class="btn btn-danger">Stop
                 kontingent</button>
         </form>
-        {{else if user.subscription.enddate}}
-        <p>Tidligere kontingent plan betalt indtil: {{user.subscription.enddate}}</p>
+        {{else if subscription.active}}
+        <p>Tidligere kontingent plan betalt indtil: {{subscription.enddate}}</p>
         <a href="/user/subscription" class="btn btn-primary">Opret kontingent</a>
         {{else}}
         <p>Du har ingen aktivt kontingent plan</p>

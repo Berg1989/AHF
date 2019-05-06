@@ -25,6 +25,7 @@ router
                 if (user && user._id === request.params.id) {
                     response.render('public/pUser', {
                         user: result,
+                        subscription: await controller.findSubscription(user.subscription),
                         success: request.session.success,
                         errors: request.session.errors
                     });
@@ -78,7 +79,7 @@ router
             //const result = await controller.findUser(request.params.id);
             response.render('public/subscription', {
                 user,
-                subscriptions: await controller.findSubscriptionModels(),
+                subscriptionModels: await controller.findSubscriptionModels(),
                 success: request.session.success,
                 errors: request.session.errors,
             });
@@ -88,34 +89,37 @@ router
     })
 
     .post('/subscription', async (request, response) => {
-        // # dato krig
-        const subModel = await controller.findSubscriptionModel(request.body.subscriptionModel);
-        if (subModel) {
+        const user = request.session.user;
+        if (user) {
+            const model = await controller.findSubscriptionModel(request.body.subscriptionModel);
             const today = new Date();
-            let startdate = new Date().toDateString();
-            let enddate = new Date(today.setMonth(today.getMonth() + parseInt(subModel.duration))).toDateString();
+            const start = new Date().toDateString();
+            const end = new Date(today.setMonth(today.getMonth() + parseInt(model.duration))).toDateString();
 
-            console.log(parseInt(subModel.duration));
-            console.log(startdate);
-            console.log(enddate);
+            const newSub = await controller.createSubscription(user._id, start, end, true, model._id);
+            const result = await controller.connectSubToUser(newSub._id, user._id);
+            
+            /*if (!user.subscription) {
+                result = await controller.createSubscription(user._id, start, end, true, model._id);
+            } else {
+                result = await controller.updateSubsciption(user.subscription, start, end, model._id);
+            }*/
 
-            try {
-                const result = await controller.updateUserSubscription(request.session.user._id, subModel, startdate, enddate, true);
-                if (result) {
-                    request.session.success = { msg: 'Kontingent opdateret' };
-                    response.redirect('/user');
-                }
-            } catch (err) {
-                console.log(err);
+            if (result) {
+                request.session.success = { msg: 'Kontingent opdateret' };
+                response.redirect('/user');
             }
-
         }
     })
 
     .post('/unsubscribe', async (request, response) => {
-        if (await controller.unsubscribe(request.session.user._id, request.session.user.subscription.startdate, request.session.user.subscription.enddate)) {
-            request.session.success = { msg: 'Kontingent deaktiveret' };
-            response.redirect('/user');
+        const user = request.session.user;
+        if (user && user.subscription) {
+            const result = await controller.unsubscribe(user.subscription);
+            if (result) {
+                request.session.success = { msg: 'Kontingent deaktiveret' };
+                response.redirect('/user');
+            }
         }
     })
 
@@ -149,12 +153,12 @@ router
                 return Promise.reject('Forkert password indtastet');
         }),
         check('newpw', 'Nyt password skal være min. 5 karaktere lang').isLength({ min: 5 }).custom((newpw, { req }) => {
-                if (newpw === req.body.oldpw) {
-                    throw new Error('Find venligst på et nyt password :)');
-                } else {
-                    return true;
-                }
-            })
+            if (newpw === req.body.oldpw) {
+                throw new Error('Find venligst på et nyt password :)');
+            } else {
+                return true;
+            }
+        })
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {

@@ -5,7 +5,6 @@ const subscriptionModel = new Schema({
     name: String,
     duration: Number,
     price: Number
-    //users: [{ type: Schema.Types.ObjectId, ref: 'user' }]  
 });
 
 module.exports = mongoose.model('subscriptionModel', subscriptionModel);

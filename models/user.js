@@ -14,16 +14,8 @@ const user = new Schema({
         street: String,
         func: String
     },
-    type: {
-        title: String,
-        level: Number
-    },
-    submodel: { type: Schema.Types.ObjectId, ref: 'subscriptionModel' },
-    subscription: {
-        startdate: String,
-        enddate: String,
-        active: Boolean
-    }    
+    usertype: { type: Schema.Types.ObjectId, ref: 'usertypes' },
+    subscription: { type: Schema.Types.ObjectId, ref: 'subscriptions' } 
 });
 
 module.exports = mongoose.model('user', user);

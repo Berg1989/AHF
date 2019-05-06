@@ -1,19 +1,22 @@
 "use strict";
 
 const User = require('../models/user');
+const Usertypes = require('../models/usertypes');
+const Subscriptions = require('../models/subscriptions');
 const SubscriptionModel = require('../models/subscriptionModel');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
+//
 // SUBSCRIPTIONMODEL
+//
 exports.createSubscriptionModel = (name, duration, price, active) => {
     return new SubscriptionModel({
         name: name,
         duration: duration,
         price: price,
         active: active
-    })
-    .save();
+    }).save();
 };
 
 exports.findSubscriptionModels = () => {
@@ -22,10 +25,12 @@ exports.findSubscriptionModels = () => {
 
 exports.updateSubscriptionModel = (id, name, duration, price, active) => {
     return SubscriptionModel.findByIdAndUpdate(id, {
-        name: name,
-        duration: duration,
-        price: price,
-        active: active
+        $set: {
+            name: name,
+            duration: duration,
+            price: price,
+            active: active
+        }
     }).exec();
 };
 
@@ -37,8 +42,10 @@ exports.deleteSubscriptionModel = (id) => {
     return SubscriptionModel.findByIdAndDelete(id).exec();
 }
 
-// USER
-exports.createUser = async (email, password, firstname, lastname, title, level, func) => {
+//
+// USERS
+//
+exports.createUser = async (email, password, firstname, lastname, usertype, func) => {
     const created = new Date().toDateString();
     const newHash = await bcrypt.hash(password, saltRounds);
 
@@ -55,64 +62,48 @@ exports.createUser = async (email, password, firstname, lastname, title, level, 
             street: null,
             phone: null
         },
-        type: {
-            title: title,
-            level: level
-        },
-        submodel: null,
-        subscription: {
-            startdate: null,
-            enddate: null,
-            active: false
-        }
+        usertype: usertype,
+        subscription: null
     });
     return user.save();
 };
 
 exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, func) => {
     return User.findByIdAndUpdate(id, {
-        info: {
-            firstname: firstname,
-            lastname: lastname,
-            birth: birth,
-            phone: phone,
-            zipcode: zipcode,
-            street: street,
-            func: func
-        }
-    }).exec();
-};
-
-exports.updateUserSubscription = (id, subModelId, startdate, enddate, active) => {
-    return User.findByIdAndUpdate(id, {
-        submodel: subModelId,
-        subscription: {
-            startdate: startdate,
-            enddate: enddate,
-            active: active
+        $set: {
+            info: {
+                firstname: firstname,
+                lastname: lastname,
+                birth: birth,
+                phone: phone,
+                zipcode: zipcode,
+                street: street,
+                func: func
+            }
         }
     }).exec();
 };
 
 exports.updateUserEmail = (id, email) => {
     return User.findByIdAndUpdate(id, {
-        email: email
+        $set: {
+            email: email
+        }
     }).exec();
 };
 
 exports.updateUserPassword = async (id, password) => {
     const newHash = await bcrypt.hash(password, saltRounds);
     return User.findByIdAndUpdate(id, {
-        password: newHash
+        $set: {
+            password: newHash
+        }
     }).exec()
 };
 
-exports.updateUserType = (id, title, level) => {
+exports.updateUserType = (id, usertype) => {
     return User.findByIdAndUpdate(id, {
-        type: {
-            title: title,
-            level: level
-        }
+        $set: { usertype: usertype }
     }).exec();
 };
 
@@ -120,15 +111,8 @@ exports.deleteUser = (id) => {
     return User.findByIdAndDelete(id).exec();
 };
 
-exports.getUserTitle = (level) => {
-    if (level === '1') level = 'admin';
-    else if (level === '2') level = 'frivillig';
-    else level = 'medlem';
-    return level;
-};
-
 exports.findUsers = () => {
-    return User.find().exec();
+    return User.find().populate('usertype').sort({ 'info.firstname': 1 }).exec();
 };
 
 exports.findUserr = (id) => {
@@ -136,7 +120,7 @@ exports.findUserr = (id) => {
 };
 
 exports.findUser = (id) => {
-    return User.findById(id).populate('submodel').exec();
+    return User.findById(id).populate('usertype').populate('subscription').exec();
 };
 
 exports.checkEmail = (email) => {
@@ -156,27 +140,70 @@ exports.checkPassword = async (plaintext, hash) => {
     return await bcrypt.compare(plaintext, hash);
 };
 
-exports.unsubscribe = (id, startdate, enddate) => {
-    return User.findByIdAndUpdate(id, {
-        submodel: null,
-        subscription: {
-            startdate: startdate,
-            enddate: enddate,
-            active: false
-        }
-    }).exec();
-};
-
 exports.addMonths = (date, n) => {
-    return new Date(date.setMonth(date.getMonth() + n)).toLocaleDateString();
+    return new Date(date.setMonth(date.getMonth() + n)).toDateString();
 };
 
 exports.resetPassword = async (id) => {
     const newpw = Math.random().toString(36).substring(2);
     const newHash = await bcrypt.hash(newpw, saltRounds);
-    const result =  await User.findByIdAndUpdate(id, {
-        password: newHash
+    const result = await User.findByIdAndUpdate(id, {
+        $set: { password: newHash }
     }).exec();
-   
+
     return result ? newpw : false;
+};
+
+//
+// SUBSCRIPTIONS
+//
+exports.findUserSubscription = (userid) => {
+    return Subscriptions.findOne({ user: userid }).populate('model').exec();
+};
+
+exports.createSubscription = (userid, start, end, active, modelid) => {
+    return new Subscriptions({
+        user: userid,
+        start: start,
+        end: end,
+        active: active,
+        model: modelid
+    }).save();
+};
+
+exports.connectSubToUser = (subid, userid) => {
+    return User.findByIdAndUpdate(userid, {
+        $set: { subscription: subid }
+    }).exec();
+};
+
+exports.updateSubsciption = (id, start, end, modelid) => {
+    return Subscriptions.findByIdAndUpdate(id, {
+        $set: {
+            start: start,
+            end: end,
+            model: modelid
+        }
+    }).exec();
+};
+
+exports.unsubscribe = (id) => {
+    return Subscriptions.findByIdAndUpdate(id, {
+        $set: { aktive: false }
+    }).exec();
+};
+
+exports.findSubscription = (id) => {
+    return Subscriptions.findById(id).populate('model').exec();
+}
+
+//
+// USERTYPES
+//
+exports.findUsertypes = () => {
+    return Usertypes.find().exec();
+};
+
+exports.findUsertype = (id) => {
+    return Usertypes.findById(id).exec();
 };

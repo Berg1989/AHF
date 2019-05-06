@@ -78,7 +78,7 @@ router
             response.redirect('/login');
         } else {
             const { email, password, firstname, lastname } = request.body;
-            const result = await controller.createUser(email, password, firstname, lastname, await controller.getUserTitle(3), 3, 'medlem');
+            const result = await controller.createUser(email, password, firstname, lastname, '5cd04bc81c9d4400009071ce', 'medlem');
 
             if (result) {
                 request.session.user = result;

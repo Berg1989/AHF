@@ -43,13 +43,12 @@
                         <input type="text" class="form-control" name="street" value="{{user.info.street}}" />
                     </div>
                     <div class="form-group">
-                        <label for="level">Bruger type:</label>
-                        <select name="level" class="form-control" id="typeselect">
-                            {{#select user.type.level}}
-                            <option value="0" disabled="true">Vælg</option>
-                            <option value="1">Admin</option>
-                            <option value="2">Frivillig</option>
-                            <option value="3">Medlem</option>
+                        <label for="usertype">Bruger type:</label>
+                        <select name="usertype" class="form-control" id="typeselect">
+                            {{#select user.usertype._id}}
+                            {{#each usertypes}}
+                            <option value="{{this._id}}">{{this.title}}</option>
+                            {{/each}}
                             {{/select}}
                         </select>
                     </div>
@@ -77,9 +76,11 @@
         </div>
     </div>
     <div class="col">
+        <!-- redo this -->
         <h2>Kontingent info:</h2>
-        {{#if user.subscription.active}}
-        <p>Model: {{user.submodel.name}}: {{user.submodel.duration}} måneder af {{user.submodel.price}}DKK/pr måned</p>
+        {{#if subscription}}
+        <p>{{subscription.model}}</p>
+        <p>Model: {{user.subscription.model}}: {{user.submodel.duration}} måneder af {{user.submodel.price}}DKK/pr måned</p>
         <p>Start dato: {{user.subscription.startdate}}</p>
         <p>Slut dato: {{user.subscription.enddate}}</p>
         <form method="POST" action="/admin/users/id={{user._id}}/unsubscribe">

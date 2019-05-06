@@ -18,14 +18,13 @@
             </div>
             <div class="panel-body">
                 <form method="post" action="/admin/users">
-                    <div class="form-group">
-                        <label for="typeselect">Vælg en bruger type</label>
-                        <select name="level" class="form-control" id="typeselect">
-                            {{#select "3"}}
-                            <option value="0" disabled="true">Vælg</option>
-                            <option value="1">Admin</option>
-                            <option value="2">Frivillig</option>
-                            <option value="3">Medlem</option>
+                   <div class="form-group">
+                        <label for="usertype">Bruger type:</label>
+                        <select name="usertype" class="form-control" id="typeselect">
+                            {{#select "{{usertypes._id}}"}}
+                            {{#each usertypes}}
+                            <option value="{{this._id}}">{{this.title}}</option>
+                            {{/each}}
                             {{/select}}
                         </select>
                     </div>
@@ -72,7 +71,7 @@
                 {{#each users }}
                 <tr>
                     <td>{{this.info.firstname}} {{this.info.lastname}}</td>
-                    <td>{{this.type.title}}</td>
+                    <td>{{this.usertype.title}}</td>
                     <td>{{this.info.func}}</td>
                     <td><a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
                     </td>

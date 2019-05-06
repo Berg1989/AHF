@@ -16,6 +16,7 @@ router
         response.render('admin/users', {
             layout: 'admin',
             users: await controller.findUsers(),
+            usertypes: await controller.findUsertypes(),
             inputs: request.session.inputs,
             success: request.session.success,
             errors: request.session.errors,
@@ -38,7 +39,7 @@ router
             .isLength({ min: 2 }),
         check('lastname', 'Please enter your lastname')
             .isLength({ min: 2 }),
-        check('level', 'Please select a usertype')
+        check('usertype', 'Please select a usertype')
             .not().isEmpty(),
         check('func')
             .optional({ checkFalsy: true }).isString()
@@ -49,10 +50,9 @@ router
             request.session.inputs = { email: request.body.email, firstname: request.body.firstname, lastname: request.body.lastname, func: request.body.func };
             response.redirect('/admin/users');
         } else {
-            const { level, email, password, firstname, lastname, func } = request.body;
-            const title = await controller.getUserTitle(level);
+            const { usertype, email, password, firstname, lastname, func } = request.body;
 
-            if (await controller.createUser(email, password, firstname, lastname, title, level, func)) {
+            if (await controller.createUser(email, password, firstname, lastname, usertype, func)) {
                 request.session.success = { msg: 'Success - ny bruger: ' + email + ', er oprettet' };
                 response.redirect('/admin/users');
             }
@@ -71,6 +71,8 @@ router
                 response.render('admin/user', {
                     layout: 'admin',
                     user,
+                    subscription: await controller.findSubscription(user.subscription),
+                    usertypes: await controller.findUsertypes(),
                     errors: request.session.errors,
                     success: request.session.success
                 });
@@ -90,12 +92,12 @@ router
         check('zipcode', 'Postnummer skal være et tal')
             .optional({ checkFalsy: true }) // Can be falsy
             .isDecimal(),
-        check('email', 'Please enter a valid email')
+        check('email', 'Valid email er påkrævet')
             .optional({ checkFalsy: true }) // Can be falsy
             .isEmail()
             .custom(async email => {
                 if (await controller.checkEmail(email))
-                    return Promise.reject('Email already in use');
+                    return Promise.reject('Denne email er allerede registreret');
             })
     ], async (request, response) => {
         const errors = validationResult(request);
@@ -103,9 +105,10 @@ router
             request.session.errors = await errors.array();
             response.redirect('/admin/users/id=' + request.params.id);
         } else {
-            const { firstname, lastname, birth, phone, zipcode, street, level, func, email } = request.body;
+            const { firstname, lastname, birth, phone, zipcode, street, usertype, func, email } = request.body;
+
             const res1 = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, func);
-            const res2 = await controller.updateUserType(request.params.id, await controller.getUserTitle(level), level);
+            const res2 = await controller.updateUserType(request.params.id, usertype);
             if (email) await controller.updateUserEmail(request.params.id, email);
 
             if (res1 && res2) {
@@ -125,8 +128,8 @@ router
 
     .post('/id=:id/unsubscribe', async (request, response) => {
         const user = await controller.findUser(request.params.id);
-        if (user) {
-            const result = await controller.unsubscribe(request.params.id, user.subscription.startdate, user.subscription.enddate)
+        if (user.subscription) {
+            const result = await controller.unsubscribe(user.subscription._id);
             if (result) {
                 request.session.success = { msg: 'Kontingent deaktiveret' };
                 response.redirect('/admin/users/id=' + request.params.id);
@@ -136,7 +139,7 @@ router
 
     .delete('/id=:id', async (request, response) => {
         try {
-            if (await controller.deleteUser(request.params.id)) response.sendStatus(200);
+            if (await controller.deleteUser(request.params.id)) response.sendStatus(200); //Dele subscription as well?
         } catch (err) {
             response.sendStatus(405);
         }
