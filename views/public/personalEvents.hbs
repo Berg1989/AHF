@@ -32,3 +32,35 @@
             </div>
         </div>
     </span>
+    <span class="border border-primary">
+        <div class='col'>
+            <h4>Afsluttede events</h4>
+            <div class="form-group">
+                <table cellpadding='2' style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Start Dato</th>
+                            <th>Slut Dato</th>
+                            <th>Pris</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each subscriptions}}
+                        <tr>
+                            <td>{{this.name}}</td>
+                            <td>{{this.duration}}</td>
+                            <td>{{this.price}}</td>
+                            <td><a href="/admin/subscriptions/id={{this._id}}" class="btn btn-primary"><i
+                                        class="fas fa-wrench"></i></a></td>
+                            <td> <button type="submit" id="{{this._id}}" onclick="deleteSubscription(this.id)"
+                                    class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </span>
+</div>

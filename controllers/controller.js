@@ -241,3 +241,7 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
     });
     return event.save();
 };
+
+exports.eventSignUp = (event, user) => {
+    event.participants.push(user);
+}
