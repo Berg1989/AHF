@@ -4,6 +4,8 @@
         {{#each errors}}
         <p class="alert alert-danger">{{this.msg}}</p>
         {{/each}}
+        {{else if success}}
+        <p class="alert alert-success">{{success.msg}}</p>
         {{/if}}
     </div>
 </div>
@@ -51,3 +53,19 @@
         </table>
     </div>
 </div>
+
+<script>
+    async function deleteCategory(id) {
+        const res = window.confirm('Sletter du denne kategori slettes alle indeholdende produkter også. Er du sikker på denne handling?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/shop/categories/' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>

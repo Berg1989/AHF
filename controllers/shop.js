@@ -11,7 +11,7 @@ const Order = require('../models/Order');
 exports.createCategory = (name) => {
     return new Category({
         name: name,
-        products: null
+        products: []
     }).save();
 };
 
@@ -81,7 +81,7 @@ exports.findProducts = () => {
 };
 
 exports.findProduct = (id) => {
-    return Product.findById(id).exec();
+    return Product.findById(id).populate('category').exec();
 };
 
 exports.findProductsInCategory = (categoryId) => {

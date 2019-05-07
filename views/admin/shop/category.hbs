@@ -1,9 +1,17 @@
 <div class="row">
     <div class="col">
+        <a href="/admin/shop/categories">Kategorier</a><span> > </span>
+        <span>{{category.name}}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         {{#if errors}}
         {{#each errors}}
         <p class="alert alert-danger">{{this.msg}}</p>
         {{/each}}
+        {{else if success}}
+        <p class="alert alert-success">{{success.msg}}</p>
         {{/if}}
     </div>
 </div>
@@ -31,14 +39,18 @@
                 <h2>Opret produkt</h2>
             </div>
             <div class="panel-body">
-                <form method="post" action="/admin/shop/categories/{{category._id}}/product">
+                <form method="post" action="/admin/shop/categories/{{category._id}}/products">
                     <div class="form-group">
                         <label>Navn: (Påkrævet)</label>
-                        <input type="text" class="form-control" name="productName" value="{{inputs.productName}}" />
+                        <input type="text" class="form-control" name="pname" value="{{inputs.name}}" />
                     </div>
                     <div class="form-group">
                         <label>Pris: (Påkrævet)</label>
-                        <input type="number" class="form-control" name="productPrice" value="{{inputs.productPrice}}" />
+                        <input type="number" class="form-control" name="pprice" value="{{inputs.price}}" />
+                    </div>
+                     <div class="form-group">
+                        <label>Størrelse: (Påkrævet)</label>
+                        <input type="text" class="form-control" name="psize" value="{{inputs.size}}" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Opret</button>
@@ -74,3 +86,19 @@
         </table>
     </div>
 </div>
+
+<script>
+    async function deleteProduct(id) {
+        const res = window.confirm('Vil du slette dette produkt?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/shop/products/' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>

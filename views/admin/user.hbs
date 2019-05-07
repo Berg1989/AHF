@@ -1,5 +1,11 @@
 <div class="row">
     <div class="col">
+        <a href="/admin/users/">Brugere</a><span> > </span>
+        <span>{{user.info.firstname}} {{user.info.lastname}}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         {{#if errors }}
         {{#each errors }}
         <p class="alert alert-danger">{{ this.msg }}</p>
