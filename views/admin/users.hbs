@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
                 <form method="post" action="/admin/users">
-                   <div class="form-group">
+                    <div class="form-group">
                         <label for="usertype">Bruger type:</label>
                         <select name="usertype" class="form-control" id="typeselect">
                             {{#select "{{usertypes._id}}"}}
@@ -55,8 +55,14 @@
             </div>
         </div>
     </div>
-    <div class="col">
+    <div>
         <h2>Rediger eksisterende brugere</h2>
+        
+        <div>
+            <label>Antal medlemmer:</label>
+            <label>{{userCount}}</label
+        </div>
+
         <table cellpadding='2' style="width:100%;">
             <thead>
                 <tr>

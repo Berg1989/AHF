@@ -153,6 +153,10 @@ exports.resetPassword = async (id) => {
     return result ? newpw : false;
 };
 
+exports.getUsersCount = async() => {
+    return User.count();
+}
+
 //
 // SUBSCRIPTIONS
 //

@@ -15,6 +15,7 @@ router
         };
         response.render('admin/users', {
             layout: 'admin',
+            userCount: await controller.getUsersCount(),
             users: await controller.findUsers(),
             usertypes: await controller.findUsertypes(),
             inputs: request.session.inputs,
@@ -135,6 +136,10 @@ router
                 response.redirect('/admin/users/id=' + request.params.id);
             }
         }
+    })
+
+    .get('/', async(request, response) => {
+        response.send(controller.countMembers());
     })
 
     .delete('/id=:id', async (request, response) => {
