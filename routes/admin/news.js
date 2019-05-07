@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 
 router
 
-.get('/', function (request, response) {
+.get('/', async function (request, response) {
     /* if (request.session.user) response.redirect('/profile/id=' + request.session.user._id); */
     /* else { */
         response.locals.metaTags = {
@@ -16,6 +16,8 @@ router
         };
         response.render('admin/news', {
             action: '/news',
+            events: await controller.findEvents(),
+            posts: await controller.findPosts(),
             errors: request.session.errors,
             email: request.session.email,
             inputs: request.session.inputs,

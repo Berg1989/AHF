@@ -2,17 +2,67 @@
     <div class="col-lg-6">
         <div class="row">
             <h1>Begivenheder</h1>
-            <form method="POST" action="/admin/news/createpost">
-            </form>
         </div>
+        <form method="GET" action="/admin/news/createevent">
+            <button type="submit" class="btn btn-primary row">Ny Begivenhed</button>
+        </form>
+
+        <table cellpadding='2' style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Titel</th>
+                    <th>Start dato</th>
+                    <th>Slut dato</th>
+                    <th>pris</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each events }}
+                <tr>
+                    <td>{{this.headline}}</td>
+                    <td>{{this.startdate}}</td>
+                    <td>{{this.enddate}}</td>
+                    <td>{{this.price}}</td>
+                    <td><a href="/admin/news/eventedit/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                    </td>
+                    <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent()" class="btn btn-danger"><i
+                                class="fas fa-times"></i></button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
     </div>
 
     <div class="col-lg-6">
         <div class="row">
             <h1>Nyheder</h1>
-            <form method="POST" action="/admin/news/createpost">
-            </form> 
         </div>
+        <form method="GET" action="/admin/news/createpost">
+            <button type="submit" class="btn btn-primary row">Nyt event</button>
+        </form>
+
+        <table cellpadding='2' style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Titel</th>
+                    <th>Dato</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each posts }}
+                <tr>
+                    <td>{{this.headline}}</td>
+                    <td>{{this.postdate}}</td>
+                    <td><a href="/admin/news/postedit/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                    </td>
+                    <td> <button type="submit" id="{{this._id}}" onclick="deletePost()" class="btn btn-danger"><i
+                                class="fas fa-times"></i></button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
     </div>
 
 </div>

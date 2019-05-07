@@ -211,7 +211,7 @@ exports.findUsertype = (id) => {
 
 
 //
-//  POSTS 
+//  POSTS / EVENTS
 //
 
 exports.createPost = (body, headline, author) => {
@@ -228,11 +228,14 @@ exports.createPost = (body, headline, author) => {
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
 
+    const start = new Date(startDate).toDateString();
+    const end = new Date(endDate).toDateString();
+
     const event = new eventModel({
         headline: headline,
         author: author,
-        startdate: startDate,
-        enddate: endDate,
+        startdate: start,
+        enddate: end,
         body: body,
         deadline: deadline,
         participants: [],
@@ -241,3 +244,11 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
     });
     return event.save();
 };
+
+exports.findEvents = () => {
+    return eventModel.find().exec()
+}
+
+exports.findPosts = ()  => {
+    return postModel.find().exec();
+}
