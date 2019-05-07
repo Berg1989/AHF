@@ -5,13 +5,12 @@ const request = require('supertest');
 
 describe('Create Sub test', function () {
     it('createSubType() test', async function () {
-        const data = { name: '3mdr', duration: '3', price: '100', active: true };
+        const data = { name: '3mdr', duration: '3', price: '100'};
         this.timeout(3000);
-        const subType = await controller.createSubscriptionModel(data.name, data.duration, data.price, data.active);
+        const subType = await controller.createSubscriptionModel(data.name, data.duration, data.price);
         assert.equal(subType.name, data.name);
         assert.equal(subType.duration, data.duration);
         assert.equal(subType.mdrPrice, data.mdrPrice);
-        assert.equal(subType.active, data.active);
         await controller.deleteSubscriptionModel(subType._id);
     });
 });

@@ -10,12 +10,11 @@ const saltRounds = 10;
 //
 // SUBSCRIPTIONMODEL
 //
-exports.createSubscriptionModel = (name, duration, price, active) => {
+exports.createSubscriptionModel = (name, duration, price) => {
     return new SubscriptionModel({
         name: name,
         duration: duration,
         price: price,
-        active: active
     }).save();
 };
 
