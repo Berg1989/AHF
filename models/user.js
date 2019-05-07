@@ -18,4 +18,8 @@ const user = new Schema({
     subscription: { type: Schema.Types.ObjectId, ref: 'subscriptions' } 
 });
 
+user.methods.toString = function() {
+    return this.firstname + ", hours: " + this.lastname;
+};
+
 module.exports = mongoose.model('user', user);

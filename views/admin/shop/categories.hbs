@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col">
+        {{#if errors}}
+        {{#each errors}}
+        <p class="alert alert-danger">{{this.msg}}</p>
+        {{/each}}
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Opret ny kategori</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="/admin/shop/categories">
+                    <div class="form-group">
+                        <label>Navn: (Påkrævet)</label>
+                        <input type="name" class="form-control" name="name" value="{{inputs.name}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opret</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <h2>Eksisterende kategorier</h2>
+        <table cellpadding='2' style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Rediger</th>
+                    <th>Slet</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each categories }}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td><a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i
+                                class="fas fa-wrench"></i></a>
+                    </td>
+                    <td> <button type="submit" id="{{this._id}}" onclick="deleteCategory(this.id)"
+                            class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

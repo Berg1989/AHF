@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col">
+        {{#if errors}}
+        {{#each errors}}
+        <p class="alert alert-danger">{{this.msg}}</p>
+        {{/each}}
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Rediger kategori</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="/admin/shop/categories/{{category._id}}">
+                    <div class="form-group">
+                        <label>Navn: (Påkrævet)</label>
+                        <input type="text" class="form-control" name="name" value="{{category.name}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opdater</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Opret produkt</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="/admin/shop/categories/{{category._id}}/product">
+                    <div class="form-group">
+                        <label>Navn: (Påkrævet)</label>
+                        <input type="text" class="form-control" name="productName" value="{{inputs.productName}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pris: (Påkrævet)</label>
+                        <input type="number" class="form-control" name="productPrice" value="{{inputs.productPrice}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opret</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <h2>Produkter</h2>
+        <table cellpadding='2' style="width:100%;">
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Pris</th>
+                    <th>Rediger</th>
+                    <th>Slet</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each category.products }}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                    <td><a href="/admin/shop/categories/{{category._id}}/products/{{this._id}}" class="btn btn-primary"><i
+                                class="fas fa-wrench"></i></a>
+                    </td>
+                    <td> <button type="submit" id="{{this._id}}" onclick="deleteProduct(this.id)"
+                            class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
