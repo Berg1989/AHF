@@ -1,1 +1,150 @@
-<a href="/admin/shop/categories">Kategorier</a>
+<div class="row">
+    <div class="col">
+        {{#if errors}}
+        {{#each errors}}
+        <p class="alert alert-danger">{{this.msg}}</p>
+        {{/each}}
+        {{else if success}}
+        <p class="alert alert-success">{{success.msg}}</p>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Opret ny kategori</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="/admin/shop/categories">
+                    <div class="form-group">
+                        <label>Navn: (Påkrævet)</label>
+                        <input type="name" class="form-control" name="Cname" value="{{inputs.Cname}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opret</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Opret produkt</h2>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="/admin/shop/products">
+                    <div class="form-group">
+                        <label>Navn: (Påkrævet)</label>
+                        <input type="text" class="form-control" name="pname" value="{{inputs.name}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pris: (Påkrævet)</label>
+                        <input type="number" class="form-control" name="pprice" value="{{inputs.price}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Størrelse: (Påkrævet)</label>
+                        <input type="text" class="form-control" name="psize" value="{{inputs.size}}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Kategori: (Påkrævet)</label>
+                        <select name="category" class="form-control" id="category">
+                            {{#select categories._id}}
+                            {{#each categories}}
+                            <option value="{{this._id}}">{{this.name}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opret</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h2>Shop håndtering</h2>
+<table cellpadding='2' style="width:100%;">
+    <thead>
+        <tr>
+            <th>Kategori</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each categories }}
+        <tr>
+            <td>{{this.name}}</td>
+            <td class="align-right"><a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i
+                        class="fas fa-wrench"></i></a>
+                <button type="submit" id="{{this._id}}" onclick="deleteCategory(this.id)" class="btn btn-danger"><i
+                        class="fas fa-times"></i></button>
+            </td>
+        </tr>
+        <tr class="products">
+            <td style="padding-left:50px;">
+                <table cellpadding='2' style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Produkter</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each this.products}}
+                        <tr>
+                            <td>{{this.name}}</td>
+                            <td class="align-right">
+                                <a href="/admin/shop/products/{{this._id}}" class="btn btn-primary"><i
+                                        class="fas fa-wrench"></i></a>
+                                <button type="submit" id="{{this._id}}" onclick="deleteProduct(this.id, this.className)"
+                                    class="{{../this._id}} btn btn-danger"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<script>
+    async function deleteProduct(id, classnames) {
+        const res = window.confirm('Er du sikker på denne handling?');
+        if (res) {
+            const categoryid = classnames.split(' ')[0];
+            try {
+                const response = await fetch('/admin/shop/products/' + id, {
+                    method: 'DELETE',
+                    body: JSON.stringify({ categoryid }),
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>
+
+<script>
+    async function deleteCategory(id) {
+        const res = window.confirm('Sletter du denne kategori slettes alle indeholdende produkter også. Er du sikker på denne handling?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/shop/categories/' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>

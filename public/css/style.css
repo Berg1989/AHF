@@ -10,3 +10,19 @@ body {
     min-height: 50vh;
     padding: 25px 0;
 }
+
+tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  table tr:nth-last-child(1) {
+      border-bottom: none;
+  }
+
+  .align-right {
+      text-align: right;
+  }
+
+  .products {
+      border-bottom: none;
+  }

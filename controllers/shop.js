@@ -52,22 +52,22 @@ exports.checkCategoryName = (name) => {
 //
 // PRODUCTS
 //
-exports.createProduct = (name, price, size, categoryId) => {
+exports.createProduct = (name, price, size) => {
     return new Product({
         name: name,
         price: price,
-        size: size,
-        category: categoryId
+        size: size
+        //category: categoryId
     }).save();
 };
 
-exports.updateProduct = (id, name, price, size, categoryId) => {
+exports.updateProduct = (id, name, price, size) => {
     return Product.findByIdAndUpdate(id, {
         $set: {
             name: name,
             price: price,
-            size: size,
-            category: categoryId
+            size: size
+            //category: categoryId
         }
     }).exec();
 };
@@ -81,11 +81,7 @@ exports.findProducts = () => {
 };
 
 exports.findProduct = (id) => {
-    return Product.findById(id).populate('category').exec();
-};
-
-exports.findProductsInCategory = (categoryId) => {
-    return Product.find({category: categoryId}).exec();
+    return Product.findById(id).exec();
 };
 
 exports.checkProductName = (name) => {
