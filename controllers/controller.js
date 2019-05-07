@@ -260,6 +260,10 @@ exports.findPosts = () => {
     return PostModel.find().exec();
 }
 
+exports.eventSignUp = (event, user) => {
+    event.participants.push(user);
+}
+
 exports.deleteEvent = async id => {
     
     const event =  await exports.findEvent(id)
