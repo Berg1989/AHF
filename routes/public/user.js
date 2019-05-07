@@ -174,11 +174,11 @@ router
         }
     })
 
-    .get('/events', async (request, response) => {
+    .get('/personalEvents', async (request, response) => {
         const user = request.session.user;
         if (!user) response.redirect('/login');
         else {
-            response.render('public/events', {
+            response.render('public/personalEvents', {
                 user,
                 success: request.session.success,
                 errors: request.session.errors,

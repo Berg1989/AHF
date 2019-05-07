@@ -23,6 +23,10 @@ router
                 response.redirect('/login');
             }
         });
+    })
+
+    .get('/events', (request,response) => {
+        response.render('public/events');
     });
 
 module.exports = router;

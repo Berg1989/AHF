@@ -255,3 +255,7 @@ exports.findEvents = () => {
 exports.findPosts = ()  => {
     return postModel.find().exec();
 }
+
+exports.eventSignUp = (event, user) => {
+    event.participants.push(user);
+}
