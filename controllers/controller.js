@@ -313,3 +313,7 @@ exports.updatePost = (id,headline,body) => {
     }).exec();
 
 };
+
+exports.eventSignUp = (event, user) => {
+    event.participants.push(user);
+}
