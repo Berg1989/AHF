@@ -172,6 +172,20 @@ router
                 response.redirect('/user');
             }
         }
+    })
+
+    .get('/events', async (request, response) => {
+        const user = request.session.user;
+        if (!user) response.redirect('/login');
+        else {
+            response.render('public/events', {
+                user,
+                success: request.session.success,
+                errors: request.session.errors,
+            });
+            request.session.success = null;
+            request.session.errors = null;
+        }
     });
 
 module.exports = router;

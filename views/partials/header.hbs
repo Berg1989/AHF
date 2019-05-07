@@ -4,20 +4,32 @@
         <div class="col">
             <!-- Just an image -->
             <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <img src="/favicon.ico" width="30" height="30" alt="">
                 </a>
                 <ul class="nav">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
                     </li>
+
+
+                    <!-- Dropdown menu for bruger -->
                     {{#if user}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/id={{user._id}}"><i class="fas fa-user"></i> Profil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary" href="/logout">Logout</a>
-                    </li>
+                    <div class="dropdown">
+                        <span><i class="fas fa-user"></i>Info</span>
+                        <div class="dropdown-content">
+                            <a href="/user/id={{user._id}}">Profil</a>
+                            <a href="/user/events">Events</a>
+
+
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+
+
+
+
+                
                     {{else}}
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
