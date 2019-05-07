@@ -70,6 +70,9 @@ app.use('/admin/users', adminUsers);
 const adminSubscriptions = require('./routes/admin/subscriptions');
 app.use('/admin/subscriptions', adminSubscriptions);
 
+const adminNews = require('./routes/admin/news');
+app.use('/admin/news', adminNews);
+
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
 app.use(function(req, res, next){
   res.locals.metaTags = {

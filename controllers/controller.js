@@ -4,6 +4,8 @@ const User = require('../models/user');
 const Usertypes = require('../models/usertypes');
 const Subscriptions = require('../models/subscriptions');
 const SubscriptionModel = require('../models/subscriptionModel');
+const postModel = require('../models/post');
+const eventModel = require('../models/event');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
@@ -205,4 +207,37 @@ exports.findUsertypes = () => {
 
 exports.findUsertype = (id) => {
     return Usertypes.findById(id).exec();
+};
+
+
+//
+//  POSTS 
+//
+
+exports.createPost = (body, headline, author) => {
+    const created = new Date().toDateString();
+
+    const post = new postModel({
+        postdate: created,
+        body: body,
+        headline: headline,
+        author: author
+    });
+    return post.save();
+};
+
+exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
+
+    const event = new eventModel({
+        headline: headline,
+        author: author,
+        startdate: startDate,
+        enddate: endDate,
+        body: body,
+        deadline: deadline,
+        participants: [],
+        maxparticipants: maxParticipants,
+        price: price
+    });
+    return event.save();
 };
