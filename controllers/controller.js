@@ -289,7 +289,9 @@ exports.userSignUp = (event, user) => {
     }).exec();
 }
 
+exports.findPersonalEvents = () => {
 
+}
 
 exports.findEvents = () => {
     return eventModel.find().exec();
