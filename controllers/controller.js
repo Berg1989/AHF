@@ -127,6 +127,11 @@ exports.findUser = (id) => {
     return User.findById(id).populate('usertype').populate('subscription').exec();
 };
 
+exports.findUsersByText = async (text) => {
+    const temp = text.charAt(0).toUpperCase() + text.slice(1);
+    return User.find({ 'info.firstname': { $regex: temp } }).exec();
+};
+
 exports.checkEmail = (email) => {
     return User.findOne({ email: email }).exec();
 };

@@ -84,6 +84,29 @@ router
         }
     })
 
+    .get('/search=:searchid', async (request, response) => {
+        // Get users
+        //const usertypes = await controller.findUserTypes();
+        //const admin = request.session.admin;
+        response.locals.metaTags = {
+            title: 'Admin - users',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };
+        response.render('admin/users', {
+            layout: 'admin',
+            users: await controller.findUsersByText(request.params.searchid),
+            usertypes: await controller.findUsertypes(),
+            inputs: request.session.inputs,
+            success: request.session.success,
+            errors: request.session.errors,
+            //admin: request.session.admin,
+        });
+        request.session.errors = null;
+        request.session.success = null;
+        request.session.inputs = null;
+    })
+
     .post('/id=:id', [
         check('firstname', 'Fornavn skal udfyldes')
             .isLength({ min: 2 }),
@@ -144,5 +167,9 @@ router
             response.sendStatus(405);
         }
     });
+
+
+    
+	
 
 module.exports = router;

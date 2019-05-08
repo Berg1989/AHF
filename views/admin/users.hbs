@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
                 <form method="post" action="/admin/users">
-                   <div class="form-group">
+                    <div class="form-group">
                         <label for="usertype">Bruger type:</label>
                         <select name="usertype" class="form-control" id="typeselect">
                             {{#select "{{usertypes._id}}"}}
@@ -57,6 +57,11 @@
     </div>
     <div class="col">
         <h2>Rediger eksisterende brugere</h2>
+
+        {{!-- search --}}
+        <input type="text" name="search" id="search">
+        <button onclick="search()" class="btn btn-primary">søg</button>
+
         <table cellpadding='2' style="width:100%;">
             <thead>
                 <tr>
@@ -98,4 +103,19 @@
             }
         }
     };
+
+    async function search() {
+        const searchterm = document.getElementById("search").value;
+
+        try {
+            const response = await fetch('/admin/users/search=' + searchterm, {
+                method: 'GET',
+            })
+            if (response.status === 200) location.href = '/admin/users/search=' + searchterm;
+            else location.href = '/admin/users';
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
 </script>
