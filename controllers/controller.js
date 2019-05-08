@@ -47,6 +47,8 @@ exports.deleteSubscriptionModel = (id) => {
 // USERS
 //
 exports.createUser = async (email, password, firstname, lastname, usertype, func) => {
+    const tempFirstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
+    const tempLastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
     const created = new Date().toDateString();
     const newHash = await bcrypt.hash(password, saltRounds);
 
@@ -55,8 +57,8 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
         email: email,
         created: created,
         info: {
-            firstname: firstname,
-            lastname: lastname,
+            firstname: tempFirstname,
+            lastname: tempLastname,
             func: func,
             birth: null,
             zipcode: null,
