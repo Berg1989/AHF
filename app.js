@@ -74,6 +74,9 @@ app.use('/admin/subscriptions', adminSubscriptions);
 const adminShop = require('./routes/admin/shop');
 app.use('/admin/shop', adminShop);
 
+const shopIndex = require('./routes/shop/index');
+app.use('/shop', shopIndex);
+
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
 app.use(function(req, res, next){
   res.locals.metaTags = {

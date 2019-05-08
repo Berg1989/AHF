@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const products = new Schema({
     name: String,
     price: Number,
-    size: String
+    size: String,
+    img: String
 });
 
 products.methods.calcPrice = function() {

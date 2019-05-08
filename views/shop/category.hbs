@@ -1,0 +1,14 @@
+<div class="row">
+    {{#each category.products}}
+    <div class="col-md-4">
+        <div class="card" style="width:100%;margin: 10px 0;">
+            <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{this.name}}</h5>
+                <p class="card-text">{{this.price}}</p>
+                <a href="#" class="btn btn-primary">Tilføj</a>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>

@@ -66,7 +66,7 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
         subscription: null
     });
 
-    const navn = user.methods.toString();
+    //const navn = user.methods.toString();
     return user.save();
 };
 

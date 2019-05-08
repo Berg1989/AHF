@@ -41,6 +41,10 @@ exports.findCategories = () => {
     return Category.find().populate('products').exec();
 };
 
+exports.findCategoriesNoProducts = () => {
+    return Category.find().exec();
+};
+
 exports.findCategory = (id) => {
     return Category.findById(id).populate('products').exec();
 };
