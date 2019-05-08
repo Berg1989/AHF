@@ -11,7 +11,6 @@
 <div class="row">
     <span class="border border-primary">
         <div class="col">
-            <form method='post' action="/">
                 <div class="form-group">
                     <table cellpadding='2' style="width:100%;">
                         <thead>
@@ -31,14 +30,16 @@
                                 <td>{{this.enddate}}</td>
                                 <td>{{this.price}}</td>
                                 <td>
-                                    <a type="submit" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                    <form method='post' action="">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                 </form>
+
                                 </td>
                             </tr>
                             {{/each}}
                         </tbody>
                     </table>
                 </div>
-            </form>
 
         </div>
     </span>
