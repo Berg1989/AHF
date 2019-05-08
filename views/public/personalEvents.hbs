@@ -16,13 +16,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each subscriptions}}
+                        {{#each personalEvents }}
                         <tr>
-                            <td>{{this.name}}</td>
-                            <td>{{this.duration}}</td>
-                            <td>{{this.price}}</td>
-                            <td><a href="/admin/subscriptions/id={{this._id}}" class="btn btn-primary"><i
-                                        class="fas fa-wrench"></i></a></td>
+                            <td>{{this.headline}}</td>
+                            <td>{{this.startdate}}</td>
+                            <td>{{this.enddate}}</td>
                             <td> <button type="submit" id="{{this._id}}" onclick="deleteSubscription(this.id)"
                                     class="btn btn-danger"><i class="fas fa-times"></i></button></td>
                         </tr>

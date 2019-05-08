@@ -6,6 +6,8 @@ const fetch = require('node-fetch');
 
 router
 
-
+    .post('/', async (request, response) => {
+        response.redirect('/events');
+    })
 
 module.exports = router;
