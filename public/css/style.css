@@ -6,6 +6,11 @@ body {
     overflow-x: hidden;
 }
 
+.textarea {
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
 .container {
     min-height: 50vh;
     padding: 25px 0;

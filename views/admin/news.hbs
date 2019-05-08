@@ -1,3 +1,15 @@
+<script>
+    function updateTimeView(startid, slutid) {
+    const startinput = document.getElementById(startid);
+    const endinput = document.getElementById(slutid);
+
+    const startdate = new Date(startinput.innerHTML).toDateString();
+    const enddate = new Date(endinput.innerHTML).toDateString();
+    
+    startinput.innerHTML = startdate;
+    endinput.innerHTML = enddate;
+    }
+</script>
 <div class="row">
     <div class="col-lg-6">
         <div class="row">
@@ -20,8 +32,8 @@
                 {{#each events }}
                 <tr>
                     <td>{{this.headline}}</td>
-                    <td id="startdate">{{this.startdate}}</td>
-                    <td id="enddate">{{this.enddate}}</td>
+                    <td id="{{this._id}}1">{{this.startdate}}</td>
+                    <td id="{{this._id}}2">{{this.enddate}}</td>
                     <td>{{this.price}}</td>
                     <td><a href="/admin/news/eventedit/id={{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a>
@@ -29,6 +41,7 @@
                     <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent(this.id)" class="btn btn-danger"><i
                                 class="fas fa-times"></i></button></td>
                 </tr>
+                <script class="scriptings">updateTimeView("{{this.id}}1", "{{this.id}}2")</script>
                 {{/each}}
             </tbody>
         </table>
@@ -70,15 +83,6 @@
 </div>
 
 <script>
-    const startinput = document.getElementById("startdate");
-    const endinput = document.getElementById("enddate");
-
-    const startdate = new Date(startinput.innerHTML).toDateString();
-    const enddate = new Date(endinput.innerHTML).toDateString();
-    
-    startinput.innerHTML = startdate;
-    endinput.innerHTML = enddate;
-    
 
     async function deleteEvent(id) {
         const res = window.confirm('Vil du slette denne begivenhed?');

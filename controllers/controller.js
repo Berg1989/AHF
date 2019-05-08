@@ -284,7 +284,6 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
             enddate: endDate,
             body: body,
             deadline: deadline,
-            participants: [],
             maxparticipants: maxParticipants,
             price: price
         }

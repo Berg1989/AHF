@@ -10,9 +10,12 @@
             <label class="row">Slut dato</label>
             <input name="endDate" type="date" data-provide="datepicker" data-date-format="DD/MM/YYYY" class="row" value="{{event.enddate}}">
 
+            <label class="row">Svarfrist</label>
+            <input name="deadline" type="date" data-provide="datepicker" data-date-format="DD/MM/YYYY" class="row" value="{{event.deadline}}">
+
             <label class="row">Beskrivelse</label>
             <div class="row">
-                <textarea name="body" class="col-lg-6">{{event.body}}</textarea>
+                <textarea name="body" class="col-lg-6 textarea">{{event.body}}</textarea>
             </div>
 
 
