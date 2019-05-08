@@ -25,6 +25,7 @@ router
         request.session.inputs = null;
     })
 
+    //Create category
     .post('/categories', [
         check('Cname', 'Navn er påkrævet').isString().isLength({ min: 2 }).custom(async (name) => {
             if (await shopController.checkCategoryName(name)) {
@@ -40,16 +41,16 @@ router
             request.session.inputs = { Cname: request.body.Cname };
             response.redirect('/admin/shop');
         } else {
-            const name = request.body.Cname;
-            const result = await shopController.createCategory(name);
+            const result = await shopController.createCategory(request.body.Cname);
 
             if (result) {
-                request.session.success = { msg: 'Success! - ' + Cname + ' oprettet' };
+                request.session.success = { msg: 'Success! - ' + result.name + ' oprettet' };
                 response.redirect('/admin/shop');
             }
         }
     })
 
+    //Edit category
     .get('/categories/:id', async (request, response) => {
         response.locals.metaTags = {
             title: 'Admin - Shop - Categories - edit',
@@ -94,6 +95,7 @@ router
         }
     })
 
+    //Delete category
     .delete('/categories/:id', async (request, response) => {
         try {
             const category = await shopController.findCategory(request.params.id);
@@ -118,26 +120,8 @@ router
 
     })
 
-    .get('/products', async (request, response) => {
-        response.locals.metaTags = {
-            title: 'Admin - Shop - Edit product',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
-        };
-        response.render('admin/shop/product', {
-            layout: 'admin',
-            success: request.session.success,
-            errors: request.session.errors,
-            inputs: request.session.inputs,
-            categories: await shopController.findCategories(),
-        });
-
-        request.session.success = null;
-        request.session.errors = null;
-    })
-
     //Create product
-    .post('/products', [
+    .post('/categories/:id/products', [
         check('name', 'Navn er påkrævet').isString().isLength({ min: 2 }).custom(async (name) => {
             if (await shopController.checkProductName(name)) {
                 return Promise.reject('Dette navn er allerede i brug');
@@ -147,7 +131,6 @@ router
         }),
         check('price').isDecimal(),
         check('size').isString(),
-        check('category', 'Produktkategori er påkrævet').not().isEmpty()
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
@@ -155,9 +138,9 @@ router
             request.session.inputs = { name: request.body.name, price: request.body.price, size: request.body.size };
             response.redirect('/admin/shop');
         } else {
-            const { name, price, size, category } = request.body;
-            const product = await shopController.createProduct(name, price, size, category);
-            const connect = await shopController.addProduktToCategory(category, product._id);
+            const { name, price, size } = request.body;
+            const product = await shopController.createProduct(name, price, size);
+            const connect = await shopController.addProduktToCategory(request.params.id, product._id);
             if (product && connect) {
                 request.session.success = { msg: 'Success! - ' + name + ' er oprettet' };
                 response.redirect('/admin/shop');
@@ -169,7 +152,8 @@ router
         }
     })
 
-    .get('/products/:id', async (request, response) => {
+    //Edit product
+    .get('/categories/:id/products/:pid', async (request, response) => {
         response.locals.metaTags = {
             title: 'Admin - Shop - Edit product',
             description: 'Here goes the description',
@@ -179,9 +163,8 @@ router
             layout: 'admin',
             success: request.session.success,
             errors: request.session.errors,
-            inputs: request.session.inputs,
-            product: await shopController.findProduct(request.params.id),
-            categories: await shopController.findCategories(),
+            product: await shopController.findProduct(request.params.pid),
+            category: await shopController.findCategory(request.params.id),
         });
 
         request.session.success = null;
@@ -189,7 +172,7 @@ router
         request.session.inputs = null;
     })
 
-    .post('/products/:id', [
+    .post('/categories/:id/products/:pid', [
         check('name', 'Navn er påkrævet').isString().isLength({ min: 2 }).custom(async (name, { req }) => {
             if (req.body.name !== name) {
                 if (await shopController.checkProductName(name)) return Promise.reject('Dette navn er allerede i brug');
@@ -199,37 +182,37 @@ router
             }
         }),
         check('price').isDecimal(),
-        check('size').isString(),
+        check('size').isString()
     ], async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
-            response.redirect('/admin/shop/products/' + request.params.id);
+            response.redirect('/admin/shop/categories/' + request.params.id + '/products/' + request.params.pid);
         } else {
             try {
-                const { name, price, size } = request.body;
-                const product = await shopController.updateProduct(request.params.id, name, price, size);
+                const { category, name, price, size } = request.body;
+                const product = await shopController.updateProduct(request.params.pid, name, price, size);
 
                 if (product) {
                     request.session.success = { msg: 'Success! - produktet er opdateret' };
-                    response.redirect('/admin/shop/products/' + request.params.id);
+                    response.redirect('/admin/shop/categories/' + request.params.id + '/products/' + request.params.pid);
                 } else {
                     throw new Error('Product update failed');
                 }
             } catch (err) {
-                request.session.errors = { msg: err };
-                response.redirect('/admin/shop/products/' + request.params.id);
+                request.session.errors = { msg: 'Ups der skete en fejl' };
+                response.redirect('/admin/shop/categories/' + request.params.id + '/products/' + request.params.pid);
             }
         }
     })
 
-    .delete('/products/:id', async (request, response) => {
+    //Delete product
+    .delete('categories/:id/products/:pid', async (request, response) => {
         try {
             const product = await shopController.findProduct(request.params.id);
             if (product) {
-                const categoryid = request.body.categoryid;
                 const result = await shopController.deleteProduct(product._id);
-                const dc = await shopController.removeProduktFromCategory(categoryid, product._id);
+                const dc = await shopController.removeProduktFromCategory(request.params.id, product._id);
 
                 if (result && dc) {
                     response.sendStatus(200);

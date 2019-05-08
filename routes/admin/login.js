@@ -5,6 +5,7 @@ const router = express.Router();
 
 router
     .get('/', function (request, response) {
+        const user = request.session.user;
         if (!request.session.admin) {
             response.locals.metaTags = {
                 title: 'Admin Login',
@@ -12,6 +13,7 @@ router
                 keywords: 'Here goes keywords'
             };
             response.render('admin/login', {
+                user: request.session.user,
                 errors: request.session.errors,
                 email: request.session.email,
                 admin: request.session.admin

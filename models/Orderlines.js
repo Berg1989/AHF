@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const orderlines = new Schema({
     number: Number,
-    produkt: { type: Schema.Types.ObjectId, ref: 'Produkt' }
+    product: { type: Schema.Types.ObjectId, ref: 'Products' }
 });
 
 orderlines.methods.calcPrice = function() {
-    return this.firstname + ", hours: " + this.lastname;
+    return this.number * this.product.methods.getPrice();
 };
 
 module.exports = mongoose.model('Orderlines', orderlines);

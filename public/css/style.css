@@ -23,6 +23,14 @@ tr {
       text-align: right;
   }
 
-  .products {
-      border-bottom: none;
+  .categories-backend {
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+    margin-top: 10px;
+  }
+
+  .products-backend {
+    border-top: 1px solid #ddd;
+    margin-left: 50px;
+    padding: 5px 0;
   }

@@ -11,110 +11,103 @@
 </div>
 <div class="row">
     <div class="col">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2>Opret ny kategori</h2>
-            </div>
-            <div class="panel-body">
-                <form method="post" action="/admin/shop/categories">
-                    <div class="form-group">
-                        <label>Navn: (Påkrævet)</label>
-                        <input type="name" class="form-control" name="Cname" value="{{inputs.Cname}}" />
+        <h1>Shop håndtering</h1>
+        <!-- Create new category -->
+        <div class="row">
+            <div class="col">
+                <p>
+                    <a class="btn btn-secondary" data-toggle="collapse" href="#createCategoryCollapse" role="button"
+                        aria-expanded="false" aria-controls="createCategoryCollapse"><i class="fas fa-plus"></i></a>
+                </p>
+                <div class="collapse" id="createCategoryCollapse">
+                    <div class="card card-body">
+                        <form method="post" action="/admin/shop/categories">
+                            <div class="form-group">
+                                <label>Navn: (Påkrævet)</label>
+                                <input type="name" class="form-control" name="Cname" value="{{inputs.Cname}}" />
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Opret</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Opret</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2>Opret produkt</h2>
-            </div>
-            <div class="panel-body">
-                <form method="post" action="/admin/shop/products">
-                    <div class="form-group">
-                        <label>Navn: (Påkrævet)</label>
-                        <input type="text" class="form-control" name="pname" value="{{inputs.name}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Pris: (Påkrævet)</label>
-                        <input type="number" class="form-control" name="pprice" value="{{inputs.price}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Størrelse: (Påkrævet)</label>
-                        <input type="text" class="form-control" name="psize" value="{{inputs.size}}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Kategori: (Påkrævet)</label>
-                        <select name="category" class="form-control" id="category">
-                            {{#select categories._id}}
-                            {{#each categories}}
-                            <option value="{{this._id}}">{{this.name}}</option>
-                            {{/each}}
-                            {{/select}}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Opret</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-
-<h2>Shop håndtering</h2>
-<table cellpadding='2' style="width:100%;">
-    <thead>
-        <tr>
-            <th>Kategori</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each categories }}
-        <tr>
-            <td>{{this.name}}</td>
-            <td class="align-right"><a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i
-                        class="fas fa-wrench"></i></a>
+        {{#each categories}}
+        <div class="row justify-content-between categories-backend">
+            <div class="col">{{this.name}}</div>
+            <div class="align-right col">
+                <a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
                 <button type="submit" id="{{this._id}}" onclick="deleteCategory(this.id)" class="btn btn-danger"><i
                         class="fas fa-times"></i></button>
-            </td>
-        </tr>
-        <tr class="products">
-            <td style="padding-left:50px;">
-                <table cellpadding='2' style="width:100%;">
-                    <thead>
-                        <tr>
-                            <th>Produkter</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each this.products}}
-                        <tr>
-                            <td>{{this.name}}</td>
-                            <td class="align-right">
-                                <a href="/admin/shop/products/{{this._id}}" class="btn btn-primary"><i
-                                        class="fas fa-wrench"></i></a>
-                                <button type="submit" id="{{this._id}}" onclick="deleteProduct(this.id, this.className)"
-                                    class="{{../this._id}} btn btn-danger"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </td>
-        </tr>
+            </div>
+        </div>
+
+        <!-- Create new product in category -->
+        <div class="row">
+            <div class="col">
+                <p style="margin-left:50px;">
+                    <a class="btn btn-secondary" data-toggle="collapse" href="#createProductCollapse{{this.name}}"
+                        role="button" aria-expanded="false" aria-controls="createProductCollapse{{this.name}}"><i
+                            class="fas fa-plus"></i></a>
+                </p>
+                <div class="collapse" id="createProductCollapse{{this.name}}">
+                    <div class="card card-body">
+                        <form method="post" action="/admin/shop/categories/{{this._id}}/products">
+                            <div class="form-group">
+                                <label>Navn: (Påkrævet)</label>
+                                <input type="text" class="form-control" name="name" value="{{inputs.name}}" />
+                            </div>
+                            <div class="form-group">
+                                <label>Pris: (Påkrævet)</label>
+                                <input type="number" class="form-control" name="price" value="{{inputs.price}}" />
+                            </div>
+                            <div class="form-group">
+                                <label>Størrelse: (Påkrævet)</label>
+                                <input type="text" class="form-control" name="size" value="{{inputs.size}}" />
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Opret</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{#each this.products}}
+        <div class="row justify-content-between products-backend">
+            <div class="col">{{this.name}}</div>
+            <div class="align-right col">
+                <a href="/admin/shop/categories/{{../this._id}}/products/{{this._id}}" class="btn btn-primary"><i
+                        class="fas fa-wrench"></i></a>
+                <button type="submit" id="{{this._id}}" onclick="deleteProduct(this.id, this.className)"
+                    class="{{../this._id}} btn btn-danger"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
         {{/each}}
-    </tbody>
-</table>
+        {{/each}}
+    </div>
+    <div class="col"></div>
+</div>
 
 <script>
+    async function deleteCategory(id) {
+        const res = window.confirm('Sletter du denne kategori slettes alle indeholdende produkter også. Er du sikker på denne handling?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/shop/categories/' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
     async function deleteProduct(id, classnames) {
         const res = window.confirm('Er du sikker på denne handling?');
         if (res) {
@@ -124,22 +117,6 @@
                     method: 'DELETE',
                     body: JSON.stringify({ categoryid }),
                     headers: { 'Content-Type': 'application/json' }
-                })
-                if (response.status === 200) location.reload(true);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
-</script>
-
-<script>
-    async function deleteCategory(id) {
-        const res = window.confirm('Sletter du denne kategori slettes alle indeholdende produkter også. Er du sikker på denne handling?');
-        if (res) {
-            try {
-                const response = await fetch('/admin/shop/categories/' + id, {
-                    method: 'DELETE',
                 })
                 if (response.status === 200) location.reload(true);
             } catch (err) {

@@ -57,7 +57,6 @@ exports.createProduct = (name, price, size) => {
         name: name,
         price: price,
         size: size
-        //category: categoryId
     }).save();
 };
 
@@ -67,7 +66,6 @@ exports.updateProduct = (id, name, price, size) => {
             name: name,
             price: price,
             size: size
-            //category: categoryId
         }
     }).exec();
 };
@@ -87,3 +85,53 @@ exports.findProduct = (id) => {
 exports.checkProductName = (name) => {
     return Product.findOne({ name: name }).exec();
 }
+
+//
+// ORDERLINES
+//
+exports.createOrderline = (product, number) => {
+    return new Orderline({
+        number: number,
+        product: product
+    }).save();
+};
+
+exports.deleteOrderline = (id) => {
+    return Orderline.findByIdAndRemove(id).exec();
+};
+
+exports.updateOrderline = (id, number) => {
+    return Orderline.findByIdAndUpdate(id, {
+        $set: { number: number }
+    })
+};
+
+//
+// ORDER
+//
+exports.createOrder = (date, sellerId) => {
+    return new Order({
+        date: date,
+        sellerId: sellerId,
+        price: 0,
+        orderlines: []
+    }).save();
+};
+
+exports.updateOrderPrice = (id, price) => {
+    return Order.findByIdAndUpdate(id, {
+        $set: { price: price }
+    }).exec();
+};
+
+exports.addOrderlineToOrder = (orderid, orderlineid) => {
+    return Order.findByIdAndUpdate(orderid, {
+        $push: { orderlines: orderlineid }
+    }).exec();
+};
+
+exports.removeOrderlineFromOrder = (orderid, orderlineid) => {
+    return Order.findByIdAndUpdate(orderid, {
+        $pull: { orderlines: orderlineid }
+    }).exec();
+};
