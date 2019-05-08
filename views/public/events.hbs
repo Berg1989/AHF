@@ -11,35 +11,37 @@
 <div class="row">
     <span class="border border-primary">
         <div class="col">
-                <div class="form-group">
-                    <table cellpadding='2' style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>Event</th>
-                                <th>Start Dato</th>
-                                <th>Slut Dato</th>
-                                <th>Pris</th>
-                                <th>Tilmeld</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each events }}
-                            <tr>
-                                <td>{{this.headline}}</td>
-                                <td>{{this.startdate}}</td>
-                                <td>{{this.enddate}}</td>
-                                <td>{{this.price}}</td>
-                                <td>
-                                    <form method='post' action="">
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i></a>
-                                 </form>
+            <div class="form-group">
+                <table cellpadding='2' style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Start Dato</th>
+                            <th>Slut Dato</th>
+                            <th>Pris</th>
+                            <th>Tilmeld</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each events }}
+                        <tr>
+                            <td>{{this.headline}}</td>
+                            <td>{{this.startdate}}</td>
+                            <td>{{this.enddate}}</td>
+                            <td>{{this.price}}</td>
+                            <td>
+                                <form method='post' action="">
+                                    <button type="submit" class="btn btn-primary" id='{{this.id}}'
+                                        user='{{session.request.user._id}}' onclick='signUp(eventId, userId)'><i
+                                            class="fas fa-plus"></i></a>
+                                </form>
 
-                                </td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </span>
@@ -74,3 +76,21 @@
     </span>
 </div>
 {{/if}}
+
+
+<script>
+    async function signUp(eventId, userId) {
+        const res = window.confirm("Vil du tilmelde dig dette event?");
+        const user = session.request.user;
+        if (res) {
+            try {
+                const response = await fetch('/public/events/id=' + id, {
+                    method: "post",
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+</script>
