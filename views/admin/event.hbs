@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-lg-6">
+        <form method="POST" action="/admin/news/eventedit/id={{event._id}}">
+            <label class="row">Overskrift</label>
+            <input name="headline" type="text" class="row" value="{{event.headline}}">
+
+            <label class="row">Start dato</label>
+            <input name="startDate" type="date" data-provide="datepicker" data-date-format="DD/MM/YYYY" class="row" value="{{event.startdate}}">
+
+            <label class="row">Slut dato</label>
+            <input name="endDate" type="date" data-provide="datepicker" data-date-format="DD/MM/YYYY" class="row" value="{{event.enddate}}">
+
+            <label class="row">Beskrivelse</label>
+            <div class="row">
+                <textarea name="body" class="col-lg-6">{{event.body}}</textarea>
+            </div>
+
+
+            <label class="row">Max deltagere</label>
+            <input name="maxparticipants" type="text" class="row" value="{{event.maxparticipants}}">
+
+            <label class="row">Pris</label>
+            <input name="price" type="text" class="row" value="{{event.price}}">
+
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gem ændringer</button>
+            </div>
+        </form>
+    </div>
+</div>

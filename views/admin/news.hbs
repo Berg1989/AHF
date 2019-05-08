@@ -20,12 +20,13 @@
                 {{#each events }}
                 <tr>
                     <td>{{this.headline}}</td>
-                    <td>{{this.startdate}}</td>
-                    <td>{{this.enddate}}</td>
+                    <td id="startdate">{{this.startdate}}</td>
+                    <td id="enddate">{{this.enddate}}</td>
                     <td>{{this.price}}</td>
-                    <td><a href="/admin/news/eventedit/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                    <td><a href="/admin/news/eventedit/id={{this._id}}" class="btn btn-primary"><i
+                                class="fas fa-wrench"></i></a>
                     </td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent()" class="btn btn-danger"><i
+                    <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent(this.id)" class="btn btn-danger"><i
                                 class="fas fa-times"></i></button></td>
                 </tr>
                 {{/each}}
@@ -36,7 +37,7 @@
 
     <div class="col-lg-6">
         <div class="row">
-            <h1>Nyheder</h1>
+            <h1>Opslag</h1>
         </div>
         <form method="GET" action="/admin/news/createpost">
             <button type="submit" class="btn btn-primary row">Nyt event</button>
@@ -54,9 +55,10 @@
                 <tr>
                     <td>{{this.headline}}</td>
                     <td>{{this.postdate}}</td>
-                    <td><a href="/admin/news/postedit/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                    <td><a href="/admin/news/postedit/id={{this._id}}" class="btn btn-primary"><i
+                                class="fas fa-wrench"></i></a>
                     </td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deletePost()" class="btn btn-danger"><i
+                    <td> <button type="submit" id="{{this._id}}" onclick="deletePost(this.id)" class="btn btn-danger"><i
                                 class="fas fa-times"></i></button></td>
                 </tr>
                 {{/each}}
@@ -66,3 +68,44 @@
     </div>
 
 </div>
+
+<script>
+    const startinput = document.getElementById("startdate");
+    const endinput = document.getElementById("enddate");
+
+    const startdate = new Date(startinput.innerHTML).toDateString();
+    const enddate = new Date(endinput.innerHTML).toDateString();
+    
+    startinput.innerHTML = startdate;
+    endinput.innerHTML = enddate;
+    
+
+    async function deleteEvent(id) {
+        const res = window.confirm('Vil du slette denne begivenhed?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/news/delete/eventid=' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
+    async function deletePost(id) {
+        const res = window.confirm('Vil du slette dette opslag?');
+        if (res) {
+            try {
+                const response = await fetch('/admin/news/delete/postid=' + id, {
+                    method: 'DELETE',
+                })
+                if (response.status === 200) location.reload(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
+</script>

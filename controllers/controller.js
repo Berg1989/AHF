@@ -4,8 +4,8 @@ const User = require('../models/user');
 const Usertypes = require('../models/usertypes');
 const Subscriptions = require('../models/subscriptions');
 const SubscriptionModel = require('../models/subscriptionModel');
-const postModel = require('../models/post');
-const eventModel = require('../models/event');
+const PostModel = require('../models/post');
+const EventModel = require('../models/event');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
@@ -220,7 +220,7 @@ exports.findUsertype = (id) => {
 exports.createPost = (body, headline, author) => {
     const created = new Date().toDateString();
 
-    const post = new postModel({
+    const post = new PostModel({
         postdate: created,
         body: body,
         headline: headline,
@@ -231,14 +231,11 @@ exports.createPost = (body, headline, author) => {
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
 
-    const start = new Date(startDate).toDateString();
-    const end = new Date(endDate).toDateString();
-
-    const event = new eventModel({
+    const event = new EventModel({
         headline: headline,
         author: author,
-        startdate: start,
-        enddate: end,
+        startdate: startDate,
+        enddate: endDate,
         body: body,
         deadline: deadline,
         participants: [],
@@ -249,9 +246,54 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
 };
 
 exports.findEvents = () => {
-    return eventModel.find().exec()
+    return EventModel.find().exec()
 }
 
-exports.findPosts = ()  => {
-    return postModel.find().exec();
+exports.findPosts = () => {
+    return PostModel.find().exec();
 }
+
+exports.deleteEvent = id => {
+    return EventModel.findByIdAndDelete(id).exec();
+}
+
+exports.deletePost = id => {
+    return PostModel.findByIdAndDelete(id).exec();
+}
+
+exports.findPost = id => {
+    return PostModel.findById(id).exec();
+}
+
+exports.findEvent = id => {
+    return EventModel.findById(id).exec();
+}
+
+exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
+    
+    return EventModel.findByIdAndUpdate(id, {
+        $set: {
+            headline: headline,
+            author: author,
+            startdate: startDate,
+            enddate: endDate,
+            body: body,
+            deadline: deadline,
+            participants: [],
+            maxparticipants: maxParticipants,
+            price: price
+        }
+    }).exec();
+
+};
+
+exports.updatePost = (id,headline,body) => {
+    
+    return PostModel.findByIdAndUpdate(id, {
+        $set: {
+            headline: headline,
+            body: body,
+        }
+    }).exec();
+
+};

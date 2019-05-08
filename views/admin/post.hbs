@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-lg-6">
+        <form method="POST" action="/admin/news/postedit/id={{post._id}}">
+            <label class="row">Overskrift</label>
+            <input name="headline" type="text" class="row" value="{{post.headline}}">
+
+            <label class="row">Beskrivelse</label>
+            <div class="row">
+                <textarea name="body" class="col-lg-6">{{post.body}}</textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gem ændringer</button>
+            </div>
+        </form>
+    </div>
+</div>

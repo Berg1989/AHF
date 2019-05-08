@@ -83,4 +83,87 @@ router
     response.redirect('/admin/news/')
 })
 
+.delete('/delete/eventid=:id', async function (request, response) {
+    
+    try {
+        if (await controller.deleteEvent(request.params.id)) response.sendStatus(200);
+    } catch (err) {
+        response.sendStatus(405);
+    }
+})
+
+.delete('/delete/postid=:id', async function (request, response) {
+    try {
+        if (await controller.deletePost(request.params.id)) response.sendStatus(200);
+    } catch (err) {
+        response.sendStatus(405);
+    }
+})
+
+
+
+
+//
+// EDIT
+//
+
+.get('/postedit/id=:id', async (request, response) => {
+    try {
+        const post = await controller.findPost(request.params.id);
+        if (post) {
+            response.locals.metaTags = {
+                title: 'Admin - edit user: ' + post.headline,
+                description: 'Here goes the description',
+                keywords: 'Here goes keywords'
+            };
+            response.render('admin/post', {
+                layout: 'admin',
+                post,
+                errors: request.session.errors,
+                success: request.session.success
+            });
+            request.session.errors = null;
+            request.session.success = null;
+        }
+    } catch (err) {
+        response.render('error');
+    }
+})
+
+.get('/eventedit/id=:id', async (request, response) => {
+    try {
+        const event = await controller.findEvent(request.params.id);
+        if (event) {
+            response.locals.metaTags = {
+                title: 'Admin - edit user: ' + event.headline,
+                description: 'Here goes the description',
+                keywords: 'Here goes keywords'
+            };
+            response.render('admin/event', {
+                layout: 'admin',
+                event,
+                errors: request.session.errors,
+                success: request.session.success
+            });
+            request.session.errors = null;
+            request.session.success = null;
+        }
+    } catch (err) {
+        response.render('error');
+    }
+})
+
+.post('/eventedit/id=:id', async (request, response) => {
+    const{headline, startDate, endDate, body, deadline, maxparticipants, price} = request.body;
+    await controller.updateEvent(request.params.id, headline, 'Oscar', startDate, endDate, body, deadline, maxparticipants, price);
+    response.redirect('/admin/news/')
+})
+
+.post('/postedit/id=:id', async (request, response) => {
+    const{headline, body} = request.body;
+    const id = request.params.id;
+    await controller.updatePost(id,headline,body);
+    response.redirect('/admin/news/')
+})
+
 module.exports = router;
