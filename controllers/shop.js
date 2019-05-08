@@ -4,6 +4,14 @@ const Category = require('../models/Categories');
 const Product = require('../models/Products');
 const Orderline = require('../models/Orderlines');
 const Order = require('../models/Order');
+const Cart = require('../models/Cart');
+
+//
+// CART
+//
+exports.createCart = function(oldCart) {
+    return new Cart(oldCart);
+};
 
 //
 // CATEGORIES

@@ -11,6 +11,13 @@ const expressValidator = require('express-validator');
 const cookeParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const handlebarsIntl = require('handlebars-intl');
+const MongoStore = require('connect-mongo')(session); //Gemme session i mongodb i stedet for sysMem
+
+// MONGODB & MONGOOSE SETUP
+const mongoose = require('mongoose');
+mongoose.Promise = Promise;
+mongoose.connect(config.mongodb, { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 
 const app = express();
 app.engine('hbs', xhbs({
@@ -25,26 +32,36 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookeParser());
-app.use(session({ secret: 'hemmelig', saveUninitialized: true, resave: true }));
+app.use(session({
+  secret: 'hemmelig',
+  saveUninitialized: false,
+  resave: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 120 * 60 * 1000 } //60 min
+}));
 app.use(expressValidator());
+
+// VISIBLE IN ALL VIEWS:
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  res.locals.metaTags = {
+    title: 'Title',
+    description: 'Description',
+    keywords: 'Keywords'
+  };
+  next();
+});
 
 // Select hbs-helper
 hbs.registerHelper("select", function (value, options) {
   return options.fn(this)
-      .split('\n')
-      .map(function (v) {
-          var t = 'value="' + value + '"'
-          return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
-      })
-      .join('\n')
+    .split('\n')
+    .map(function (v) {
+      var t = 'value="' + value + '"'
+      return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
+    })
+    .join('\n')
 });
-
-// MONGODB & MONGOOSE SETUP
-const mongoose = require('mongoose');
-mongoose.Promise = Promise;
-mongoose.connect(config.mongodb, { useNewUrlParser: true });
-mongoose.set('useFindAndModify', false);
-
 
 // ROUTES FOR THE APP
 // PUBLIC
@@ -78,12 +95,12 @@ const shopIndex = require('./routes/shop/index');
 app.use('/shop', shopIndex);
 
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   res.locals.metaTags = {
     title: '404 - not found',
     description: 'Here goes the description',
     keywords: 'Here goes keywords'
-};
+  };
   res.status(404).render('error');
 });
 

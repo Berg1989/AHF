@@ -2,7 +2,10 @@ const controller = require("../../controllers/controller");
 const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
+const csrf = require('csurf');
+
+const csrfProtection = csrf();
+router.use(csrfProtection)
 
 router
     .get('/', function (request, response) {
@@ -15,6 +18,7 @@ router
             };
             response.render('public/login', {
                 action: '/login',
+                csrfToken: request.csrfToken(),
                 errors: request.session.errors,
                 email: request.session.email,
                 inputs: request.session.inputs,
