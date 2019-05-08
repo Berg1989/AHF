@@ -25,8 +25,15 @@ router
         });
     })
 
-    .get('/events', (request,response) => {
-        response.render('public/events');
+    .get('/events', async (request,response) => {
+        const user = request.session.user;
+        response.render('public/events', {
+            user: request.session.user,
+            errors: request.session.errors,
+            events: await controller.findEvents(user),
+        });
+        request.session.success = null;
+        request.session.errors = null;       
     });
 
 module.exports = router;

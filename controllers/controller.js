@@ -8,6 +8,7 @@ const PostModel = require('../models/post');
 const EventModel = require('../models/event');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
+const personalEvent = require('../models/personalEvent');
 
 //
 // SUBSCRIPTIONMODEL
@@ -261,7 +262,11 @@ exports.findPosts = () => {
 }
 
 exports.eventSignUp = (event, user) => {
-    event.participants.push(user);
+        return EventModel.findByIdAndUpdate(event._id, {
+            $push: {
+                participants: user
+            }
+        }).exec();
 }
 
 exports.deleteEvent = async id => {
@@ -276,6 +281,18 @@ exports.deleteEvent = async id => {
     return true;
 
     return EventModel.findByIdAndDelete(id).exec();
+exports.userSignUp = (event, user) => {
+    return userModel.findByIdAndUpdate(user._id, {
+        $push: {
+            personalEvents: event
+        }
+    }).exec();
+}
+
+
+
+exports.findEvents = () => {
+    return eventModel.find().exec();
 }
 
 exports.deletePost = id => {

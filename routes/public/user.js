@@ -182,6 +182,7 @@ router
                 user,
                 success: request.session.success,
                 errors: request.session.errors,
+                //events: await controller.findPersonalEvents()
             });
             request.session.success = null;
             request.session.errors = null;

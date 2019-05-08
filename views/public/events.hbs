@@ -1,8 +1,53 @@
-<h1>Dine events</h1>
+<div class="col">
+    {{#if success}}
+    {{#each success}}
+    <p class="alert alert-success">{{success.msg}}</p>
+    {{/each}}
+    {{/if}}
+</div>
+<h1>Kommende events</h1>
+
+{{#if user}}
 <div class="row">
     <span class="border border-primary">
         <div class="col">
-            <h3>Kommende events</h3>
+            <form method='post' action="{{action}}">
+
+                <div class="form-group">
+                    <table cellpadding='2' style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Start Dato</th>
+                                <th>Slut Dato</th>
+                                <th>Pris</th>
+                                <th>Tilmeld</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each events }}
+                            <tr>
+                                <td>{{this.headline}}</td>
+                                <td>{{this.startdate}}</td>
+                                <td>{{this.enddate}}</td>
+                                <td>{{this.price}}</td>
+                                <td>
+                                    <a type="submit" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+        </div>
+    </span>
+</div>
+{{else}}
+<div class="row">
+    <span class="border border-primary">
+        <div class="col">
             <div class="form-group">
                 <table cellpadding='2' style="width:100%;">
                     <thead>
@@ -11,20 +56,15 @@
                             <th>Start Dato</th>
                             <th>Slut Dato</th>
                             <th>Pris</th>
-
-                            <th>Afmeld</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each subscriptions}}
+                        {{#each events }}
                         <tr>
-                            <td>{{this.name}}</td>
-                            <td>{{this.duration}}</td>
+                            <td>{{this.headline}}</td>
+                            <td>{{this.startdate}}</td>
+                            <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
-                            <td><a href="/admin/subscriptions/id={{this._id}}" class="btn btn-primary"><i
-                                        class="fas fa-wrench"></i></a></td>
-                            <td> <button type="submit" id="{{this._id}}" onclick="deleteSubscription(this.id)"
-                                    class="btn btn-danger"><i class="fas fa-times"></i></button></td>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -32,3 +72,5 @@
             </div>
         </div>
     </span>
+</div>
+{{/if}}
