@@ -23,6 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        
                         {{#each events }}
                         <tr>
                             <td>{{this.headline}}</td>
@@ -30,13 +31,13 @@
                             <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
                             <td>
-                                <form method='post' action="">
-                                    <button type="submit" class="btn btn-primary" id='{{this.id}}'
-                                        user='{{session.request.user._id}}' onclick='signUp(eventId, userId)'><i
-                                            class="fas fa-plus"></i></a>
-                                </form>
+                                <form method="POST" action='/events/eventid={{this.id}}/userid={{../user._id}}'>
+                                    <button type="submit" class="btn btn-primary" onclick="signUp({{this.id}}, {{../user._id}})"><i
+                                            class="fas fa-plus"></i></button>
 
+</form>
                             </td>
+                            
                         </tr>
                         {{/each}}
                     </tbody>
@@ -80,12 +81,11 @@
 
 <script>
     async function signUp(eventId, userId) {
-        const res = window.confirm("Vil du tilmelde dig dette event?");
-        const user = session.request.user;
+        const res = window.confirm('Vil tilmelde dig dette event?');
         if (res) {
             try {
-                const response = await fetch('/public/events/id=' + id, {
-                    method: "post",
+                const response = await fetch('public/events/eventid=' + eventId + '/userid=' + userId, {
+                    method: 'POST',
                 })
                 if (response.status === 200) location.reload(true);
             } catch (err) {

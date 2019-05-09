@@ -70,7 +70,8 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
             phone: null
         },
         usertype: usertype,
-        subscription: null
+        subscription: null,
+        personalEvents: []
     });
     return user.save();
 };
@@ -239,6 +240,9 @@ exports.createPost = (headline, body, author) => {
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
 
+    const start = new Date(startDate).toDateString();
+    const end = new Date(endDate).toDateString();
+
     const event = new EventModel({
         headline: headline,
         author: author,
@@ -263,8 +267,10 @@ exports.findPosts = () => {
 
 exports.eventSignUp = (event, user) => {
         return EventModel.findByIdAndUpdate(event._id, {
+exports.eventSignUp = (eventId, userId) => {
+        return EventModel.findByIdAndUpdate(eventId, {
             $push: {
-                participants: user
+                participants: userId
             }
         }).exec();
 }
@@ -284,19 +290,22 @@ exports.deleteEvent = async id => {
 exports.userSignUp = (event, user) => {
     return userModel.findByIdAndUpdate(user._id, {
         $push: {
-            personalEvents: event
+            personalEvents: eventId
         }
     }).exec();
 }
 
+//TODO
 exports.findPersonalEvents = () => {
 
 }
 
 exports.findEvents = () => {
-    return eventModel.find().exec();
+    return EventModel.find().exec();
 }
 
+exports.findPosts = ()  => {
+    return PostModel.find().exec();
 exports.deletePost = id => {
     return PostModel.findByIdAndDelete(id).exec();
 }
