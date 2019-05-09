@@ -17,14 +17,14 @@
             <label class="row">Overskrift</label>
             <input type="text" name="headline" class="row" value="{{inputs.headline}}">
             <label class="row">Start dato</label>
-            <input type="date" name="startDate" class="row" data-provide="datepicker" data-date-format="DD/MM/YYYY" required value="value="{{inputs.startDate}}"">
+            <input type="date" name="startDate" class="row" data-provide="datepicker" data-date-format="DD/MM/YYYY" value="{{inputs.startDate}}">
             <label class="row">Slut dato</label>
-            <input type="date" name="endDate" class="row" data-provide="datepicker" data-date-format="DD/MM/YYYY" required value="{{inputs.endDate}}">
+            <input type="date" name="endDate" class="row" data-provide="datepicker" data-date-format="DD/MM/YYYY" value="{{inputs.endDate}}">
             <label class="row">Svarfrist</label>
-            <input type="date" name="deadline" class="row" data-provide="datepicker" data-date-format="DD/MM/YYYY" required value="{{inputs.deadline}}">
+            <input type="date" name="deadline" class="row" data-provide="datepicker" data-date-format="DD/MM/YYYY" value="{{inputs.deadline}}">
             <label class="row">Beskrivelse</label>
             <div class="row">
-                <textarea name="body" class="col-lg-6 textarea" value="{{inputs.body}}"></textarea>
+                <textarea name="body" class="col-lg-6 textarea">{{inputs.body}}</textarea>
             </div>
             <label class="row">Max deltagere</label>
             <input type="number" name="maxparticipants" class="row" value="{{inputs.maxparticipants}}">

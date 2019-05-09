@@ -11,6 +11,18 @@
     }
 </script>
 <div class="row">
+    <div class="col">
+        {{#if errors }}
+        {{#each errors }}
+        <p class="alert alert-danger">{{ this.msg }}</p>
+        {{/each}}
+        {{/if}}
+        {{#if success }}
+        <p class="alert alert-success">{{ success.msg }}</p>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
     <div class="col-lg-6">
         <div class="row">
             <h1>Begivenheder</h1>

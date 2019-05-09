@@ -61,7 +61,7 @@ router
     .post('/register', [
         check('email', 'Email er påkrævet')
             .isEmail().custom(async email => {
-                if (await controller.checkEmail(email))
+                if (await controller.checkEmail(email.toLowerCase()))
                     return Promise.reject('Email er allerede i brug');
             }),
         check('password', 'Password skal min. være 5 karaktere')

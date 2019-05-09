@@ -30,7 +30,7 @@ router
     .post('/', [
         check('email', 'Please enter a valid email')
             .isEmail().custom(async email => {
-                if (await controller.checkEmail(email))
+                if (await controller.checkEmail(email.toLowerCase()))
                     return Promise.reject('Email already in use');
             }),
         check('password', 'Password must be 5 characters or longer')

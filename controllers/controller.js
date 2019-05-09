@@ -50,12 +50,13 @@ exports.deleteSubscriptionModel = (id) => {
 exports.createUser = async (email, password, firstname, lastname, usertype, func) => {
     const tempFirstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
     const tempLastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+    const tempEmail = email.toLowerCase();
     const created = new Date().toDateString();
     const newHash = await bcrypt.hash(password, saltRounds);
 
     const user = new User({
         password: newHash,
-        email: email,
+        email: tempEmail,
         created: created,
         info: {
             firstname: tempFirstname,
@@ -222,7 +223,7 @@ exports.findUsertype = (id) => {
 //  POSTS / EVENTS
 //
 
-exports.createPost = (body, headline, author) => {
+exports.createPost = (headline, body, author) => {
     const created = new Date().toDateString();
 
     const post = new PostModel({
@@ -258,7 +259,17 @@ exports.findPosts = () => {
     return PostModel.find().exec();
 }
 
-exports.deleteEvent = id => {
+exports.deleteEvent = async id => {
+    
+    const event =  await exports.findEvent(id)
+    const participants = event.participants;
+
+    for(ids of participants){
+        /* afmelding fra daniel og morten */
+    }
+
+    return true;
+
     return EventModel.findByIdAndDelete(id).exec();
 }
 
