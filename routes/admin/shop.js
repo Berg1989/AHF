@@ -3,7 +3,8 @@ const shopController = require('../../controllers/shop');
 const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
+//const multer = require('multer'); //Multipart form data (files)
+const upload = require('../../middleware/upload');
 
 router
     .get('/', async (request, response) => {
@@ -121,7 +122,7 @@ router
     })
 
     //Create product
-    .post('/categories/:id/products', [
+    .post('/products', upload.single('productImage'), [
         check('name', 'Navn er påkrævet').isString().isLength({ min: 2 }).custom(async (name) => {
             if (await shopController.checkProductName(name)) {
                 return Promise.reject('Dette navn er allerede i brug');
@@ -129,18 +130,19 @@ router
                 return true;
             }
         }),
-        check('price').isDecimal(),
-        check('size').isString(),
+        check('price', 'Pris er påkrævet').isDecimal(),
+        check('size', 'Størrelse er påkrævet').isString().isLength({min: 1})
     ], async (request, response) => {
+        console.log(request.file);
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.session.errors = await errors.array();
             request.session.inputs = { name: request.body.name, price: request.body.price, size: request.body.size };
             response.redirect('/admin/shop');
         } else {
-            const { name, price, size } = request.body;
-            const product = await shopController.createProduct(name, price, size);
-            const connect = await shopController.addProduktToCategory(request.params.id, product._id);
+            const { name, price, size, category, image } = request.body;
+            const product = await shopController.createProduct(name, price, size, '/uploads/' + request.file.filename);
+            const connect = await shopController.addProduktToCategory(category, product._id);
             if (product && connect) {
                 request.session.success = { msg: 'Success! - ' + name + ' er oprettet' };
                 response.redirect('/admin/shop');

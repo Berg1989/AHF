@@ -5,13 +5,24 @@ const express = require('express');
 const morgan = require('morgan');
 const config = require('./config');
 const session = require('express-session');
-const hbs = require('handlebars');
-const xhbs = require('express-handlebars')
-const expressValidator = require('express-validator');
+const hbs = require('handlebars'); //View engine middleware
+const xhbs = require('express-handlebars') //Udvidelse til handlebars
+const expressValidator = require('express-validator'); //Input validering af req.body
 const cookeParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const handlebarsIntl = require('handlebars-intl');
+const bodyParser = require('body-parser'); //Middleware til at parse req.body
+const handlebarsIntl = require('handlebars-intl'); //Middleware til hbs data formatering
 const MongoStore = require('connect-mongo')(session); //Gemme session i mongodb i stedet for sysMem
+
+// ROUTES FOR THE SERVER
+const index = require('./routes/public/index');
+const login = require('./routes/public/login');
+const user = require('./routes/public/user');
+const adminIndex = require('./routes/admin/index');
+const adminLogin = require('./routes/admin/login');
+const adminUsers = require('./routes/admin/users');
+const adminSubscriptions = require('./routes/admin/subscriptions');
+const adminShop = require('./routes/admin/shop');
+const shopIndex = require('./routes/shop/index');
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
@@ -52,46 +63,19 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Select hbs-helper
-hbs.registerHelper("select", function (value, options) {
-  return options.fn(this)
-    .split('\n')
-    .map(function (v) {
-      var t = 'value="' + value + '"'
-      return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
-    })
-    .join('\n')
-});
-
-// ROUTES FOR THE APP
 // PUBLIC
-const index = require('./routes/public/index');
 app.use('/', index);
-
-const login = require('./routes/public/login');
 app.use('/login', login);
-
-const user = require('./routes/public/user');
 app.use('/user', user);
 
 // ADMIN
-const adminIndex = require('./routes/admin/index');
 app.use('/admin', adminIndex);
-
-const adminLogin = require('./routes/admin/login');
 app.use('/admin/login', adminLogin);
-
-const adminUsers = require('./routes/admin/users');
 app.use('/admin/users', adminUsers);
-
-const adminSubscriptions = require('./routes/admin/subscriptions');
 app.use('/admin/subscriptions', adminSubscriptions);
 
 // SHOP
-const adminShop = require('./routes/admin/shop');
 app.use('/admin/shop', adminShop);
-
-const shopIndex = require('./routes/shop/index');
 app.use('/shop', shopIndex);
 
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
@@ -102,6 +86,17 @@ app.use(function (req, res, next) {
     keywords: 'Here goes keywords'
   };
   res.status(404).render('error');
+});
+
+// Select hbs-helper
+hbs.registerHelper("select", function (value, options) {
+  return options.fn(this)
+    .split('\n')
+    .map(function (v) {
+      var t = 'value="' + value + '"'
+      return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
+    })
+    .join('\n')
 });
 
 // START THE SERVER

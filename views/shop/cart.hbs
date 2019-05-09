@@ -11,7 +11,7 @@
             <li class="list-item">
                 <span>{{this.qty}} Stk.</span>
                 <strong>{{this.item.name}}</strong>
-                <span>{{this.item.price}},-</span>
+                <span>{{formatNumber this.item.price style="currency" currency="DKK"}}</span>
                 <a href="/shop/retract-from-cart/{{this.item._id}}">Fjern én</a>
                 <a href="/shop/remove-from-cart/{{this.item._id}}">Fjern</a>
             </li>
@@ -22,7 +22,7 @@
 <br>
 <div class="row">
     <div class="col">
-        <span>Total pris: <strong>{{ totalPrice }}</strong>,-</span>
+        <span>Total pris: <strong>{{formatNumber totalPrice style="currency" currency="DKK"}}</strong></span>
     </div>
 </div>
 <hr>
@@ -36,5 +36,5 @@
     </div>
 </form>
 {{else}}
-<p class="alert alert-danger">Cart is empty</p>
+<h2>Kurven er tom</h2>
 {{/if}}

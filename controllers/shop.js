@@ -64,11 +64,12 @@ exports.checkCategoryName = (name) => {
 //
 // PRODUCTS
 //
-exports.createProduct = (name, price, size) => {
+exports.createProduct = (name, price, size, imgPath) => {
     return new Product({
         name: name,
         price: price,
-        size: size
+        size: size,
+        imgPath: imgPath
     }).save();
 };
 
