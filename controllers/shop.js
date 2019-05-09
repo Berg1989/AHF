@@ -101,10 +101,11 @@ exports.checkProductName = (name) => {
 //
 // ORDERLINES
 //
-exports.createOrderline = (product, number) => {
+exports.createOrderline = (product, qty, price) => {
     return new Orderline({
-        number: number,
-        product: product
+        qty: qty,
+        product: product,
+        price: price
     }).save();
 };
 
@@ -121,12 +122,14 @@ exports.updateOrderline = (id, number) => {
 //
 // ORDER
 //
-exports.createOrder = (date, sellerId) => {
+exports.createOrder = (sellerId, orderlines, price, phone) => {
+    const date = new Date().toISOString();
     return new Order({
         date: date,
         sellerId: sellerId,
-        price: 0,
-        orderlines: []
+        price: price,
+        orderlines: orderlines,
+        phone: phone
     }).save();
 };
 

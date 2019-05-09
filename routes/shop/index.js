@@ -31,7 +31,7 @@ router
         });
     })
 
-    .get('/cart', async function(req, res, next) {
+    .get('/cart', async function (req, res, next) {
         if (!req.session.cart) {
             return res.render('shop/cart', { products: null });
         }
@@ -45,7 +45,45 @@ router
                 description: 'cart descr',
                 keywords: 'lol'
             }
-        })
+        });
+
+        req.session.errors = null;
+    })
+
+    .post('/cart/checkout', [
+        check('phone', 'Telefon nummer er påkrævet').isDecimal()
+    ], async function (req, res, next) {
+        if (!req.session.cart) {
+            return res.render('shop/cart', { products: null });
+        }
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            req.session.errors = await errors.array();
+            res.redirect('/shop/cart');
+        } else {
+            const cart = await shopController.createCart(req.session.cart);
+            const items = cart.generateArray();
+            let orderlines = [];
+            let counter = 0;
+
+            for (let itemGroup of items) {
+                const orderline = await shopController.createOrderline(itemGroup.item._id, itemGroup.qty, itemGroup.price);
+                orderlines.push(orderline._id);
+                counter++;
+            }
+
+            if (counter === items.length) {
+                const order = await shopController.createOrder('123', orderlines, cart.totalPrice, req.body.phone);
+
+                if (order) {
+                    req.session.cart = await shopController.createCart({}); //Empty the cart
+                    res.redirect('/shop');
+                } else {
+                    res.redirect('/shop/cart');
+                }
+            }
+        }
     })
 
     .get('/add-to-cart/:id', async function (req, res, next) {
@@ -61,6 +99,28 @@ router
         } else {
             return res.redirect('/');
         }
-    });
+    })
+
+    .get('/retract-from-cart/:id', async function(req, res, next){
+        const product = await shopController.findProduct(req.params.id);
+        if (product) {
+            const cart = await shopController.createCart(req.session.cart);
+            cart.retractOne(product._id);
+
+            req.session.cart = cart;
+            res.redirect('/shop/cart');
+        }
+    })
+
+    .get('/remove-from-cart/:id', async function(req, res, next){
+        const product = await shopController.findProduct(req.params.id);
+        if (product) {
+            const cart = await shopController.createCart(req.session.cart);
+            cart.removeItem(product._id);
+
+            req.session.cart = cart;
+            res.redirect('/shop/cart');
+        }
+    })
 
 module.exports = router;

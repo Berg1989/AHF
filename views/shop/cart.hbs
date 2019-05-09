@@ -1,7 +1,40 @@
 {{#if products}}
-
-{{#each products}}
-
-<p>{{this.item.name}}</p>
+{{#if session.errors}}
+{{#each session.errors}}
+<p class="alert alert-danger">{{this.msg}}</p>
 {{/each}}
+{{/if}}
+<div class="row">
+    <div class="col-md-6">
+        <ul class="list-group">
+            {{#each products}}
+            <li class="list-item">
+                <span>{{this.qty}} Stk.</span>
+                <strong>{{this.item.name}}</strong>
+                <span>{{this.item.price}},-</span>
+                <a href="/shop/retract-from-cart/{{this.item._id}}">Fjern én</a>
+                <a href="/shop/remove-from-cart/{{this.item._id}}">Fjern</a>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col">
+        <span>Total pris: <strong>{{ totalPrice }}</strong>,-</span>
+    </div>
+</div>
+<hr>
+<form action="/shop/cart/checkout" method="POST">
+    <div class="form-group">
+        <label>Telefon nummer: (Påkrævet)</label>
+        <input type="number" class="form-control" name="phone" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Checkout</button>
+    </div>
+</form>
+{{else}}
+<p class="alert alert-danger">Cart is empty</p>
 {{/if}}

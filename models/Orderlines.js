@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orderlines = new Schema({
-    number: Number,
-    product: { type: Schema.Types.ObjectId, ref: 'Products' }
+    qty: { type: Number, required: true },
+    product: { type: Schema.Types.ObjectId, ref: 'Products' },
+    price: { type: Number, required: true }
 });
 
 orderlines.methods.calcPrice = function() {
