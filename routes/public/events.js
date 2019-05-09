@@ -1,14 +1,20 @@
 const controller = require("../../controllers/controller");
 const express = require('express');
-const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
 
 router
 
-    .post('/', async (request, response) => {
-        const user = request.session.user;
-        response.redirect('/events')
+    .post('/eventid=:eventid/userid=:userid', async (request, response) => {
+        const event = request.params.eventid;
+        const user = request.params.userid;
+        try{
+            if  (await controller.eventSignUp(event, user) && await controller.userSignUp(event, user)) {
+              //response.sendStatus(200);
+                response.redirect('/events');  
+            } 
+        } catch (err) {
+            response.sendStatus(405);
+        }
     })
 
 module.exports = router;

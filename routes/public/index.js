@@ -28,7 +28,7 @@ router
     .get('/events', async (request,response) => {
         const user = request.session.user;
         response.render('public/events', {
-            user: request.session.user,
+            user: user,
             errors: request.session.errors,
             events: await controller.findEvents(user),
         });

@@ -4,8 +4,8 @@ const User = require('../models/user');
 const Usertypes = require('../models/usertypes');
 const Subscriptions = require('../models/subscriptions');
 const SubscriptionModel = require('../models/subscriptionModel');
-const postModel = require('../models/post');
-const eventModel = require('../models/event');
+const PostModel = require('../models/post');
+const EventModel = require('../models/event');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const personalEvent = require('../models/personalEvent');
@@ -68,7 +68,8 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
             phone: null
         },
         usertype: usertype,
-        subscription: null
+        subscription: null,
+        personalEvents: []
     });
     return user.save();
 };
@@ -221,7 +222,7 @@ exports.findUsertype = (id) => {
 exports.createPost = (body, headline, author) => {
     const created = new Date().toDateString();
 
-    const post = new postModel({
+    const post = new PostModel({
         postdate: created,
         body: body,
         headline: headline,
@@ -235,7 +236,7 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
     const start = new Date(startDate).toDateString();
     const end = new Date(endDate).toDateString();
 
-    const event = new eventModel({
+    const event = new EventModel({
         headline: headline,
         author: author,
         startdate: start,
@@ -249,30 +250,31 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
     return event.save();
 };
 
-exports.eventSignUp = (event, user) => {
-        return EventModel.findByIdAndUpdate(event._id, {
+exports.eventSignUp = (eventId, userId) => {
+        return EventModel.findByIdAndUpdate(eventId, {
             $push: {
-                participants: user
+                participants: userId
             }
         }).exec();
 }
 
-exports.userSignUp = (event, user) => {
-    return userModel.findByIdAndUpdate(user._id, {
+exports.userSignUp = (eventId, userId) => {
+    return User.findByIdAndUpdate(userId, {
         $push: {
-            personalEvents: event
+            personalEvents: eventId
         }
     }).exec();
 }
 
+//TODO
 exports.findPersonalEvents = () => {
 
 }
 
 exports.findEvents = () => {
-    return eventModel.find().exec();
+    return EventModel.find().exec();
 }
 
 exports.findPosts = ()  => {
-    return postModel.find().exec();
+    return PostModel.find().exec();
 }
