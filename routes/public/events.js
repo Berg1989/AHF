@@ -9,8 +9,7 @@ router
         const user = request.session.user;
         try{
             if  (await controller.eventSignUp(event, user._id)) {
-              //response.sendStatus(200);
-                response.redirect('/events');  
+                response.redirect('back');  
             } 
         } catch (err) {
             response.sendStatus(405);

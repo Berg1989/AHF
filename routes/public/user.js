@@ -189,12 +189,13 @@ router
         }
     })
 
-    .delete('/personalEvents/eventid=:eventid', async (request, response) => {
+    .post('/events/:id/remove', async (request, response) => {
+        const event = request.params.id;
         const user = request.session.user;
-        const event = request.params.eventid
         try {
-            if (await controller.eventSignOff(id, user._id)) 
-            response.redirect('/personalEvents');
+            if (await controller.eventSignOff(event, user._id)) {
+                 response.redirect('back');
+            }
         } catch (err) {
             response.sendStatus(405);
         }

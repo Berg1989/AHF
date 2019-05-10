@@ -31,7 +31,7 @@
                             <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
                             <td>
-                                <form method="POST" action='/events/eventid={{this.id}}'>
+                                <form method="POST" onsubmit="return confirm('Vil du tilmelde dig dette event?')" action='/events/eventid={{this.id}}'>
                                     <button type="submit" class="btn btn-primary"><i
                                             class="fas fa-plus"></i></button>
 

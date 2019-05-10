@@ -23,8 +23,11 @@
                             <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
                             <td>
-                                <button type="submit" id = "{{this.id}} "onclick="eventSignOff({{this.id}}, {{../user._id}})"
-                                    class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                                <form method="POST" onsubmit="return confirm('Vil du framelde dig dette event?')" action='/user/events/{{this.id}}/remove'>
+                                    <button type="submit" class="btn btn-danger"><i
+                                            class="fas fa-times"></i></button>
+
+</form>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -33,19 +36,3 @@
         </div>
     </span>
 </div>
-
-<script>
-    async function eventSignOff(eventid, userid) {
-        const res = window.confirm('Vil du afmelde dig dette event?');
-        if (res) {
-            try {
-                const response = await fetch('/eventid=' + eventid, {
-                    method: 'DELETE',
-                })
-                if (response.status === 200) location.reload(true);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
-</script>
