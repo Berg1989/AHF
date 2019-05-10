@@ -71,7 +71,6 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
         },
         usertype: usertype,
         subscription: null,
-        personalEvents: []
     });
     return user.save();
 };
@@ -291,6 +290,10 @@ exports.userSignUp = (event, user) => {
     return userModel.findByIdAndUpdate(user._id, {
         $push: {
             personalEvents: eventId
+exports.eventSignOff = (eventId, userId) => {
+    return EventModel.findByIdAndUpdate(eventId, {
+        $pull: {
+            participants: userId
         }
     }).exec();
 }
