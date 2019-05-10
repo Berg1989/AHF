@@ -255,9 +255,29 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
     return event.save();
 };
 
+exports.eventSignUp = (eventId, userId) => {
+        return EventModel.findByIdAndUpdate(eventId, {
+            $push: {
+                participants: userId
+            }
+        }).exec();
+};
+
+exports.eventSignOff = (eventId, userId) => {
+    return EventModel.findByIdAndUpdate(eventId, {
+        $pull: {
+            participants: userId
+        }
+    }).exec();
+};
+
+exports.findUserEvents = function(userid) {
+    return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
+};
+
 exports.findEvents = () => {
-    return EventModel.find().exec()
-}
+    return EventModel.find().exec();
+};
 
 exports.findPosts = () => {
     return PostModel.find().exec();
@@ -307,46 +327,4 @@ exports.findEvents = () => {
 
 exports.findPosts = ()  => {
     return PostModel.find().exec();
-exports.deletePost = id => {
-    return PostModel.findByIdAndDelete(id).exec();
-}
-
-exports.findPost = id => {
-    return PostModel.findById(id).exec();
-}
-
-exports.findEvent = id => {
-    return EventModel.findById(id).exec();
-}
-
-exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
-    
-    return EventModel.findByIdAndUpdate(id, {
-        $set: {
-            headline: headline,
-            author: author,
-            startdate: startDate,
-            enddate: endDate,
-            body: body,
-            deadline: deadline,
-            maxparticipants: maxParticipants,
-            price: price
-        }
-    }).exec();
-
 };
-
-exports.updatePost = (id,headline,body) => {
-    
-    return PostModel.findByIdAndUpdate(id, {
-        $set: {
-            headline: headline,
-            body: body,
-        }
-    }).exec();
-
-};
-
-exports.eventSignUp = (event, user) => {
-    event.participants.push(user);
-}
