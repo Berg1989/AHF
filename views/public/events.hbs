@@ -77,20 +77,3 @@
     </span>
 </div>
 {{/if}}
-
-
-<script>
-    async function signUp(eventId, userId) {
-        const res = window.confirm('Vil tilmelde dig dette event?');
-        if (res) {
-            try {
-                const response = await fetch('public/events/eventid=' + eventId + '/userid=' + userId, {
-                    method: 'POST',
-                })
-                if (response.status === 200) location.reload(true);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
-</script>

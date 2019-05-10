@@ -8,7 +8,6 @@ const PostModel = require('../models/post');
 const EventModel = require('../models/event');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
-const personalEvent = require('../models/personalEvent');
 
 //
 // SUBSCRIPTIONMODEL
@@ -255,7 +254,7 @@ exports.eventSignUp = (eventId, userId) => {
                 participants: userId
             }
         }).exec();
-}
+};
 
 exports.eventSignOff = (eventId, userId) => {
     return EventModel.findByIdAndUpdate(eventId, {
@@ -263,17 +262,16 @@ exports.eventSignOff = (eventId, userId) => {
             participants: userId
         }
     }).exec();
-}
+};
 
-//TODO
-exports.findPersonalEvents = () => {
-
-}
+exports.findUserEvents = function(userid) {
+    return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
+};
 
 exports.findEvents = () => {
     return EventModel.find().exec();
-}
+};
 
 exports.findPosts = ()  => {
     return PostModel.find().exec();
-}
+};
