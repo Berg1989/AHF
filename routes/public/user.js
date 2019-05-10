@@ -98,7 +98,7 @@ router
 
             const newSub = await controller.createSubscription(user._id, start, end, true, model._id);
             const result = await controller.connectSubToUser(newSub._id, user._id);
-            
+
             /*if (!user.subscription) {
                 result = await controller.createSubscription(user._id, start, end, true, model._id);
             } else {
@@ -194,7 +194,7 @@ router
         const user = request.session.user;
         try {
             if (await controller.eventSignOff(event, user._id)) {
-                 response.redirect('back');
+                response.redirect('back');
             }
         } catch (err) {
             response.sendStatus(405);

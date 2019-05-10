@@ -30,22 +30,11 @@ router
         response.render('public/events', {
             user: user,
             errors: request.session.errors,
-            events: await controller.findEvents(),
+            success: request.session.success,
+            events: await controller.findEvents(user),
         });
         request.session.success = null;
-        request.session.errors = null;       
-    })
-
-    .post('/eventid=:eventid', async (request, response) => {
-        const event = request.params.eventid;
-        const user = request.session.user;
-        try{
-            if  (await controller.eventSignUp(event, user._id)) {
-                response.redirect('back');  
-            } 
-        } catch (err) {
-            response.sendStatus(405);
-        }
+        request.session.errors = null;  
     });
 
 module.exports = router;

@@ -279,29 +279,16 @@ exports.findEvents = () => {
     return EventModel.find().exec();
 };
 
+exports.findEvent = (id) => {
+    return EventModel.findById(id).exec();
+};
 exports.findPosts = () => {
     return PostModel.find().exec();
 }
 
-exports.eventSignUp = (eventId, userId) => {
-        return EventModel.findByIdAndUpdate(eventId, {
-            $push: {
-                participants: userId
-            }
-        }).exec();
-};
-
 exports.deleteEvent = async id => {
     return EventModel.findByIdAndDelete(id).exec();
 }
-
-exports.eventSignOff = (eventId, userId) => {
-    return EventModel.findByIdAndUpdate(eventId, {
-        $pull: {
-            participants: userId
-        }
-    }).exec();
-};
 
 exports.findUserEvents = function(userid) {
     return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
