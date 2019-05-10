@@ -61,9 +61,19 @@
         <h2>Kontingent info</h2>
         <!-- redo this part -->
         {{#if subscription}}
-        <p>Model: {{subscription.model.name}}: {{subscription.model.duration}} måneder af {{subscription.model.price}}DKK/pr måned</p>
-        <p>Start dato: {{subscription.startdate}}</p>
-        <p>Slut dato: {{subscription.enddate}}</p>
+        <p>Navn: {{subscription.model.name}}</p>
+        <p>Varighed: {{subscription.model.duration}} måneder</p>
+        <p>Pris: {{subscription.model.price}} DKK </p>
+        <p>Start dato: {{subscription.start}}</p>
+        <p>Slut dato: {{subscription.end}}</p>
+
+        <!-- Tjekker om kontingent er aktiv eller inaktiv -->
+        {{#if user.subscription.active}}
+        <p>Aktiv: <i class="fas fa-check subscriptionActiveStyle"></i></p>
+        {{else}}
+        <p>Aktiv: <i class="fas fa-times subscriptionInActiveStyle"></i></p>
+        {{/if}}
+
         <a href="/user/subscription" class="btn btn-primary" style="display: inline-block">Skift kontingent</a>
         <form method="POST" action="/user/unsubscribe" style="display: inline-block">
             <button type="submit" id="{{user._id}}" onclick="confirm('Er du sikker?')" class="btn btn-danger">Stop

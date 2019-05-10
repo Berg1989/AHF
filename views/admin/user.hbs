@@ -76,22 +76,30 @@
         </div>
     </div>
     <div class="col">
-        <!-- redo this -->
         <h2>Kontingent info:</h2>
         {{#if subscription}}
-        <p>{{subscription.model}}</p>
-        <p>Model: {{user.subscription.model}}: {{user.submodel.duration}} måneder af {{user.submodel.price}}DKK/pr måned</p>
-        <p>Start dato: {{user.subscription.startdate}}</p>
-        <p>Slut dato: {{user.subscription.enddate}}</p>
+        <p>Navn: {{subscription.model.name}}</p>
+        <p>Varighed: {{subscription.model.duration}} måneder</p>
+        <P>Pris: {{subscription.model.price}} DKK</P>
+        <p>Start dato: {{subscription.start}}</p>
+        <p>Slut dato: {{subscription.end}}</p>
+
+        <!-- Tjekker om kontingent er aktiv eller inaktiv -->
+        {{#if user.subscription.active}}
+        <p>Aktiv: <i class="fas fa-check subscriptionActiveStyle"></i></p>
+        {{else}}
+        <p>Aktiv: <i class="fas fa-times subscriptionInActiveStyle"></i></p>
+        {{/if}}
+        
         <form method="POST" action="/admin/users/id={{user._id}}/unsubscribe">
             <div class="form-group">
-                <button type="submit" class="btn btn-danger">Deaktiv kontingent</button>
+                <button type="submit" class="btn btn-danger">Deaktiver kontingent</button>
             </div>
         </form>
-        {{else if user.subscription.enddate}}
-        <p>Denne bruger har stoppet sit kontingent, men dette er betalt til og med: {{user.subscription.enddate}}</p>
+        {{else if user.subscription.end}}
+        <p>Denne bruger har stoppet sit kontingent, men dette er betalt til og med: {{user.subscription.end}}</p>
         {{else}}
-        <p>Denne bruger har intet aktivt kontingent</p>  
+        <p>Denne bruger har intet aktivt kontingent</p>
         {{/if}}
     </div>
 </div>

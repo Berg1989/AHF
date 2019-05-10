@@ -57,17 +57,24 @@
     </div>
     <div class="col">
         <h2>Rediger eksisterende brugere</h2>
+        <div>
+            <label><b>Antal medlemmer: </b></label>
+            <label><b>{{userCount}}</b></label>
+        </div>
 
         {{!-- search --}}
         <input type="text" name="search" id="search">
         <button onclick="search()" class="btn btn-primary">søg</button>
 
-        <table cellpadding='2' style="width:100%;">
+
+        <table cellpadding='10' style="width:100%;">
+
             <thead>
                 <tr>
                     <th>Navn</th>
                     <th>Type</th>
                     <th>Funktion</th>
+                    <th>Kontingent</th>
                     <th>Rediger</th>
                     <th>Slet</th>
                 </tr>
@@ -78,10 +85,22 @@
                     <td>{{this.info.firstname}} {{this.info.lastname}}</td>
                     <td>{{this.usertype.title}}</td>
                     <td>{{this.info.func}}</td>
-                    <td><a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+
+                    <td align="center">
+                        {{#if this.subscription.active}}
+                        <i class="fas fa-check subscriptionActiveStyle"></i>
+                        {{else}}
+                        <i class="fas fa-times subscriptionInActiveStyle"></i>
+                        {{/if}}
                     </td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deleteUser(this.id)" class="btn btn-danger"><i
-                                class="fas fa-times"></i></button></td>
+
+                    <td align="center">
+                        <a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                    </td>
+
+                    <td align="center"> <button type="submit" id="{{this._id}}" onclick="deleteUser(this.id)"
+                            class="btn btn-danger"><i class="fas fa-times"></i></button>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>

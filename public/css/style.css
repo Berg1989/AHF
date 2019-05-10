@@ -59,3 +59,15 @@ body {
     background-color: #3e8e41;
   }
 /* End of dropdown menu */
+
+/* Subscription button green (accept) and red (cross) */
+.subscriptionActiveStyle{
+  color: limegreen; 
+}
+.subscriptionInActiveStyle {
+  color: red;
+}
+
+.testA{
+  size: 200px
+}

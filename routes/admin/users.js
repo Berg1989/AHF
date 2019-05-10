@@ -16,6 +16,7 @@ router
         response.render('admin/users', {
             layout: 'admin',
             users: await controller.findUsers(),
+            userCount: await controller.getUsersCount(),
             usertypes: await controller.findUsertypes(),
             inputs: request.session.inputs,
             success: request.session.success,
@@ -70,7 +71,7 @@ router
                 };
                 response.render('admin/user', {
                     layout: 'admin',
-                    user,
+                    user: user,
                     subscription: await controller.findSubscription(user.subscription),
                     usertypes: await controller.findUsertypes(),
                     errors: request.session.errors,

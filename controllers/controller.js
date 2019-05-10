@@ -118,7 +118,7 @@ exports.deleteUser = (id) => {
 };
 
 exports.findUsers = () => {
-    return User.find().populate('usertype').sort({ 'info.firstname': 1 }).exec();
+    return User.find().populate('usertype').populate('subscription').sort({ 'info.firstname': 1 }).exec();
 };
 
 exports.findUserr = (id) => {
@@ -165,6 +165,10 @@ exports.resetPassword = async (id) => {
     return result ? newpw : false;
 };
 
+exports.getUsersCount = async() => {
+    return User.count();
+};
+
 //
 // SUBSCRIPTIONS
 //
@@ -200,7 +204,7 @@ exports.updateSubsciption = (id, start, end, modelid) => {
 
 exports.unsubscribe = (id) => {
     return Subscriptions.findByIdAndUpdate(id, {
-        $set: { aktive: false }
+        $set: { active: false }
     }).exec();
 };
 
