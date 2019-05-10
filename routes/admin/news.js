@@ -27,6 +27,7 @@ router
         request.session.errors = null;
         request.session.email = null;
         request.session.inputs = null;
+        request.session.success = null;
     })
 
     .get('/createpost', function (request, response) {
@@ -47,6 +48,7 @@ router
             request.session.errors = null;
             request.session.email = null;
             request.session.inputs = null;
+            request.session.success = null;
         } else {
             response.redirect('/');
         }
@@ -71,6 +73,7 @@ router
             request.session.errors = null;
             request.session.email = null;
             request.session.inputs = null;
+            request.session.success = null;
 
         } else {
             response.redirect('/');
