@@ -283,8 +283,6 @@ exports.findPosts = () => {
     return PostModel.find().exec();
 }
 
-exports.eventSignUp = (event, user) => {
-        return EventModel.findByIdAndUpdate(event._id, {
 exports.eventSignUp = (eventId, userId) => {
         return EventModel.findByIdAndUpdate(eventId, {
             $push: {
@@ -294,21 +292,9 @@ exports.eventSignUp = (eventId, userId) => {
 };
 
 exports.deleteEvent = async id => {
-    
-    const event =  await exports.findEvent(id)
-    const participants = event.participants;
-
-    for(ids of participants){
-        /* afmelding fra daniel og morten */
-    }
-
-    return true;
-
     return EventModel.findByIdAndDelete(id).exec();
-exports.userSignUp = (event, user) => {
-    return userModel.findByIdAndUpdate(user._id, {
-        $push: {
-            personalEvents: eventId
+}
+
 exports.eventSignOff = (eventId, userId) => {
     return EventModel.findByIdAndUpdate(eventId, {
         $pull: {
