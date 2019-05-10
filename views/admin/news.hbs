@@ -43,7 +43,8 @@
             <tbody>
                 {{#each events }}
                 <tr>
-                    <td>{{this.headline}}</td>
+                    
+                    <td><a href="/events/id={{this._id}}">{{this.headline}}</a></td>
                     <td id="{{this._id}}1">{{this.startdate}}</td>
                     <td id="{{this._id}}2">{{this.enddate}}</td>
                     <td>{{this.price}}</td>
@@ -53,7 +54,7 @@
                     <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent(this.id)" class="btn btn-danger"><i
                                 class="fas fa-times"></i></button></td>
                 </tr>
-                <script class="scriptings">updateTimeView("{{this.id}}1", "{{this.id}}2")</script>
+                <script>updateTimeView("{{this.id}}1", "{{this.id}}2")</script>
                 {{/each}}
             </tbody>
         </table>
@@ -65,7 +66,7 @@
             <h1>Opslag</h1>
         </div>
         <form method="GET" action="/admin/news/createpost">
-            <button type="submit" class="btn btn-primary row">Nyt event</button>
+            <button type="submit" class="btn btn-primary row">Nyt opslag</button>
         </form>
 
         <table cellpadding='2' style="width:100%;">
