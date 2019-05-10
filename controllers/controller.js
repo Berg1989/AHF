@@ -13,9 +13,10 @@ const saltRounds = 10;
 // SUBSCRIPTIONMODEL
 //
 exports.createSubscriptionModel = (name, duration, price) => {
-    const tempName = firstname.charAt(0).toUpperCase() + firstname.slice(1);
+    //const tempName = firstname.charAt(0).toUpperCase() + firstname.slice(1);
     return new SubscriptionModel({
-        name: tempName,
+        //name: tempName,
+        name: name,
         duration: duration,
         price: price,
     }).save();
