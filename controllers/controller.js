@@ -49,31 +49,16 @@ exports.deleteSubscriptionModel = (id) => {
 // USERS
 //
 exports.createUser = async (email, password, firstname, lastname, usertype, func) => {
-    const tempFirstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
-    const tempLastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
-    const tempEmail = email.toLowerCase();
-    const created = new Date().toDateString();
-    const newHash = await bcrypt.hash(password, saltRounds);
+    const newUser = new User();
+    newUser.email = email.toLowerCase();
+    newUser.password = await newUser.hashPassword(password);
+    newUser.created = new Date().toDateString();
+    newUser.info.firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
+    newUser.info.lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+    newUser.info.func = func;
+    newUser.usertype = usertype;
 
-    const user = new User({
-        password: newHash,
-        email: tempEmail,
-        created: created,
-        info: {
-            firstname: tempFirstname,
-            lastname: tempLastname,
-            func: func,
-            birth: null,
-            zipcode: null,
-            street: null,
-            phone: null
-        },
-        usertype: usertype,
-        subscription: null,
-    });
-
-    //const navn = user.methods.toString();
-    return user.save();
+    return newUser.save();
 };
 
 exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, func) => {
@@ -147,6 +132,10 @@ exports.login = async (email, password) => {
     } else {
         return false;
     }
+};
+
+exports.checkPassword2 = async (user, password) => {
+    return await user.checkPassword(password);
 };
 
 exports.checkPassword = async (plaintext, hash) => {

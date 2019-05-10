@@ -1,38 +1,42 @@
-{{#if hasErrors}}
-<div class="alert alert-danger">
-    {{#each messages}}
-    <p>{{this}}</p>
-    {{/each}}
-</div>
-{{/if}}
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h1>Registrer dig hos AHF</h1>
-    </div>
-    <div class="panel-body">
-        <form method="post" action="{{action}}">
-            <div class="form-group">
-                <label>Email (Påkrævet):</label>
-                <input type="email" class="form-control" name="email" value="{{inputs.email}}" />
+<div class="row">
+    <div class="col">
+        {{#if hasErrors}}
+        <div class="alert alert-danger">
+            {{#each messages}}
+            <span>{{this}}</span><br>
+            {{/each}}
+        </div>
+        {{/if}}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1>Registrer dig hos AHF</h1>
             </div>
-            <div class="form-group">
-                <label>Password (Påkrævet):</label>
-                <input type="password" class="form-control" name="password" />
+            <div class="panel-body">
+                <form method="post" action="{{action}}">
+                    <div class="form-group">
+                        <label>Email (Påkrævet):</label>
+                        <input type="email" class="form-control" name="email" value="{{inputs.email}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password (Påkrævet):</label>
+                        <input type="password" class="form-control" name="password" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fornavn (Påkrævet):</label>
+                        <input type="text" class="form-control" name="firstname" value="{{inputs.firstname}}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Efternavn (Påkrævet):</label>
+                        <input type="text" class="form-control" name="lastname" value="{{inputs.lastname}}" />
+                    </div>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <input type="hidden" name="usertype" value="5cd04bc81c9d4400009071ce" />
+                    <input type="hidden" name="func" value="Member" />
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Registrer</button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label>Fornavn (Påkrævet):</label>
-                <input type="text" class="form-control" name="firstname" value="{{inputs.firstname}}" />
-            </div>
-            <div class="form-group">
-                <label>Efternavn (Påkrævet):</label>
-                <input type="text" class="form-control" name="lastname" value="{{inputs.lastname}}" />
-            </div>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-            <input type="hidden" name="usertype" value="5cd04bc81c9d4400009071ce" />
-            <input type="hidden" name="func" value="Member" />
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Registrer</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

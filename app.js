@@ -17,7 +17,6 @@ const flash = require('connect-flash'); //Session stored flash messages to rende
 
 // ROUTES FOR THE SERVER
 const index = require('./routes/public/index');
-const login = require('./routes/public/login');
 const user = require('./routes/public/user');
 const adminIndex = require('./routes/admin/index');
 const adminLogin = require('./routes/admin/login');
@@ -25,6 +24,7 @@ const adminUsers = require('./routes/admin/users');
 const adminSubscriptions = require('./routes/admin/subscriptions');
 const adminShop = require('./routes/admin/shop');
 const shopIndex = require('./routes/shop/index');
+const events = require('./routes/public/events');
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
@@ -58,8 +58,10 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 // VISIBLE IN ALL VIEWS:
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
+  res.locals.login = req.isAuthenticated();
   res.locals.session = req.session;
   res.locals.metaTags = {
     title: 'Title',
@@ -70,12 +72,9 @@ app.use(function (req, res, next) {
 });
 
 // PUBLIC
-app.use('/', index);
-app.use('/login', login);
 app.use('/user', user);
-
-const events = require('./routes/public/events');
 app.use('/events', events);
+app.use('/', index);
 
 // ADMIN
 app.use('/admin', adminIndex);

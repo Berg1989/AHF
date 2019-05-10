@@ -20,49 +20,15 @@ User routes:
 */
 
 router
-    .get('/', (request, response) => {
-        const user = request.session.user;
-        if (!user) {
-            response.redirect('/login');
-        }
+    .get('/', isLoggedIn, (request, response) => {
         response.render('public/user', {
             metaTags: {
-                title: 'AHF - ' + user.firstname,
+                title: 'AHF - ' + request.session,
                 description: 'Personal user page',
                 keywords: 'Profile and stuff'
-            }
+            },
+            user: request.user
         });
-    })
-
-    .get('/id=:id', async (request, response) => {
-        try {
-            const user = request.session.user;
-            const result = await controller.findUser(request.params.id);
-            if (result) {
-                response.locals.metaTags = {
-                    title: 'User - ' + result.info.firstname,
-                    description: 'Here goes the description',
-                    keywords: 'Here goes keywords'
-                };
-                if (user && user._id === request.params.id) {
-                    response.render('public/pUser', {
-                        user: result,
-                        subscription: await controller.findSubscription(user.subscription),
-                        success: request.session.success,
-                        errors: request.session.errors
-                    });
-                    request.session.success = null;
-                    request.session.errors = null;
-                    request.session.user = result; //update user session
-                } else {
-                    response.render('public/user', { result });
-                }
-            } else {
-                throw new Error(result);
-            }
-        } catch (err) {
-            console.log(err);
-        }
     })
 
     .post('/id=:id', [
@@ -91,56 +57,6 @@ router
                 console.log(err);
             }
 
-        }
-    })
-
-    .get('/login', function (request, response) {
-        if (request.session.user) {
-            response.redirect('back');
-        }
-        response.render('public/login', {
-            metaTags: {
-                title: 'AHF - Login',
-                description: 'User login page',
-                keywords: 'Login and stuff'
-            },
-            action: '/user/login',
-            csrfToken: request.csrfToken(),
-            errors: request.session.errors,
-        });
-
-        request.session.errors = null;
-    })
-
-    .post('/login', [
-        check('email', 'Email er påkrævet')
-            .isEmail().custom(async (email) => {
-                if (!await controller.checkEmail(email))
-                    return Promise.reject('Ukendt email');
-                else return true;
-            }),
-        check('password', 'Password er påkrævet')
-            .isLength({ min: 5 }),/*.custom(async (password, { req }) => {
-                if (!await controller.login(req.body.loginEmail, password))
-                    return Promise.reject('Password og email matcher ikke');
-            })*/
-    ], async (request, response) => {
-        const errors = validationResult(request);
-        if (!errors.isEmpty()) {
-            request.session.errors = await errors.array();
-            request.session.email = request.body.loginEmail;
-            response.redirect('back');
-        } else {
-            const { loginEmail, loginPassword } = request.body;
-            const user = await controller.login(loginEmail, loginPassword);
-
-            if (user) {
-                request.session.user = user;
-                response.redirect('/user');
-            } else {
-                request.session.errors = [{ msg: 'Password og email matcher ikke' }];
-                response.redirect('/login');
-            }
         }
     })
 
@@ -273,7 +189,28 @@ router
         }
     })
 
-    .get('/register', function(req, res, next) {
+    .get('/login', notloggedIn, function (req, res, next) {
+        const messages = req.flash('error')
+        res.render('public/login', {
+            messages: messages,
+            hasErrors: messages.length > 0,
+            metaTags: {
+                title: 'AHF - Login',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
+            action: '/user/login',
+            csrfToken: req.csrfToken(),
+        });
+    })
+
+    .post('/login', passport.authenticate('local.login', {
+        successRedirect: '/user',
+        failureRedirect: '/user/login',
+        failureFlash: true
+    }))
+
+    .get('/register', notloggedIn, function (req, res, next) {
         const messages = req.flash('error')
         res.render('public/register', {
             messages: messages,
@@ -294,7 +231,7 @@ router
         failureFlash: true
     }))
 
-    .get('/info', function(req, res, next) {
+    .get('/info', isLoggedIn, function (req, res, next) {
         res.render('public/puser', {
             metaTags: {
                 title: 'AHF - Info',
@@ -302,6 +239,27 @@ router
                 keywords: 'Register and stuff'
             }
         });
-    });
+    })
+
+    .get('/logout', function (req, res, next) {
+        req.logout();
+        res.redirect('/');
+    })
 
 module.exports = router;
+
+//Skal påføres alle routes, hvor brugeren SKAL være logget ind, for at tilgå
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/user/login');
+};
+
+//Skal påføres alle routes hvor brugeren IKKE skal være logget ind for at tilgå
+function notloggedIn(req, res, next) {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/user'); //TODO: go to user
+};
