@@ -272,7 +272,7 @@ exports.eventSignOff = (eventId, userId) => {
 };
 
 exports.findUserEvents = function(userid) {
-    return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
+    return findEvents().participants.find().aggregate({match: { _id: userid } }).exec();
 };
 
 exports.findEvents = () => {

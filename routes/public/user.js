@@ -182,14 +182,14 @@ router
                 user,
                 success: request.session.success,
                 errors: request.session.errors,
-                pevents: await controller.findUserEvents(user._id)
+                events: await controller.findUserEvents(user._id)
             });
             request.session.success = null;
             request.session.errors = null;
         }
     })
 
-    .post('/events/:id/remove', async (request, response) => {
+    .post('/events/eventid=:id/remove', async (request, response) => {
         const event = request.params.id;
         const user = request.session.user;
         try {

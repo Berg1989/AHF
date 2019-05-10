@@ -57,9 +57,6 @@ app.use('/login', login);
 const user = require('./routes/public/user');
 app.use('/user', user);
 
-const events = require('./routes/public/events');
-app.use('/events', events);
-
 // ADMIN
 const adminIndex = require('./routes/admin/index');
 app.use('/admin', adminIndex);
