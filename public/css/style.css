@@ -23,6 +23,10 @@ tr {
       text-align: right;
   }
 
+.category-admin-wrap {
+    box-sizing: border-box
+}
+
   .categories-backend {
     border-top: 1px solid #ddd;
     padding: 10px 0;
@@ -31,6 +35,10 @@ tr {
 
   .products-backend {
     border-top: 1px solid #ddd;
-    margin-left: 50px;
+    margin: 0 50px;
     padding: 5px 0;
+  }
+  
+  .inline-form {
+    display: inline-block;
   }

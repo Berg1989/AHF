@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label>Pris: (Påkrævet)</label>
-                <input type="number" class="form-control" name="price" value="{{inputs.price}}" />
+                <input type="number" class="form-control" name="price" step="0.01" value="{{inputs.price}}" />
             </div>
             <div class="form-group">
                 <label>Størrelse: (Påkrævet)</label>
@@ -62,58 +62,34 @@
     <div class="col">
         <h1>Shop håndtering</h1>
         {{#each categories}}
-        <div class="row justify-content-between categories-backend">
-            <div class="col">{{this.name}}</div>
-            <div class="align-right col">
-                <a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
-                <button type="submit" id="{{this._id}}" onclick="deleteCategory(this.id)" class="btn btn-danger"><i
-                        class="fas fa-times"></i></button>
+        <div class="category-admin-wrap">
+            <div class="row justify-content-between categories-backend">
+                <div class="col">{{this.name}}</div>
+                <div class="align-right col">
+                    <a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i
+                            class="fas fa-wrench"></i></a>
+                    <form class="inline-form" action="/admin/shop/categories/{{this._id}}/remove" method="POST"
+                        onsubmit="return confirm('OBS! Slettes denne kategori, slettes alle tilhørende produkter også. Er du sikker på denne handling?')">
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
             </div>
-        </div>
-        {{#each this.products}}
-        <div class="row justify-content-between products-backend">
-            <div class="col">{{this.name}}</div>
-            <div class="align-right col">
-                <a href="/admin/shop/categories/{{../this._id}}/products/{{this._id}}" class="btn btn-primary"><i
-                        class="fas fa-wrench"></i></a>
-                <button type="submit" id="{{this._id}}" onclick="deleteProduct({{this._id}}, {{../this._id}})"
-                    class="{{../this._id}} btn btn-danger"><i class="fas fa-times"></i></button>
+            {{#each this.products}}
+            <div class="row justify-content-between products-backend">
+                <div class="col">{{this.name}}</div>
+                <div class="align-right col">
+                    <a href="/admin/shop/categories/{{../this._id}}/products/{{this._id}}" class="btn btn-primary"><i
+                            class="fas fa-wrench"></i></a>
+                    <form class="inline-form"
+                        action="/admin/shop/categories/{{../this._id}}/products/{{this._id}}/remove" method="POST"
+                        onsubmit="return confirm('Er du sikker på denne handling?')">
+                        <button onclick="confirm('Er du sikker på denne handling?')" type="submit"
+                            class="btn btn-danger"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
             </div>
+            {{/each}}
         </div>
-        {{/each}}
         {{/each}}
     </div>
 </div>
-
-<script>
-    async function deleteCategory(id) {
-        const res = window.confirm('Sletter du denne kategori slettes alle indeholdende produkter også. Er du sikker på denne handling?');
-        if (res) {
-            try {
-                const response = await fetch('/admin/shop/categories/' + id, {
-                    method: 'DELETE',
-                })
-                if (response.status === 200) location.reload(true);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
-
-    async function deleteProduct(id, classnames) {
-        const res = window.confirm('Er du sikker på denne handling?');
-        if (res) {
-            const categoryid = classnames.split(' ')[0];
-            try {
-                const response = await fetch('/admin/shop/products/' + id, {
-                    method: 'DELETE',
-                    body: JSON.stringify({ categoryid }),
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                if (response.status === 200) location.reload(true);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
-</script>

@@ -31,7 +31,29 @@
                         <button type="submit" class="btn btn-primary">Opdater</button>
                     </div>
                 </form>
+                <form class="inline-form"
+                    onsubmit="return confirm('OBS! Slettes denne kategori, slettes alle tilhørende produkter også. Er du sikker på denne handling?')"
+                    action="/admin/shop/categories/{{category._id}}/remove" method="POST">
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i> Slet kategori</button>
+                </form>
             </div>
         </div>
     </div>
+    <div class="col">
+        <h2>Produkter</h2>
+        {{#each category.products}}
+        <div class="row justify-content-between products-backend">
+            <div class="col">{{this.name}}</div>
+            <div class="align-right col">
+                <a href="/admin/shop/categories/{{../category._id}}/products/{{this._id}}" class="btn btn-primary"><i
+                        class="fas fa-wrench"></i></a>
+                <form class="inline-form" onsubmit="return confirm('Er du sikker på denne handling?')"
+                    action="/admin/shop/categories/{{../category._id}}/products/{{this._id}}/remove" method="POST">
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                </form>
+            </div>
+        </div>
+        {{/each}}
+    </div>
 </div>
+<br>

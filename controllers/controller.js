@@ -209,3 +209,7 @@ exports.findUsertypes = () => {
 exports.findUsertype = (id) => {
     return Usertypes.findById(id).exec();
 };
+
+exports.findUserEvents = function(userid) {
+    return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
+};

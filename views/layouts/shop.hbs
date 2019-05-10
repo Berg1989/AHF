@@ -19,26 +19,9 @@
 
 <body>
     {{> header}}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 shop-nav">
-                <!-- Productcategories goes here -->
-                <h5>Produkt kategorier</h5>
-                <ul>
-                    {{#each categories}}
-                    <li><a href="/shop/category/{{this._id}}">{{this.name}}</a></li>
-                    {{/each}}
-                </ul>
-            </div>
-            <div class="col-md-7">
-                <!-- Products goes here -->
-                {{{ body }}}
-            </div>
-            <div class="col-md-3 shopping-cart">
-                <!-- Shopping cart goes here -->
-                <h5>Shopping cart</h5>
-            </div>
-        </div>
+    <div class="container">
+        <!-- Products goes here -->
+        {{{ body }}}
     </div>
     {{> footer}}
 

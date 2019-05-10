@@ -23,7 +23,8 @@
                 <h2>Rediger produkt</h2>
             </div>
             <div class="panel-body">
-                <form method="post" action="/admin/shop/categories/{{category._id}}/products/{{product._id}}">
+                <form method="post" action="/admin/shop/categories/{{category._id}}/products/{{product._id}}"
+                    enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Varekategori:</label>
                         <input type="text" class="form-control" name="category" readonly value="{{category.name}}" />
@@ -41,8 +42,21 @@
                         <input type="text" class="form-control" name="size" value="{{product.size}}" />
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">OK</button>
+                        <label>Nuværende billede:</label>
+                        <img src="{{product.imgPath}}" width="200px">
                     </div>
+                    <div class="form-group">
+                        <label>Opload nyt billede:</label>
+                        <input type="file" class="form-control-file" name="productImage" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Opdater</button>
+                    </div>
+                </form>
+                <form action="/admin/shop/categories/{{category._id}}/products/{{product._id}}/remove" method="POST"
+                    onsubmit="return confirm('Er du sikker på denne handling?')">
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i> Slet dette
+                        produkt</button>
                 </form>
             </div>
         </div>

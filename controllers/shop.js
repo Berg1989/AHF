@@ -73,12 +73,13 @@ exports.createProduct = (name, price, size, imgPath) => {
     }).save();
 };
 
-exports.updateProduct = (id, name, price, size) => {
+exports.updateProduct = (id, name, price, size, imgPath) => {
     return Product.findByIdAndUpdate(id, {
         $set: {
             name: name,
             price: price,
-            size: size
+            size: size,
+            imgPath: imgPath
         }
     }).exec();
 };
