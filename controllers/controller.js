@@ -242,9 +242,6 @@ exports.createPost = (headline, body, author) => {
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
 
-    const start = new Date(startDate).toDateString();
-    const end = new Date(endDate).toDateString();
-
     const event = new EventModel({
         headline: headline,
         author: author,
@@ -303,6 +300,10 @@ exports.eventSignOff = (eventId, userId) => {
     return EventModel.findByIdAndUpdate(eventId, {
         $pull: {
             participants: userId
+        }
+    }).exec();
+}
+            
 exports.deletePost = id => {
     return PostModel.findByIdAndDelete(id).exec();
 }
@@ -346,6 +347,7 @@ exports.updatePost = (id, headline, body) => {
             body: body,
         }
     }).exec();
+}
 
 exports.findPosts = ()  => {
     return PostModel.find().exec();
