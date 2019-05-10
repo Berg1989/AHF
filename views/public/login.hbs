@@ -31,6 +31,7 @@
             <label>Efternavn (Påkrævet):</label>
             <input type="text" class="form-control" name="lastname" value="{{inputs.lastname}}" />
           </div>
+          
           <div class="form-group">
             <button type="submit" class="btn btn-primary">Registrer</button>
           </div>
@@ -53,6 +54,7 @@
             <label>Password</label>
             <input type="password" class="form-control" name="loginPassword" />
           </div>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}" />
           <div class="form-group">
             <button type="submit" class="btn btn-primary">Login</button>
           </div>

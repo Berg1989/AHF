@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-md-3">
+        {{> shopNav }}
+    </div>
+    <div class="col-md-9">
+        {{#each category.products}}
+        <div class="col-md-4">
+            <div class="card" style="width:100%;margin: 10px 0;">
+                <img class="card-img-top" src="{{this.imgPath}}" alt="{{this.name}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}</h5>
+                    <p class="card-text">{{formatNumber this.price style="currency" currency="DKK"}}</p>
+                    <a href="/shop/add-to-cart/{{this._id}}" class="btn btn-primary">Føj til kurv</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

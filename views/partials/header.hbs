@@ -1,36 +1,46 @@
 <!-- This is the header partial -->
 <header>
-    <div class="row">
-        <div class="col">
-            <!-- Just an image -->
-            <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand" href="/">
-                    <img src="/favicon.ico" width="30" height="30" alt="">
-                </a>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Hjem</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/events">Events</a>
-                    </li>
-                    <!-- Dropdown menu for bruger -->
-                    {{#if user}}
-                    <div class="dropdown">
-                        <span><i class="fas fa-user"></i>Info</span>
-                        <div class="dropdown-content">
-                            <a href="/user/id={{user._id}}">Profil</a>
-                            <a href="/user/personalEvents">Mine events</a>
-                            <a href="/logout">Log ud</a>
-                        </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">
+            <img src="/favicon.ico" width="30" height="30"
+                class="d-inline-block align-top" alt="">
+            AHF
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/cart">Kurv <span class="badge badge-secondary badge-pill">{{session.cart.totalQty}}</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i> Profil
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/{{user._id}}">Settings</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
                     </div>
-                    {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    {{/if}}
-                </ul>
-            </nav>
+                </li>
+            </ul>
         </div>
+    </nav>
+    <div aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
     </div>
+</nav>
 </header>

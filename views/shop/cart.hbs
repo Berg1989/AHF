@@ -1,0 +1,49 @@
+
+{{#if products}}
+<div class="row">
+    <div class="col">
+        {{#if session.errors}}
+        {{#each session.errors}}
+        <p class="alert alert-danger">{{this.msg}}</p>
+        {{/each}}
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <p>Produkter:</p>
+        <ul class="list-group">
+            {{#each products}}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="badge badge-primary badge-pill">{{this.qty}}</span>
+                <strong>{{this.item.name}}</strong>
+                <span>{{formatNumber this.item.price style="currency" currency="DKK"}}</span>
+                <div>
+                    <a href="/shop/retract-from-cart/{{this.item._id}}" class="badge badge-warning badge-pill"><i class="fas fa-minus"></i></a> /
+                    <a href="/shop/remove-from-cart/{{this.item._id}}" class="badge badge-danger badge-pill"><i class="fas fa-times"></i></a>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        <hr>
+        <p>Total pris: <strong>{{formatNumber totalPrice style="currency" currency="DKK"}}</strong></p>
+    </div>
+    <div class="col-md-6">
+        <form action="/shop/cart/checkout" method="POST">
+            <div class="form-group">
+                <label>Telefon nummer: (Påkrævet)</label>
+                <input type="number" class="form-control" name="phone" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Checkout</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{else}}
+<div class="row">
+    <div class="col">
+        <h2>Kurven er tom</h2>
+    </div>
+</div>
+{{/if}}
