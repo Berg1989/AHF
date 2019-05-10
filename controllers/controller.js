@@ -13,7 +13,7 @@ const saltRounds = 10;
 // SUBSCRIPTIONMODEL
 //
 exports.createSubscriptionModel = (name, duration, price) => {
-    const tempName = firstname.charAt(0).toUpperCase() + firstname.slice(1);
+    const tempName = name.charAt(0).toUpperCase() + name.slice(1);
     return new SubscriptionModel({
         name: tempName,
         duration: duration,
@@ -260,16 +260,6 @@ exports.findPosts = () => {
 }
 
 exports.deleteEvent = async id => {
-    
-    const event =  await exports.findEvent(id)
-    const participants = event.participants;
-
-    for(ids of participants){
-        /* afmelding fra daniel og morten */
-    }
-
-    return true;
-
     return EventModel.findByIdAndDelete(id).exec();
 }
 
