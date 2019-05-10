@@ -9,27 +9,21 @@
                 </a>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/">Hjem</a>
                     </li>
-
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="/events">Events</a>
+                    </li>
                     <!-- Dropdown menu for bruger -->
                     {{#if user}}
                     <div class="dropdown">
                         <span><i class="fas fa-user"></i>Info</span>
                         <div class="dropdown-content">
                             <a href="/user/id={{user._id}}">Profil</a>
-                            <a href="/user/events">Events</a>
-
-
-                            <a href="/logout">Logout</a>
+                            <a href="/user/personalEvents">Mine events</a>
+                            <a href="/logout">Log ud</a>
                         </div>
                     </div>
-
-
-
-
-                
                     {{else}}
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>

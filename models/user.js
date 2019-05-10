@@ -16,7 +16,6 @@ const user = new Schema({
     },
     usertype: { type: Schema.Types.ObjectId, ref: 'usertypes' },
     subscription: { type: Schema.Types.ObjectId, ref: 'subscriptions' },
-    personalEvents: [{ type: Schema.Types.ObjectId, ref: 'event' }]
 });
 
 module.exports = mongoose.model('user', user);

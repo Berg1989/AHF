@@ -174,17 +174,30 @@ router
         }
     })
 
-    .get('/events', async (request, response) => {
+    .get('/personalEvents', async (request, response) => {
         const user = request.session.user;
         if (!user) response.redirect('/login');
         else {
-            response.render('public/events', {
+            response.render('public/personalEvents', {
                 user,
                 success: request.session.success,
                 errors: request.session.errors,
+                events: await controller.findUserEvents(user._id)
             });
             request.session.success = null;
             request.session.errors = null;
+        }
+    })
+
+    .post('/events/eventid=:id/remove', async (request, response) => {
+        const event = request.params.id;
+        const user = request.session.user;
+        try {
+            if (await controller.eventSignOff(event, user._id)) {
+                 response.redirect('back');
+            }
+        } catch (err) {
+            response.sendStatus(405);
         }
     });
 

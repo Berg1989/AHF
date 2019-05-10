@@ -69,7 +69,7 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
             phone: null
         },
         usertype: usertype,
-        subscription: null
+        subscription: null,
     });
     return user.save();
 };
@@ -238,6 +238,9 @@ exports.createPost = (headline, body, author) => {
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
 
+    const start = new Date(startDate).toDateString();
+    const end = new Date(endDate).toDateString();
+
     const event = new EventModel({
         headline: headline,
         author: author,
@@ -252,18 +255,50 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
     return event.save();
 };
 
+exports.eventSignUp = (eventId, userId) => {
+        return EventModel.findByIdAndUpdate(eventId, {
+            $push: {
+                participants: userId
+            }
+        }).exec();
+};
+
+exports.eventSignOff = (eventId, userId) => {
+    return EventModel.findByIdAndUpdate(eventId, {
+        $pull: {
+            participants: userId
+        }
+    }).exec();
+};
+
+exports.findUserEvents = function(userid) {
+    return findEvents().participants.find().aggregate({match: { _id: userid } }).exec();
+};
+
 exports.findEvents = () => {
-    return EventModel.find().exec()
-}
+    return EventModel.find().exec();
+};
 
 exports.findPosts = () => {
     return PostModel.find().exec();
 }
 
+exports.eventSignUp = (eventId, userId) => {
+        return EventModel.findByIdAndUpdate(eventId, {
+            $push: {
+                participants: userId
+            }
+        }).exec();
+};
+
 exports.deleteEvent = async id => {
     return EventModel.findByIdAndDelete(id).exec();
 }
 
+exports.eventSignOff = (eventId, userId) => {
+    return EventModel.findByIdAndUpdate(eventId, {
+        $pull: {
+            participants: userId
 exports.deletePost = id => {
     return PostModel.findByIdAndDelete(id).exec();
 }
@@ -290,9 +325,15 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
             price: price
         }
     }).exec();
-
 };
 
+exports.findUserEvents = function(userid) {
+    return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
+};
+
+exports.findEvents = () => {
+    return EventModel.find().exec();
+};
 exports.updatePost = (id, headline, body) => {
 
     return PostModel.findByIdAndUpdate(id, {
@@ -302,4 +343,6 @@ exports.updatePost = (id, headline, body) => {
         }
     }).exec();
 
+exports.findPosts = ()  => {
+    return PostModel.find().exec();
 };
