@@ -1,17 +1,39 @@
-const controller = require("../../controllers/controller");
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator/check');
+const csrf = require('csurf');
+const csrfProtection = csrf();
+const passport = require('passport');
+
+const controller = require("../../controllers/controller");
+
+router.use(csrfProtection)
+
+/*
+User routes:
+    /
+    /login
+    /register
+    /info
+    /events
+    /subscription
+*/
 
 router
     .get('/', (request, response) => {
         const user = request.session.user;
         if (!user) {
             response.redirect('/login');
-        } else {
-            response.redirect('/user/id=' + user._id)
         }
+        response.render('public/user', {
+            metaTags: {
+                title: 'AHF - ' + user.firstname,
+                description: 'Personal user page',
+                keywords: 'Profile and stuff'
+            }
+        });
     })
+
     .get('/id=:id', async (request, response) => {
         try {
             const user = request.session.user;
@@ -69,6 +91,56 @@ router
                 console.log(err);
             }
 
+        }
+    })
+
+    .get('/login', function (request, response) {
+        if (request.session.user) {
+            response.redirect('back');
+        }
+        response.render('public/login', {
+            metaTags: {
+                title: 'AHF - Login',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
+            action: '/user/login',
+            csrfToken: request.csrfToken(),
+            errors: request.session.errors,
+        });
+
+        request.session.errors = null;
+    })
+
+    .post('/login', [
+        check('email', 'Email er påkrævet')
+            .isEmail().custom(async (email) => {
+                if (!await controller.checkEmail(email))
+                    return Promise.reject('Ukendt email');
+                else return true;
+            }),
+        check('password', 'Password er påkrævet')
+            .isLength({ min: 5 }),/*.custom(async (password, { req }) => {
+                if (!await controller.login(req.body.loginEmail, password))
+                    return Promise.reject('Password og email matcher ikke');
+            })*/
+    ], async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.session.errors = await errors.array();
+            request.session.email = request.body.loginEmail;
+            response.redirect('back');
+        } else {
+            const { loginEmail, loginPassword } = request.body;
+            const user = await controller.login(loginEmail, loginPassword);
+
+            if (user) {
+                request.session.user = user;
+                response.redirect('/user');
+            } else {
+                request.session.errors = [{ msg: 'Password og email matcher ikke' }];
+                response.redirect('/login');
+            }
         }
     })
 
@@ -199,6 +271,37 @@ router
         } catch (err) {
             response.sendStatus(405);
         }
+    })
+
+    .get('/register', function(req, res, next) {
+        const messages = req.flash('error')
+        res.render('public/register', {
+            messages: messages,
+            hasErrors: messages.length > 0,
+            metaTags: {
+                title: 'AHF - Registrering',
+                description: 'User register page',
+                keywords: 'Register and stuff'
+            },
+            action: '/user/register',
+            csrfToken: req.csrfToken(),
+        });
+    })
+
+    .post('/register', passport.authenticate('local.register', {
+        successRedirect: '/user/info',
+        failureRedirect: '/user/register',
+        failureFlash: true
+    }))
+
+    .get('/info', function(req, res, next) {
+        res.render('public/puser', {
+            metaTags: {
+                title: 'AHF - Info',
+                description: 'User register page',
+                keywords: 'Register and stuff'
+            }
+        });
     });
 
 module.exports = router;

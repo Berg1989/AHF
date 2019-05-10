@@ -12,6 +12,8 @@ const cookeParser = require('cookie-parser');
 const bodyParser = require('body-parser'); //Middleware til at parse req.body
 const handlebarsIntl = require('handlebars-intl'); //Middleware til hbs data formatering
 const MongoStore = require('connect-mongo')(session); //Gemme session i mongodb i stedet for sysMem
+const passport = require('passport'); //User login and registration authentication handling
+const flash = require('connect-flash'); //Session stored flash messages to render in views
 
 // ROUTES FOR THE SERVER
 const index = require('./routes/public/index');
@@ -29,6 +31,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
 mongoose.set('useFindAndModify', false);
+require('./middleware/passport'); //Make passport reachable in other files
 
 const app = express();
 app.engine('hbs', xhbs({
@@ -37,7 +40,7 @@ app.engine('hbs', xhbs({
 }));
 app.set('view engine', 'hbs');
 handlebarsIntl.registerWith(hbs);
-app.use(express.static('public'));
+app.use(express.static('public')); //Flags public folder as public
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
@@ -51,6 +54,9 @@ app.use(session({
   cookie: { maxAge: 120 * 60 * 1000 } //60 min
 }));
 app.use(expressValidator());
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // VISIBLE IN ALL VIEWS:
 app.use(function (req, res, next) {
@@ -82,6 +88,13 @@ app.use('/admin/news', adminNews);
 // SHOP
 app.use('/admin/shop', adminShop);
 app.use('/shop', shopIndex);
+
+// Catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
 app.use(function (req, res, next) {

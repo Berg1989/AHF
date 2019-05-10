@@ -11,48 +11,17 @@
   <div class="col">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        <h1>Registrer dig</h1>
-      </div>
-      <div class="panel-body">
-        <form method="post" action="/login/register">
-          <div class="form-group">
-            <label>Email (Påkrævet):</label>
-            <input type="email" class="form-control" name="email" value="{{inputs.email}}" />
-          </div>
-          <div class="form-group">
-            <label>Password (Påkrævet):</label>
-            <input type="password" class="form-control" name="password" />
-          </div>
-          <div class="form-group">
-            <label>Fornavn (Påkrævet):</label>
-            <input type="text" class="form-control" name="firstname" value="{{inputs.firstname}}" />
-          </div>
-          <div class="form-group">
-            <label>Efternavn (Påkrævet):</label>
-            <input type="text" class="form-control" name="lastname" value="{{inputs.lastname}}" />
-          </div>
-          
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">Registrer</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
         <h1>Login</h1>
       </div>
       <div class="panel-body">
         <form method="post" action="{{action}}">
           <div class="form-group">
             <label>Email</label>
-            <input type="email" class="form-control" name="loginEmail" value="{{email}}" />
+            <input type="email" class="form-control" name="email" />
           </div>
           <div class="form-group">
             <label>Password</label>
-            <input type="password" class="form-control" name="loginPassword" />
+            <input type="password" class="form-control" name="password" />
           </div>
           <input type="hidden" name="_csrf" value="{{csrfToken}}" />
           <div class="form-group">
