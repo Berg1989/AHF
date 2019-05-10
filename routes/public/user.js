@@ -182,10 +182,21 @@ router
                 user,
                 success: request.session.success,
                 errors: request.session.errors,
-                //events: await controller.findPersonalEvents()
+                pevents: await controller.findUserEvents(user._id)
             });
             request.session.success = null;
             request.session.errors = null;
+        }
+    })
+
+    .delete('/personalEvents/eventid=:eventid', async (request, response) => {
+        const user = request.session.user;
+        const event = request.params.eventid
+        try {
+            if (await controller.eventSignOff(id, user._id)) 
+            response.redirect('/personalEvents');
+        } catch (err) {
+            response.sendStatus(405);
         }
     });
 
