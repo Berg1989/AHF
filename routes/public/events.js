@@ -4,11 +4,11 @@ const router = express.Router();
 
 router
 
-    .post('/eventid=:eventid/userid=:userid', async (request, response) => {
+    .post('/eventid=:eventid', async (request, response) => {
         const event = request.params.eventid;
-        const user = request.params.userid;
+        const user = request.session.user;
         try{
-            if  (await controller.eventSignUp(event, user) && await controller.userSignUp(event, user)) {
+            if  (await controller.eventSignUp(event, user._id)) {
               //response.sendStatus(200);
                 response.redirect('/events');  
             } 
