@@ -9,24 +9,24 @@ const auth = require('../../middleware/authentications');
 router.use(csrfProtection)
 
 router
-    .get('/', auth.adminNotloggedIn, function (req, res, next) {
+    .get('/', auth.notloggedIn, function (req, res, next) {
         const messages = req.flash('error')
         res.render('public/login', {
             messages: messages,
             hasErrors: messages.length > 0,
             metaTags: {
-                title: 'AHF Admin - Login',
-                description: 'Admin login page',
+                title: 'AHF - Login',
+                description: 'User login page',
                 keywords: 'Login and stuff'
             },
-            action: '/admin/login',
+            action: '/user/login',
             csrfToken: req.csrfToken(),
         });
     })
 
-    .post('/', passport.authenticate('local.adminlogin', {
-        successRedirect: '/admin',
-        failureRedirect: '/admin/login',
+    .post('/', passport.authenticate('local.login', {
+        successRedirect: '/user',
+        failureRedirect: '/user/login',
         failureFlash: true
     }));
 

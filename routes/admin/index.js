@@ -1,43 +1,25 @@
-const controller = require("../../controllers/controller");
 const express = require('express');
-const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
+
+const auth = require('../../middleware/authentications');
 
 router
-
     //Admin root
-    .get('/', async (request, response) => {
-        response.locals.metaTags = {
-            title: 'Admin - Home',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
-        };
-        response.render('admin/index', { 
-            layout: 'admin', 
-            admin: request.session.admin 
-        });
-        /*
-        if (admin && admin.admintype.accesslevel < 3) {
-            response.locals.metaTags = {
-                title: 'Frontpage',
+    .get('/', auth.adminIsLoggedIn, async (request, response) => {
+        response.render('admin/index', {
+            layout: 'admin',
+            metaTags: {
+                title: 'Admin - Home',
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
-            };
-            response.render('admin/index', { admin, admintypes });
-        } else {
-            response.redirect('/');
-        }*/
+            },
+            admin: request.user
+        })
     })
 
-    .get('/logout', (request, response) => {
-        request.session.destroy(err => {
-            if (err) {
-                console.log(err);
-            } else {
-                response.redirect('/admin/login');
-            }
-        });
+    .get('/logout', auth.adminIsLoggedIn, function (req, res, next) {
+        req.logout();
+        res.redirect('/admin/login');
     });
 
 module.exports = router;

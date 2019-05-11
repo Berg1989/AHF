@@ -17,14 +17,19 @@ const flash = require('connect-flash'); //Session stored flash messages to rende
 
 // ROUTES FOR THE SERVER
 const index = require('./routes/public/index');
+const events = require('./routes/public/events');
 const user = require('./routes/public/user');
-const adminIndex = require('./routes/admin/index');
+const userLogin = require('./routes/public/login');
+const userRegister = require('./routes/public/register');
+
+const admin = require('./routes/admin/index');
 const adminLogin = require('./routes/admin/login');
 const adminUsers = require('./routes/admin/users');
 const adminSubscriptions = require('./routes/admin/subscriptions');
 const adminShop = require('./routes/admin/shop');
-const shopIndex = require('./routes/shop/index');
-const events = require('./routes/public/events');
+const adminNews = require('./routes/admin/news');
+
+const shop = require('./routes/shop/shop');
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
@@ -71,29 +76,30 @@ app.use(function(req, res, next) {
   next();
 });
 
+// ADMIN
+app.use('/admin/login', adminLogin);
+app.use('/admin/users', adminUsers);
+app.use('/admin/subscriptions', adminSubscriptions);
+app.use('/admin/news', adminNews);
+app.use('/admin/shop', adminShop);
+app.use('/admin', admin);
+
+// SHOP
+app.use('/shop', shop);
+
 // PUBLIC
+app.use('/user/login', userLogin);
+app.use('/user/register', userRegister);
 app.use('/user', user);
 app.use('/events', events);
 app.use('/', index);
 
-// ADMIN
-app.use('/admin', adminIndex);
-app.use('/admin/login', adminLogin);
-app.use('/admin/users', adminUsers);
-app.use('/admin/subscriptions', adminSubscriptions);
-
-const adminNews = require('./routes/admin/news');
-app.use('/admin/news', adminNews);
-// SHOP
-app.use('/admin/shop', adminShop);
-app.use('/shop', shopIndex);
-
 // Catch 404 and forward to error handler
-app.use(function(req, res, next) {
+/*app.use(function(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
-});
+});*/
 
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
 app.use(function (req, res, next) {

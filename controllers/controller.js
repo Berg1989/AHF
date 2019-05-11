@@ -122,7 +122,7 @@ exports.findUsersByText = async (text) => {
 };
 
 exports.checkEmail = (email) => {
-    return User.findOne({ email: email }).exec();
+    return User.findOne({ email: email }).populate('usertype').exec();
 };
 
 exports.login = async (email, password) => {
@@ -132,10 +132,6 @@ exports.login = async (email, password) => {
     } else {
         return false;
     }
-};
-
-exports.checkPassword2 = async (user, password) => {
-    return await user.checkPassword(password);
 };
 
 exports.checkPassword = async (plaintext, hash) => {
@@ -156,8 +152,8 @@ exports.resetPassword = async (id) => {
     return result ? newpw : false;
 };
 
-exports.getUsersCount = async() => {
-    return User.count();
+exports.getUsersCount = () => {
+    return User.countDocuments().exec();
 };
 
 //
