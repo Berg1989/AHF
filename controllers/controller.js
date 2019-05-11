@@ -163,17 +163,16 @@ exports.findUserSubscription = (userid) => {
     return Subscriptions.findOne({ user: userid }).populate('model').exec();
 };
 
-exports.createSubscription = (userid, start, end, active, modelid) => {
-    return new Subscriptions({
-        user: userid,
-        start: start,
-        end: end,
-        active: active,
-        model: modelid
-    }).save();
+exports.createSubscription = (modelid, start, end) => {
+    const sub = new Subscriptions();
+    sub.start = start;
+    sub.end = end;
+    sub.model = modelid;
+
+    return sub.save();
 };
 
-exports.connectSubToUser = (subid, userid) => {
+exports.connectSubToUser = (userid, subid) => {
     return User.findByIdAndUpdate(userid, {
         $set: { subscription: subid }
     }).exec();
@@ -186,12 +185,6 @@ exports.updateSubsciption = (id, start, end, modelid) => {
             end: end,
             model: modelid
         }
-    }).exec();
-};
-
-exports.unsubscribe = (id) => {
-    return Subscriptions.findByIdAndUpdate(id, {
-        $set: { active: false }
     }).exec();
 };
 

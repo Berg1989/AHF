@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-3">
+        {{> userNav}}
+    </div>
+    <div class="col-md-9">
+        <h1>Dine events</h1>
+        <hr>
+        <div class="row">
+            <span class="border border-primary">
+                <div class="col">
+                    <h3>Kommende events</h3>
+                    <div class="form-group">
+                        <table cellpadding='2' style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Start Dato</th>
+                                    <th>Slut Dato</th>
+                                    <th>Pris</th>
+
+                                    <th>Afmeld</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each events}}
+                                <tr>
+                                    <td>{{this.headline}}</td>
+                                    <td>{{this.startdate}}</td>
+                                    <td>{{this.enddate}}</td>
+                                    <td>{{this.price}}</td>
+                                    <td>
+                                        <form method="POST"
+                                            onsubmit="return confirm('Vil du framelde dig dette event?')"
+                                            action='/user/events/{{this.id}}/remove'>
+                                            <button type="submit" class="btn btn-danger"><i
+                                                    class="fas fa-times"></i></button>
+
+                                        </form>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>

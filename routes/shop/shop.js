@@ -7,6 +7,8 @@ const fetch = require('node-fetch');
 
 router
     .get('/', async (request, response) => {
+        const errors = request.flash('error');
+        const success = request.flash('success');
         response.render('shop/index', {
             layout: 'shop',
             metaTags: {
@@ -14,6 +16,7 @@ router
                 description: 'Shop descr',
                 keywords: 'lol'
             },
+            messages: { errors, success },
             categories: await shopController.findCategoriesNoProducts()
         });
     })
@@ -32,6 +35,8 @@ router
     })
 
     .get('/cart', async function (req, res, next) {
+        const errors = req.flash('error');
+        const success = req.flash('success');
         if (!req.session.cart) {
             return res.render('shop/cart', { products: null });
         }
@@ -44,7 +49,8 @@ router
                 title: 'Cart',
                 description: 'cart descr',
                 keywords: 'lol'
-            }
+            },
+            messages: { errors, success }
         });
 
         req.session.errors = null;
@@ -59,8 +65,8 @@ router
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            req.session.errors = await errors.array();
-            res.redirect('/shop/cart');
+            req.flash('error', await errors.array());
+            res.redirect('back');
         } else {
             const cart = await shopController.createCart(req.session.cart);
             const items = cart.generateArray();
@@ -78,9 +84,11 @@ router
 
                 if (order) {
                     req.session.cart = await shopController.createCart({}); //Empty the cart
+                    req.flash('success', 'Success - ordren oprettet')
                     res.redirect('/shop');
                 } else {
-                    res.redirect('/shop/cart');
+                    req.flash('error', 'Ups noget gik galt');
+                    res.redirect('back');
                 }
             }
         }

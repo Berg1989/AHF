@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-md-3">
+        {{> userNav}}
+    </div>
+    <div class="col-md-9">
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
+        {{/if}}
+
+        <h2>Kontingent info</h2>
+        <hr>
+        {{#if currentSub}}
+        <p>Nuværende model:</p>
+        <div class="card" style="max-width:350px;margin 0 auto">
+            <div class="card-body">
+                <h5 class="card-title">{{currentSub.model.name}}</h5>
+                <p class="card-text">{{formatNumber currentSub.model.price style="currency" currency="DKK"}}</p>
+                <p class="card-text">Varighed: {{currentSub.model.duration}} måneder</p>
+                <p class="card-text">Start dato: {{currentSub.start}}</p>
+                <p class="card-text">Udløbsdato: {{currentSub.end}}</p>
+            </div>
+        </div>
+        <hr>
+        <p>Er dit kontingent udløbet, kan det fornyes ved at vælge et nyt nedenfor:</p>
+        <div class="row">
+            {{#each subscriptionModels}}
+            <div class="col-md-4">
+                <div class="card" style="width:100%">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <p class="card-text">{{formatNumber this.price style="currency" currency="DKK"}}</p>
+                        <p class="card-text">{{this.duration}} måneder</p>
+                        <form method="POST" action="/user/{{../user._id}}/update-subscription">
+                            <input type="hidden" value="{{this._id}}" name="modelId">
+                            <button class="btn btn-primary" type="submit">Vælg</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <p>Du har ikke et kontingent endnu</p>
+        <p>Vælg et kontingent nedenfor:</p>
+        <hr>
+        <div class="row">
+            {{#each subscriptionModels}}
+            <div class="col-md-4">
+                <div class="card" style="width:100%">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}}</h5>
+                        <p class="card-text">{{formatNumber this.price style="currency" currency="DKK"}}</p>
+                        <p class="card-text">{{this.duration}} måneder</p>
+                        <form method="POST" action="/user/{{../user._id}}/subscription">
+                            <input type="hidden" value="{{this._id}}" name="modelId">
+                            <button class="btn btn-primary" type="submit">Vælg</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+</div>

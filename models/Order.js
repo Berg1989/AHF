@@ -9,8 +9,4 @@ const orders = new Schema({
     phone: { type: Number, required: true }
 });
 
-orders.methods.calcPrice = function() {
-    return this.firstname + ", hours: " + this.lastname;
-};
-
 module.exports = mongoose.model('Orders', orders);

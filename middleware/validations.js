@@ -17,7 +17,7 @@ module.exports = {
     ],
     userChangeEmail: [
         check('pw', 'Indtast venligst dit password').isString().custom(async (pw, { req }) => {
-            if (!await controller.checkPassword(pw, req.session.user.password))
+            if (!await controller.checkPassword(pw, req.user.password))
                 return Promise.reject('Forkert password indtastet');
         }),
         check('newEmail', 'Please enter a valid email').isEmail().custom(async (email) => {
@@ -27,7 +27,7 @@ module.exports = {
     ],
     userChangePassword: [
         check('oldpw').custom(async (oldpw, { req }) => {
-            if (!await controller.checkPassword(oldpw, req.session.user.password))
+            if (!await controller.checkPassword(oldpw, req.user.password))
                 return Promise.reject('Forkert password indtastet');
         }),
         check('newpw', 'Nyt password skal være min. 5 karaktere lang').isLength({ min: 5 }).custom((newpw, { req }) => {

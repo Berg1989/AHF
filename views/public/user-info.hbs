@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-md-3">
+        {{> userNav}}
+    </div>
+    <div class="col-md-9">
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
+        {{/if}}
+        <div class="row">
+            <div class="col">
+                <h1>Bruger info</h1>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md">
+                <p>Funktion: {{user.info.func}}</p>
+                <p>Medlem siden: {{user.created}}</p>
+                <form method="POST" action="/user/{{user._id}}/info">
+                    <div class="form-group">
+                        <label class="label">Fornavn: (Påkrævet)</label>
+                        <input type="text" id="firstname" class="form-control" name="firstname"
+                            value="{{user.info.firstname}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Efternavn: (Påkrævet)</label>
+                        <input type="text" id="lastname" class="form-control" name="lastname"
+                            value="{{user.info.lastname}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Fødselsdato</label>
+                        <input type="date" id="birth" class="form-control" name="birth" value="{{user.info.birth}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Tlf:</label>
+                        <input type="text" id="phone" class="form-control" name="phone" value="{{user.info.phone}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Postnummer:</label>
+                        <input type="number" id="zipcode" class="form-control" name="zipcode"
+                            value="{{user.info.zipcode}}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">addresse:</label>
+                        <input type="text" id="street" class="form-control" name="street"
+                            value="{{user.info.street}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Updater bruger info</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md">
+                <h2>Skift password:</h2>
+                <hr>
+                <form action="/user/{{user._id}}/change-password" method="POST">
+                    <div class="form-group">
+                        <label class="label">Nuværende password: (Påkrævet)</label>
+                        <input type="password" class="form-control" name="oldpw" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Nyt password: (Påkrævet)</label>
+                        <input type="password" class="form-control" name="newpw" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+                <hr>
+                <h2>Skift Email:</h2>
+                <form action="/user/{{user._id}}/change-email" method="POST">
+                    <div class="form-group">
+                        <label class="label">Password: (Påkrævet)</label>
+                        <input type="password" class="form-control" name="pw" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Ny email: (Påkrævet)</label>
+                        <input type="email" class="form-control" name="newEmail"
+                            placeholder="Nuværende email: {{user.email}}" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
