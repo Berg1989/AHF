@@ -17,10 +17,11 @@ exports.createCart = function (oldCart) {
 // CATEGORIES
 //
 exports.createCategory = (name) => {
-    return new Category({
-        name: name,
-        products: []
-    }).save();
+    const category = new Category();
+    category.name = name;
+    category.products = [];
+
+    return category.save();
 };
 
 exports.updateCategory = (id, name) => {
@@ -65,12 +66,13 @@ exports.checkCategoryName = (name) => {
 // PRODUCTS
 //
 exports.createProduct = (name, price, size, imgPath) => {
-    return new Product({
-        name: name,
-        price: price,
-        size: size,
-        imgPath: imgPath
-    }).save();
+    const product = new Product();
+    product.name = name;
+    product.price = price;
+    product.size = size;
+    product.imgPath = imgPath;
+
+    return product.save();
 };
 
 exports.updateProduct = (id, name, price, size, imgPath) => {
@@ -104,11 +106,12 @@ exports.checkProductName = (name) => {
 // ORDERLINES
 //
 exports.createOrderline = (product, qty, price) => {
-    return new Orderline({
-        qty: qty,
-        product: product,
-        price: price
-    }).save();
+    const orderline = new Orderline();
+    orderline.qty = qty;
+    orderline.product = product;
+    orderline.price = price;
+
+    return orderline.save();
 };
 
 exports.deleteOrderline = (id) => {
@@ -129,14 +132,14 @@ exports.findOrderline = (id) => {
 // ORDER
 //
 exports.createOrder = (sellerId, orderlines, price, phone) => {
-    const date = new Date().toISOString();
-    return new Order({
-        date: date,
-        seller: sellerId,
-        price: price,
-        orderlines: orderlines,
-        recipient: phone
-    }).save();
+    const order = new Order();
+    order.date = new Date().toISOString();
+    order.seller = sellerId;
+    order.price = price;
+    order.orderlines = orderlines;
+    order.recipient = phone;
+
+    return order.save();
 };
 
 exports.updateOrderPrice = (id, price) => {
