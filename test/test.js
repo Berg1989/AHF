@@ -2,7 +2,6 @@ const app = require('../app.js');
 const assert = require('chai').assert;
 const controller = require('../controllers/controller');
 const request = require('supertest');
-const bcrypt = require('bcryptjs');
 
 describe('User-Controller test', function () {
     it('createUser() test', async function () {
@@ -19,12 +18,12 @@ describe('User-Controller test', function () {
     });
 });
 
-describe('POST /login', function () {
-    it("Post valid login", function (done) {
+describe('POST /user/login', function () {
+    it("No CSRF token", function (done) {
         request(app)
         .post('/user/login')
         .send({ email: 'admin@mail.dk', password: '12345'})
-        .expect(302, done);
+        .expect(403, done);
     });
 });
 
