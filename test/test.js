@@ -4,34 +4,26 @@ const controller = require('../controllers/controller');
 const request = require('supertest');
 const bcrypt = require('bcryptjs');
 
-describe('Controller test', function () {
+describe('User-Controller test', function () {
     it('createUser() test', async function () {
         this.timeout(3000);
-        const user = await controller.createUser("bergtest10@gmail.com", "123ab", "Danieltest", "Bergtest");
-        const testpass = await bcrypt.compare("123ab", user.password);
+        const user = await controller.createUser("bergtest10@gmail.com", "123ab", "Danieltest", "Bergtest", '5cd04bc81c9d4400009071ce', 'Medlem');
+        
+        assert.isTrue(await controller.checkPassword('123ab', user.password));
         assert.equal(user.email, "bergtest10@gmail.com");
         assert.equal(user.info.firstname, "Danieltest");
         assert.equal(user.info.lastname, "Bergtest");
-        assert.exists(await controller.findUser(user._id));
-        assert.isTrue(testpass);
-        await controller.deleteUser(user._id);
-    });
-    it('findUser() test', async function () {
-        this.timeout(3000);
-        const member = await controller.createUser("bergtest10@gmail.com", "123ab", "Danieltest", "Bergtest");
-        const findMember = await controller.findUser(member._id);
-        assert.exists(findMember);
-        assert.equal(findMember.email, "bergtest10@gmail.com");
-        assert.equal(findMember.info.firstname, "Danieltest")
-        await controller.deleteUser(member._id);
+        assert.isObject(await controller.findUser(user));
+
+        assert.isObject(await controller.deleteUser(user));
     });
 });
 
 describe('POST /login', function () {
     it("Post valid login", function (done) {
         request(app)
-        .post('/login')
-        .send({ loginEmail: 'admin@mail.dk', LoginPassword: '123456'})
+        .post('/user/login')
+        .send({ email: 'admin@mail.dk', password: '12345'})
         .expect(302, done);
     });
 });

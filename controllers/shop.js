@@ -9,7 +9,7 @@ const Cart = require('../models/Cart');
 //
 // CART
 //
-exports.createCart = function(oldCart) {
+exports.createCart = function (oldCart) {
     return new Cart(oldCart);
 };
 
@@ -121,6 +121,10 @@ exports.updateOrderline = (id, number) => {
     })
 };
 
+exports.findOrderline = (id) => {
+    return Orderline.findById(id).exec();
+};
+
 //
 // ORDER
 //
@@ -128,10 +132,10 @@ exports.createOrder = (sellerId, orderlines, price, phone) => {
     const date = new Date().toISOString();
     return new Order({
         date: date,
-        sellerId: sellerId,
+        seller: sellerId,
         price: price,
         orderlines: orderlines,
-        phone: phone
+        recipient: phone
     }).save();
 };
 
@@ -151,4 +155,12 @@ exports.removeOrderlineFromOrder = (orderid, orderlineid) => {
     return Order.findByIdAndUpdate(orderid, {
         $pull: { orderlines: orderlineid }
     }).exec();
+};
+
+exports.findOrder = (id) => {
+    return Order.findById(id).exec();
+};
+
+exports.deleteOrder = (id) => {
+    return Order.findByIdAndRemove(id).exec();
 };

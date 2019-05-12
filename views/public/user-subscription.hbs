@@ -18,6 +18,7 @@
 
         <h2>Kontingent info</h2>
         <hr>
+
         {{#if currentSub}}
         <p>Nuværende model:</p>
         <div class="card" style="max-width:350px;margin 0 auto">
@@ -29,8 +30,9 @@
                 <p class="card-text">Udløbsdato: {{currentSub.end}}</p>
             </div>
         </div>
-        <hr>
+        {{else if isExpired}}
         <p>Er dit kontingent udløbet, kan det fornyes ved at vælge et nyt nedenfor:</p>
+        <hr>
         <div class="row">
             {{#each subscriptionModels}}
             <div class="col-md-4">

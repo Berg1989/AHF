@@ -74,6 +74,7 @@ router
         const user = await controller.findUser(request.user._id);
         const errors = request.flash('error');
         const success = request.flash('success');
+        const userSub = await controller.findSubscription(user.subscription)
         response.render('public/user-subscription', {
             metaTags: {
                 title: 'AHF - Mit kontingent',
@@ -82,7 +83,8 @@ router
             },
             messages: { errors, success },
             subscriptionModels: await controller.findSubscriptionModels(),
-            currentSub: await controller.findSubscription(user.subscription),
+            currentSub: userSub ? userSub : false,
+            isExpired: userSub.getEndDate() < new Date() ? true : false,
             user: user
         });
     })

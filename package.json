@@ -24,6 +24,7 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "test": "mocha --timeout 3000 --exit"
+    "test": "mocha --timeout 3000 --exit",
+    "shopTest": "mocha --exit"
   }
 }
