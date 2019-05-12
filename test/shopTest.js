@@ -65,4 +65,30 @@ describe('Shop-controller test', function () {
         assert.isObject(await controller.deleteOrderline(orderline));
         assert.isObject(await controller.deleteOrder(order));
     });
+    it('Cart test', async function () {
+        this.timeout(3000);
+        const item1 = { price: 10 };
+        const item2 = { price: 5 };
+        const cart = await controller.createCart({});
+        
+        cart.addProduct(item1, '1');
+        cart.addProduct(item2, '2');
+        cart.addProduct(item2, '2');
+
+        assert.isObject(cart);
+        assert.equal(cart.totalPrice, 20);
+        assert.equal(cart.totalQty, 3);
+        assert.isArray(cart.generateArray());
+        assert.equal(cart.generateArray().length, 2);
+
+        cart.retractOne('2');
+
+        assert.equal(cart.totalPrice, 15);
+        assert.equal(cart.totalQty, 2);
+
+        cart.removeItem('1');
+
+        assert.equal(cart.totalPrice, 5);
+        assert.equal(cart.totalQty, 1);
+    });
 });
