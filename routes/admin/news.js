@@ -17,6 +17,7 @@ router
             keywords: 'Here goes keywords'
         };
         response.render('admin/news', {
+            layout: 'admin',
             action: '/news',
             events: await controller.findEvents(),
             posts: await controller.findPosts(),
@@ -35,6 +36,7 @@ router
                 keywords: 'Here goes keywords'
             };
             response.render('admin/createpost', {
+                layout: 'admin',
                 action: '/createpost',
                 messages: { errors, success },
                 inputs: request.session.inputs,
@@ -58,6 +60,7 @@ router
                 keywords: 'Here goes keywords'
             };
             response.render('admin/createevent', {
+                layout: 'admin',
                 action: '/createevent',
                 messages: { errors, success },
                 inputs: request.session.inputs,
