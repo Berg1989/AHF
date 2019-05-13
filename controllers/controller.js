@@ -210,19 +210,21 @@ exports.findUsertype = (id) => {
 
 exports.createPost = (headline, body, author) => {
     const created = new Date().toDateString();
+    const tempHeadline = headline.charAt(0).toUpperCase() + headline.slice(1);
 
     const post = new PostModel({
         postdate: created,
         body: body,
-        headline: headline,
+        headline: tempHeadline,
         author: author
     });
     return post.save();
 };
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
+    const tempHeadline = headline.charAt(0).toUpperCase() + headline.slice(1);
     const event = new EventModel({
-        headline: headline,
+        headline: tempHeadline,
         author: author,
         startdate: startDate,
         enddate: endDate,
