@@ -12,9 +12,9 @@ router
         const errors = request.flash('error');
         const success = request.flash('success');
         response.locals.metaTags = {
-            title: 'Login',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
+            title: 'Admin - News',
+            description: '',
+            keywords: ''
         };
         response.render('admin/news', {
             layout: 'admin',
@@ -31,9 +31,9 @@ router
         const success = request.flash('success');
         if (user) {
             response.locals.metaTags = {
-                title: 'Lav opslag',
-                description: 'Here goes the description',
-                keywords: 'Here goes keywords'
+                title: 'Admin - Lav opslag',
+                description: '',
+                keywords: ''
             };
             response.render('admin/createpost', {
                 layout: 'admin',
@@ -55,9 +55,9 @@ router
         if (user) {
 
             response.locals.metaTags = {
-                title: 'Lav event',
-                description: 'Here goes the description',
-                keywords: 'Here goes keywords'
+                title: 'Admin - Lav event',
+                description: '',
+                keywords: ''
             };
             response.render('admin/createevent', {
                 layout: 'admin',
@@ -151,8 +151,8 @@ router
             if (post) {
                 response.locals.metaTags = {
                     title: 'Admin - edit user: ' + post.headline,
-                    description: 'Here goes the description',
-                    keywords: 'Here goes keywords'
+                    description: '',
+                    keywords: ''
                 };
                 response.render('admin/post', {
                     layout: 'admin',

@@ -23,7 +23,7 @@ describe('Create event test', function () {
 
 describe('Create post test', function () {
     it('createPost() test', async function () {
-        const data = { body: 'Pas på! Der er mudder på banen', headline: 'advarsel', author: 'Alfred'};
+        const data = { body: 'Pas på! Der er mudder på banen', headline: 'Advarsel', author: 'Alfred'};
         this.timeout(3000);
         const post = await controller.createPost(data.headline, data.body, data.author);
         assert.equal(post.headline, data.headline);
