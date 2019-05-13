@@ -4,10 +4,12 @@ const csrf = require('csurf');
 const csrfProtection = csrf();
 const passport = require('passport');
 
+const auth = require('../../middleware/authentications');
+
 router.use(csrfProtection)
 
 router
-    .get('/', notloggedIn, function (req, res, next) {
+    .get('/', auth.notloggedIn, function (req, res, next) {
         const messages = req.flash('error')
         res.render('public/register', {
             messages: messages,
@@ -29,11 +31,3 @@ router
     }));
 
 module.exports = router;
-
-//Skal påføres alle routes hvor brugeren IKKE skal være logget ind for at tilgå
-function notloggedIn(req, res, next) {
-    if (!req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/user'); //TODO: go to user
-};
