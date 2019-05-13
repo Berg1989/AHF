@@ -9,8 +9,6 @@
 </div>
 
 <h1>Kommende events</h1>
-
-{{#if user}}
 <div class="row">
     <span class="border border-primary">
         <div class="col">
@@ -34,45 +32,15 @@
                             <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
                             <td>
-                                <form method="POST" action='/events/{{this.id}}/signup'>
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                                <form method="POST" action='/events/:id'>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-angle-right"></i></button>
                                 </form>
                             </td>
                         </tr>
                         {{/each}}
                     </tbody>
-                </table>
+                </table>    
             </div>
         </div>
     </span>
 </div>
-{{else}}
-<div class="row">
-    <span class="border border-primary">
-        <div class="col">
-            <div class="form-group">
-                <table cellpadding='2' style="width:100%;">
-                    <thead>
-                        <tr>
-                            <th>Event</th>
-                            <th>Start Dato</th>
-                            <th>Slut Dato</th>
-                            <th>Pris</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each events }}
-                        <tr>
-                            <td>{{this.headline}}</td>
-                            <td>{{this.startdate}}</td>
-                            <td>{{this.enddate}}</td>
-                            <td>{{this.price}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </span>
-</div>
-{{/if}}
