@@ -48,11 +48,11 @@
                 {{#each events }}
                 <tr>
                     
-                    <td><a href="/events/id={{this._id}}">{{this.headline}}</a></td>
+                    <td><a href="/events/{{this._id}}">{{this.headline}}</a></td>
                     <td id="{{this._id}}1">{{this.startdate}}</td>
                     <td id="{{this._id}}2">{{this.enddate}}</td>
                     <td>{{this.price}}</td>
-                    <td><a href="/admin/news/eventedit/id={{this._id}}" class="btn btn-primary"><i
+                    <td><a href="/admin/news/eventedit/{{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a>
                     </td>
                     <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent(this.id)" class="btn btn-danger"><i
@@ -85,7 +85,7 @@
                 <tr>
                     <td>{{this.headline}}</td>
                     <td>{{this.postdate}}</td>
-                    <td><a href="/admin/news/postedit/id={{this._id}}" class="btn btn-primary"><i
+                    <td><a href="/admin/news/postedit/{{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a>
                     </td>
                     <td> <button type="submit" id="{{this._id}}" onclick="deletePost(this.id)" class="btn btn-danger"><i

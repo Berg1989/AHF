@@ -138,7 +138,7 @@ router
     // EDIT
     //
 
-    .get('/postedit/id=:id',/* auth.adminIsLoggedIn, */ async (request, response) => {
+    .get('/postedit/:id',/* auth.adminIsLoggedIn, */ async (request, response) => {
 
         const errors = request.flash('error');
         const success = request.flash('success');
@@ -164,7 +164,7 @@ router
         }
     })
 
-    .get('/eventedit/id=:id',/* auth.adminIsLoggedIn, */ async (request, response) => {
+    .get('/eventedit/:id',/* auth.adminIsLoggedIn, */ async (request, response) => {
 
         const errors = request.flash('error');
         const success = request.flash('success');
@@ -190,14 +190,14 @@ router
 
     })
 
-    .post('/eventedit/id=:id', validate.eventInfoCheck/* , auth.adminIsLoggedIn */, async (request, response) => {
+    .post('/eventedit/:id', validate.eventInfoCheck/* , auth.adminIsLoggedIn */, async (request, response) => {
         const user = request.user;
 
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
             request.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
-            response.redirect('/admin/news/eventedit/id=' + request.params.id)
+            response.redirect('/admin/news/eventedit/' + request.params.id)
         } else {
             const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
             if (await controller.updateEvent(request.params.id, headline, user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
@@ -208,12 +208,12 @@ router
         }
     })
 
-    .post('/postedit/id=:id', validate.postInfoCheck/* , auth.adminIsLoggedIn */, async (request, response) => {
+    .post('/postedit/:id', validate.postInfoCheck/* , auth.adminIsLoggedIn */, async (request, response) => {
             const errors = validationResult(request);
             if (!errors.isEmpty()) {
                 request.flash('error', await errors.array());
                 request.inputs = { headline: request.body.headline, body: request.body.body };
-                response.redirect('/admin/news/postedit/id=' + request.params.id)
+                response.redirect('/admin/news/postedit/' + request.params.id)
             } else {
                 const { headline, body } = request.body;
                 if (await controller.updatePost(request.params.id, headline, body)) {
