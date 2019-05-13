@@ -48,7 +48,7 @@ router
         errors: request.session.errors,
         inputs: request.session.inputs,
         ticket: participantsLength,
-        user: request.session.user
+        user: request.user
         
     });
     request.session.errors = null;
