@@ -83,7 +83,7 @@
             <tbody>
                 {{#each posts }}
                 <tr>
-                    <td>{{this.headline}}</td>
+                    <td><a href="/posts/{{this._id}}">{{this.headline}}</a></td>
                     <td>{{this.postdate}}</td>
                     <td><a href="/admin/news/postedit/{{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a>
