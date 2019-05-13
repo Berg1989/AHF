@@ -1,25 +1,30 @@
 <div class="row">
     <div class="col">
-        <a href="/admin/shop/">Shop</a><span> > </span>
-        <span>{{category.name}}</span>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        {{#if errors}}
-        {{#each errors}}
-        <p class="alert alert-danger">{{this.msg}}</p>
-        {{/each}}
-        {{else if success}}
-        <p class="alert alert-success">{{success.msg}}</p>
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
         {{/if}}
     </div>
 </div>
 <div class="row">
     <div class="col">
+        <h1>{{category.name}}</h1>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2>Rediger kategori</h2>
+                <h3>Rediger</h3>
             </div>
             <div class="panel-body">
                 <form method="post" action="/admin/shop/categories/{{category._id}}">
@@ -39,10 +44,40 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <h3>Opret et nyt product</h3>
+        <form method="post" action="/admin/shop/products" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Navn: (Påkrævet)</label>
+                <input type="text" class="form-control" name="name" value="{{inputs.name}}" />
+            </div>
+            <div class="form-group">
+                <label>Pris: (Påkrævet)</label>
+                <input type="number" class="form-control" name="price" step="0.01" value="{{inputs.price}}" />
+            </div>
+            <div class="form-group">
+                <label>Størrelse: (Påkrævet)</label>
+                <input type="text" class="form-control" name="size" value="{{inputs.size}}" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" class="form-control" name="category" value="{{category._id}}" />
+            </div>
+            <div class="form-group">
+                <label>Billede:</label>
+                <input type="file" class="form-control-file" name="productImage" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Opret</button>
+            </div>
+        </form>
+    </div>
+</div>
+<hr>
+<div class="row">
     <div class="col">
         <h2>Produkter</h2>
         {{#each category.products}}
-        <div class="row justify-content-between products-backend">
+        <div class="row justify-content-between" style="border-bottom:1px solid #eeee;padding:5px">
             <div class="col">{{this.name}}</div>
             <div class="align-right col">
                 <a href="/admin/shop/categories/{{../category._id}}/products/{{this._id}}" class="btn btn-primary"><i
@@ -56,4 +91,3 @@
         {{/each}}
     </div>
 </div>
-<br>

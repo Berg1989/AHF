@@ -1,17 +1,22 @@
 <div class="row">
     <div class="col">
-        <span>Kontingenttyper</span>
+        <h1>Kontingent håndtering</h1>
     </div>
 </div>
+<hr>
 <div class="row">
     <div class="col">
-        {{#if errors }}
-        {{#each errors }}
-        <p class="alert alert-danger">{{ this.msg }}</p>
-        {{/each}}
+             {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
         {{/if}}
-        {{#if success}}
-        <p class="alert alert-success">{{ success.msg }}</p>
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
         {{/if}}
     </div>
 </div>
@@ -19,7 +24,7 @@
     <div class="col">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h1>Opret kontingent</h1>
+                <h2>Opret nyt kontingent</h2>
             </div>
             <div class="panel-body">
                 <form method="POST" action="/admin/subscriptions">
@@ -34,7 +39,8 @@
                     </div>
                     <div class="form-group">
                         <label></label>Pris i alt (Påkrævet):</label>
-                        <input type="number" step="0.01" class="form-control" name="price" value="{{inputs.price}}" placeholder="DKK" />
+                        <input type="number" step="0.01" class="form-control" name="price" value="{{inputs.price}}"
+                            placeholder="DKK" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Opret</button>
@@ -61,10 +67,14 @@
                     <td>{{this.name}}</td>
                     <td>{{this.duration}} måneder</td>
                     <td>{{this.price}}</td>
-                    <td><a href="/admin/subscriptions/id={{this._id}}" class="btn btn-primary"><i
+                    <td><a href="/admin/subscriptions/{{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a></td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deleteSubscription(this.id)"
-                            class="btn btn-danger"><i class="fas fa-times"></i></button></td>
+                    <td>
+                        <form action="/admin/subscriptions/{{this._id}}/delete" method="POST"
+                            onsubmit="return confirm('Er du sikker på denne handling?')">
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>

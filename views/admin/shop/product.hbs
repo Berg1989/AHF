@@ -7,12 +7,17 @@
 </div>
 <div class="row">
     <div class="col">
-        {{#if errors}}
-        {{#each errors}}
-        <p class="alert alert-danger">{{this.msg}}</p>
-        {{/each}}
-        {{else if success}}
-        <p class="alert alert-success">{{success.msg}}</p>
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
         {{/if}}
     </div>
 </div>

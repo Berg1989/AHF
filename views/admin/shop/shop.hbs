@@ -1,17 +1,28 @@
 <div class="row">
     <div class="col">
-        {{#if errors}}
-        {{#each errors}}
-        <p class="alert alert-danger">{{this.msg}}</p>
-        {{/each}}
-        {{else if success}}
-        <p class="alert alert-success">{{success.msg}}</p>
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
         {{/if}}
     </div>
 </div>
 <div class="row">
     <div class="col">
-        <h2>Opret ny produktkategori</h2>
+        <h1>Shop håndtering</h1>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h3>Opret ny produktkategori</h3>
         <form method="post" action="/admin/shop/categories">
             <div class="form-group">
                 <label>Navn: (Påkrævet)</label>
@@ -23,7 +34,7 @@
         </form>
     </div>
     <div class="col">
-        <h2>Opret et nyt product</h2>
+        <h3>Opret et nyt product</h3>
         <form method="post" action="/admin/shop/products" enctype="multipart/form-data">
             <div class="form-group">
                 <label>Navn: (Påkrævet)</label>
@@ -57,10 +68,10 @@
         </form>
     </div>
 </div>
-
+<hr>
 <div class="row">
     <div class="col">
-        <h1>Shop håndtering</h1>
+        <h3>Oversigt</h3>
         {{#each categories}}
         <div class="category-admin-wrap">
             <div class="row justify-content-between categories-backend">
