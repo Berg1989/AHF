@@ -23,7 +23,7 @@ router
         try {
             if (await controller.eventSignUp(request.params.id, user._id)) {
                 request.session.success = { msg: 'Tilmelding oprettet' };
-                response.redirect('/events');
+                response.redirect('back');
             }
         } catch (err) {
             request.session.errors = { msg: 'Der skete en fejl!' };

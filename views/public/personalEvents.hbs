@@ -23,11 +23,10 @@
                             <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
                             <td>
-                                <form method="POST" onsubmit="return confirm('Vil du framelde dig dette event?')" action='/user/events/{{this.id}}/remove'>
-                                    <button type="submit" class="btn btn-danger"><i
-                                            class="fas fa-times"></i></button>
-
-</form>
+                                <form method="POST" onsubmit="return confirm('Vil du framelde dig dette event?')"
+                                    action='/user/events/{{this.id}}/remove'>
+                                    <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                </form>
                         </tr>
                         {{/each}}
                     </tbody>
