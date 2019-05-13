@@ -18,6 +18,7 @@ const flash = require('connect-flash'); //Session stored flash messages to rende
 // ROUTES FOR THE SERVER
 const index = require('./routes/public/index');
 const events = require('./routes/public/events');
+const posts = require('./routes/public/posts');
 const user = require('./routes/public/user');
 const userLogin = require('./routes/public/login');
 const userRegister = require('./routes/public/register');
@@ -92,6 +93,7 @@ app.use('/user/login', userLogin);
 app.use('/user/register', userRegister);
 app.use('/user', user);
 app.use('/events', events);
+app.use('/posts', posts)
 app.use('/', index);
 
 // Catch 404 and forward to error handler

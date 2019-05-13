@@ -6,7 +6,7 @@
 
         const startdate = new Date(startinput.innerHTML).toDateString();
         const enddate = new Date(endinput.innerHTML).toDateString();
-        const deadlinedate = new Date(endinput.innerHTML).toDateString();
+        const deadlinedate = new Date(deadlineinput.innerHTML).toDateString();
 
         startinput.innerHTML = '<strong>Periode:</strong> ' + startdate + ' til ' + enddate;
         deadlineinput.innerHTML = '<strong>Svarfrist:</strong> ' + deadlinedate;
@@ -48,7 +48,7 @@
             <p><strong>Beskrivelse:</strong></p>
         </div>
         <div class="row">
-            <textarea class="col-lg-6" readonly>{{events.body}}</textarea>
+            <p class="col-lg-6" readonly>{{events.body}}</p>
         </div>
 
 
