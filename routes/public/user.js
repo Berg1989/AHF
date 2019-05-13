@@ -173,6 +173,7 @@ router
 
     .get('/events', auth.isLoggedIn, async (request, response) => {
         const user = request.user;
+        const events = await controller.findUserEvents(user);
         const errors = request.flash('error');
         const success = request.flash('success');
         response.render('public/user-events', {
@@ -182,7 +183,7 @@ router
                 keywords: 'Profile and stuff'
             },
             messages: { errors, success },
-            events: await controller.findUserEvents(user._id),
+            events: events,
             user: user
         });
     })

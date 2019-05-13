@@ -237,11 +237,11 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
 };
 
 exports.eventSignUp = (eventId, userId) => {
-        return EventModel.findByIdAndUpdate(eventId, {
-            $push: {
-                participants: userId
-            }
-        }).exec();
+    return EventModel.findByIdAndUpdate(eventId, {
+        $push: {
+            participants: userId
+        }
+    }).exec();
 };
 
 exports.eventSignOff = (eventId, userId) => {
@@ -251,11 +251,6 @@ exports.eventSignOff = (eventId, userId) => {
         }
     }).exec();
 };
-
-exports.findEvents = () => {
-    return EventModel.find().exec();
-};
-
 exports.findEvent = (id) => {
     return EventModel.findById(id).exec();
 };
@@ -266,17 +261,13 @@ exports.findPosts = () => {
 exports.deleteEvent = async id => {
     return EventModel.findByIdAndDelete(id).exec();
 }
-            
+
 exports.deletePost = id => {
     return PostModel.findByIdAndDelete(id).exec();
 }
 
 exports.findPost = id => {
     return PostModel.findById(id).exec();
-}
-
-exports.findEvent = id => {
-    return EventModel.findById(id).exec();
 }
 
 exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
@@ -295,13 +286,21 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
     }).exec();
 };
 
-/* exports.findUserEvents = function(userid) {
-    return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
-}; */
-exports.findUserEvents = function(userid) {
-    return User.find().
-    /* return findEvents().participants.find().aggregate({match: { _id: userid } }).exec(); */
+exports.findUserEvents = async function (userid) {
+    const events = EventModel.find().exec();
+    const userEvents = [];
+    for (let i = 0; i < events.length; i++)
+        for (let u = 0; u < events[i].participants.length; u++) {
+            if (events[i].participants[u].id == userid) {
+                userEvents.push(events[i]);
+            }
+        }
+    return userEvents;
 };
+
+exports.checkParticipants = function (eventid, userid) {
+    return EventModel.findById(eventid).participants.find({ "participants.id": { "id": userid } });
+}
 
 exports.findEvents = () => {
     return EventModel.find().exec();
@@ -316,6 +315,6 @@ exports.updatePost = (id, headline, body) => {
     }).exec();
 }
 
-exports.findPosts = ()  => {
+exports.findPosts = () => {
     return PostModel.find().exec();
 };

@@ -23,6 +23,7 @@
                             </thead>
                             <tbody>
                                 {{#each events}}
+                                <!--for hvert participant-->
                                 <tr>
                                     <td>{{this.headline}}</td>
                                     <td>{{this.startdate}}</td>
@@ -34,7 +35,6 @@
                                             action='/user/events/{{this.id}}/remove'>
                                             <button type="submit" class="btn btn-danger"><i
                                                     class="fas fa-times"></i></button>
-
                                         </form>
                                 </tr>
                                 {{/each}}
