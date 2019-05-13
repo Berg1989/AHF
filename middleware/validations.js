@@ -37,5 +37,18 @@ module.exports = {
                 return true;
             }
         })
+    ],
+    eventInfoCheck: [
+        check('headline', 'Headline must be 1 character or longer').not().isEmpty(),
+        check('startDate', 'Start date not valid').not().isEmpty(),
+        check('endDate', 'end date not valid').not().isEmpty(),
+        check('deadline', 'deadline not valid').not().isEmpty(),
+        check('body', 'The description must be 1 character or longer').not().isEmpty(),
+        check('maxparticipants', 'Please enter number of participants').isNumeric(),
+        check('price', 'Please input a price').isNumeric()
+    ],
+    postInfoCheck: [
+        check('headline', 'Headline must be 1 character or longer').not().isEmpty(),
+        check('body', 'The description must be 1 character or longer').not().isEmpty(),
     ]
 }
