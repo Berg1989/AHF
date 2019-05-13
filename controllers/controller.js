@@ -290,8 +290,8 @@ exports.findUserEvents = function (userid) {
     return EventModel.find({ "participants": { "$in": userid } })
 };
 
-exports.findEvents = () => {
-    return EventModel.find().exec();
+exports.findEvents = function (userid) {
+    return EventModel.find({ "participants": { "$ne": userid } })
 };
 
 exports.updatePost = (id, headline, body) => {
