@@ -1,111 +1,106 @@
 <div class="row">
     <div class="col">
-        <a href="/admin/users/">Brugere</a><span> > </span>
-        <span>{{user.info.firstname}} {{user.info.lastname}}</span>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        {{#if errors }}
-        {{#each errors }}
-        <p class="alert alert-danger">{{ this.msg }}</p>
-        {{/each}}
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
         {{/if}}
-        {{#if success }}
-        <p class="alert alert-success">{{ success.msg }}</p>
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
         {{/if}}
     </div>
 </div>
 <div class="row">
     <div class="col">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2>Bruger info:</h2>
-            </div>
-            <div class="panel-body">
-                <form method="post" action="/admin/users/id={{user._id}}">
-                    <div class="form-group">
-                        <label>Fornavn: (Påkrævet)</label>
-                        <input type="text" class="form-control" name="firstname" value="{{user.info.firstname}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Efternavn: (Påkrævet)</label>
-                        <input type="text" class="form-control" name="lastname" value="{{user.info.lastname}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Fødselsdato</label>
-                        <input type="date" class="form-control" name="birth" value="{{user.info.birth}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Tlf:</label>
-                        <input type="text" class="form-control" name="phone" value="{{user.info.phone}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Postnummer:</label>
-                        <input type="number" class="form-control" name="zipcode" value="{{user.info.zipcode}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>addresse:</label>
-                        <input type="text" class="form-control" name="street" value="{{user.info.street}}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="usertype">Bruger type:</label>
-                        <select name="usertype" class="form-control" id="typeselect">
-                            {{#select user.usertype._id}}
-                            {{#each usertypes}}
-                            <option value="{{this._id}}">{{this.title}}</option>
-                            {{/each}}
-                            {{/select}}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="func">Funktion:</label>
-                        <input type="text" class="form-control" name="func" value="{{user.info.func}}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Email: (Påkrævet)</label>
-                        <input type="text" class="form-control" name="email" placeholder="Nuværende: {{user.email}}" />
-                    </div>
-                    <div class="form-group">
-                        <p>Medlem siden: {{user.created}}</p>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Updater info</button>
-                    </div>
-                </form>
-                <form method="POST" action="/admin/users/id={{user._id}}/resetpw">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-danger">Reset password</button>
-                    </div>
-                </form>
-            </div>
+        <h2>{{user.info.firstname}} {{user.info.lastname}}</h2>
+        <hr>
+    </div>
+</div>
+<form method="post" action="/admin/users/id={{user._id}}" class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Fornavn: (Påkrævet)</label>
+            <input type="text" class="form-control" name="firstname" value="{{user.info.firstname}}" />
+        </div>
+        <div class="form-group">
+            <label>Efternavn: (Påkrævet)</label>
+            <input type="text" class="form-control" name="lastname" value="{{user.info.lastname}}" />
+        </div>
+        <div class="form-group">
+            <label>Fødselsdato</label>
+            <input type="date" class="form-control" name="birth" value="{{user.info.birth}}" />
+        </div>
+        <div class="form-group">
+            <label>Tlf:</label>
+            <input type="text" class="form-control" name="phone" value="{{user.info.phone}}" />
+        </div>
+        <div class="form-group">
+            <label>Postnummer:</label>
+            <input type="number" class="form-control" name="zipcode" value="{{user.info.zipcode}}" />
+        </div>
+        <div class="form-group">
+            <label>addresse:</label>
+            <input type="text" class="form-control" name="street" value="{{user.info.street}}" />
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="usertype">Bruger type:</label>
+            <select name="usertype" class="form-control" id="typeselect">
+                {{#select user.usertype._id}}
+                {{#each usertypes}}
+                <option value="{{this._id}}">{{this.title}}</option>
+                {{/each}}
+                {{/select}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="func">Funktion:</label>
+            <input type="text" class="form-control" name="func" value="{{user.info.func}}" />
+        </div>
+        <div class="form-group">
+            <label>Email: (Påkrævet)</label>
+            <input type="text" class="form-control" name="email" placeholder="Nuværende: {{user.email}}" />
+        </div>
+        <div class="form-group">
+            <p>Medlem siden: {{user.created}}</p>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Updater info</button>
+        </div>
+    </div>
+</form>
+<div class="row">
     <div class="col">
-        <h2>Kontingent info:</h2>
-        {{#if subscription}}
-        <p>Navn: {{subscription.model.name}}</p>
-        <p>Varighed: {{subscription.model.duration}} måneder</p>
-        <P>Pris: {{subscription.model.price}} DKK</P>
-        <p>Start dato: {{subscription.start}}</p>
-        <p>Slut dato: {{subscription.end}}</p>
-
-        <!-- Tjekker om kontingent er aktiv eller inaktiv -->
-        {{#if user.subscription.active}}
-        <p>Aktiv: <i class="fas fa-check subscriptionActiveStyle"></i></p>
-        {{else}}
-        <p>Aktiv: <i class="fas fa-times subscriptionInActiveStyle"></i></p>
-        {{/if}}
-        
-        <form method="POST" action="/admin/users/id={{user._id}}/unsubscribe">
+        <form method="POST" action="/admin/users/id={{user._id}}/resetpw">
             <div class="form-group">
-                <button type="submit" class="btn btn-danger">Deaktiver kontingent</button>
+                <button type="submit" class="btn btn-danger">Reset password</button>
             </div>
         </form>
-        {{else if user.subscription.end}}
-        <p>Denne bruger har stoppet sit kontingent, men dette er betalt til og med: {{user.subscription.end}}</p>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+        <h2>Kontingent info</h2>
+        {{#if currentSub}}
+        <p>Nuværende model:</p>
+        <div class="card" style="max-width:350px;margin 0 auto">
+            <div class="card-body">
+                <h5 class="card-title">{{currentSub.model.name}}</h5>
+                <p class="card-text">{{formatNumber currentSub.model.price style="currency" currency="DKK"}}</p>
+                <p class="card-text">Varighed: {{currentSub.model.duration}} måneder</p>
+                <p class="card-text">Start dato: {{currentSub.createdAt}}</p>
+                <p class="card-text">Udløbsdato: {{currentSub.expirationDate}}</p>
+            </div>
+        </div>
+
         {{else}}
-        <p>Denne bruger har intet aktivt kontingent</p>
+        <p>Denne bruger har ikke et aktivt kontingent</p>
         {{/if}}
     </div>
 </div>

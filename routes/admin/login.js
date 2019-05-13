@@ -13,7 +13,6 @@ router
         const messages = req.flash('error')
         res.render('public/login', {
             messages: messages,
-            hasErrors: messages.length > 0,
             metaTags: {
                 title: 'AHF Admin - Login',
                 description: 'Admin login page',

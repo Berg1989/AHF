@@ -1,20 +1,30 @@
 <div class="row">
     <div class="col">
-        {{#if errors }}
-        {{#each errors }}
-        <p class="alert alert-danger">{{ this.msg }}</p>
-        {{/each}}
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
         {{/if}}
-        {{#if success }}
-        <p class="alert alert-success">{{ success.msg }}</p>
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
         {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h1>Bruger håndtering</h1>
+        <hr>
     </div>
 </div>
 <div class="row">
     <div class="col">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2>Registrer ny bruger</h2>
+                <h3>Registrer ny bruger</h3>
             </div>
             <div class="panel-body">
                 <form method="post" action="/admin/users">
@@ -55,8 +65,11 @@
             </div>
         </div>
     </div>
+</div>
+<hr>
+<div class="row">
     <div class="col">
-        <h2>Rediger eksisterende brugere</h2>
+        <h3>Rediger eksisterende brugere</h3>
         <div>
             <label><b>Antal medlemmer: </b></label>
             <label><b>{{userCount}}</b></label>
@@ -87,7 +100,7 @@
                     <td>{{this.info.func}}</td>
 
                     <td align="center">
-                        {{#if this.subscription.active}}
+                        {{#if this.subscription}}
                         <i class="fas fa-check subscriptionActiveStyle"></i>
                         {{else}}
                         <i class="fas fa-times subscriptionInActiveStyle"></i>
@@ -98,8 +111,11 @@
                         <a href="/admin/users/id={{this._id}}" class="btn btn-primary"><i class="fas fa-wrench"></i></a>
                     </td>
 
-                    <td align="center"> <button type="submit" id="{{this._id}}" onclick="deleteUser(this.id)"
-                            class="btn btn-danger"><i class="fas fa-times"></i></button>
+                    <td align="center">
+                        <form action="/admin/users/{{this._id}}/delete" method="POST"
+                            onsubmit="return confirm('Er du sikker på denne handling?')">
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                        </form>
                     </td>
                 </tr>
                 {{/each}}
@@ -107,22 +123,7 @@
         </table>
     </div>
 </div>
-
 <script>
-    async function deleteUser(id) {
-        const res = window.confirm('Vil du slette denne bruger?');
-        if (res) {
-            try {
-                const response = await fetch('/admin/users/id=' + id, {
-                    method: 'DELETE',
-                })
-                if (response.status === 200) location.reload(true);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    };
-
     async function search() {
         const searchterm = document.getElementById("search").value;
 

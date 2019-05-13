@@ -26,13 +26,12 @@ exports.findSubscriptionModels = () => {
     return SubscriptionModel.find().exec();
 };
 
-exports.updateSubscriptionModel = (id, name, duration, price, active) => {
+exports.updateSubscriptionModel = (id, name, duration, price) => {
     return SubscriptionModel.findByIdAndUpdate(id, {
         $set: {
             name: name,
             duration: duration,
-            price: price,
-            active: active
+            price: price
         }
     }).exec();
 };
@@ -163,11 +162,11 @@ exports.findUserSubscription = (userid) => {
     return Subscriptions.findOne({ user: userid }).populate('model').exec();
 };
 
-exports.createSubscription = (modelid, start, end) => {
+exports.createSubscription = (user, model) => {
     const sub = new Subscriptions();
-    sub.start = start;
-    sub.end = end;
-    sub.model = modelid;
+    sub.model = model;
+    sub.user = user;
+    sub.expirationDate = sub.getExpDate(model);
 
     return sub.save();
 };

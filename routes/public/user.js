@@ -27,7 +27,7 @@ router
         });
     })
 
-    .get('/logout', function (req, res, next) {
+    .get('/logout',auth.isLoggedIn, function (req, res, next) {
         req.logout();
         res.redirect('/user/login');
     })
@@ -47,7 +47,7 @@ router
         });
     })
 
-    .post('/:id/info/', validate.userinfo, async (request, response, next) => {
+    .post('/:id/info/',auth.isLoggedIn, validate.userinfo, async (request, response, next) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
@@ -84,21 +84,15 @@ router
             messages: { errors, success },
             subscriptionModels: await controller.findSubscriptionModels(),
             currentSub: userSub ? userSub : false,
-            isExpired: userSub.getEndDate() < new Date() ? true : false,
             user: user
         });
     })
 
-    //TODO: Change this method
-    .post('/:id/subscription', async (request, response) => {
+    .post('/:id/subscription', auth.isLoggedIn, async (request, response) => {
         const user = await controller.findUser(request.params.id);
         if (user) {
             const model = await controller.findSubscriptionModel(request.body.modelId);
-            const today = new Date();
-            const start = today.toDateString();
-            const end = new Date(today.setMonth(today.getMonth() + parseInt(model.duration))).toDateString();
-
-            const newSub = await controller.createSubscription(model, start, end);
+            const newSub = await controller.createSubscription(user, model);
             const result = await controller.connectSubToUser(user._id, newSub._id);
 
             if (result && newSub) {
@@ -113,29 +107,7 @@ router
         }
     })
 
-    .post('/:id/update-subscription', async (request, response) => {
-        const user = await controller.findUser(request.params.id);
-        if (user) {
-            const model = await controller.findSubscriptionModel(request.body.modelId);
-            const today = new Date();
-            const start = today.toDateString();
-            const end = new Date(today.setMonth(today.getMonth() + parseInt(model.duration))).toDateString();
-
-            const result = await controller.updateSubsciption(user.subscription, start, end, model._id);
-
-            if (result) {
-                request.flash('success', 'Success - Dit kontingent er aktiveret')
-                response.redirect('/user/subscription');
-            } else {
-                request.flash('error', 'Ups der skete en fejl')
-                response.redirect('/user/subscription');
-            }
-        } else {
-            response.sendStatus(404);
-        }
-    })
-
-    .post('/:id/change-email', validate.userChangeEmail, async (request, response) => {
+    .post('/:id/change-email',auth.isLoggedIn, validate.userChangeEmail, async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
@@ -153,7 +125,7 @@ router
         }
     })
 
-    .post('/:id/change-password', validate.userChangePassword, async (request, response) => {
+    .post('/:id/change-password', auth.isLoggedIn, validate.userChangePassword, async (request, response) => {
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
