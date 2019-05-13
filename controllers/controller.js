@@ -252,10 +252,6 @@ exports.eventSignOff = (eventId, userId) => {
     }).exec();
 };
 
-exports.findUserEvents = function(userid) {
-    return findEvents().participants.find().aggregate({match: { _id: userid } }).exec();
-};
-
 exports.findEvents = () => {
     return EventModel.find().exec();
 };
@@ -269,14 +265,6 @@ exports.findPosts = () => {
 
 exports.deleteEvent = async id => {
     return EventModel.findByIdAndDelete(id).exec();
-}
-
-exports.eventSignOff = (eventId, userId) => {
-    return EventModel.findByIdAndUpdate(eventId, {
-        $pull: {
-            participants: userId
-        }
-    }).exec();
 }
             
 exports.deletePost = id => {
@@ -307,8 +295,12 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
     }).exec();
 };
 
-exports.findUserEvents = function(userid) {
+/* exports.findUserEvents = function(userid) {
     return EventModel.find().populate({ path: 'participants', match: { _id: userid } }).exec();
+}; */
+exports.findUserEvents = function(userid) {
+    return User.find().
+    /* return findEvents().participants.find().aggregate({match: { _id: userid } }).exec(); */
 };
 
 exports.findEvents = () => {

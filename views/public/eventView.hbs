@@ -22,7 +22,7 @@
         {{/each}}
         {{/if}}
         {{#if success }}
-        <p class="alert alert-success">{{ success.msg }}</p>
+        <p class="alert alert-success">{{ this.msg }}</p>
         {{/if}}
     </div>
 </div>
@@ -58,7 +58,7 @@
         </div>
     </div>
 
-    <form method="POST" action="/events/{{events._id}}/signup">
+    <form method="POST" action="/events/{{events._id}}/signUp">
         <div class="form-group">
             <button type="submit" class="btn btn-danger">Tilmeld</button>
         </div>

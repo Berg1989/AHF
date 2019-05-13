@@ -7,7 +7,7 @@ const { check, validationResult } = require('express-validator/check');
 router
 
     .get('/', async (request, response) => {
-        const user = request.session.user;
+        const user = request.user;
         response.render('public/events', {
             user: user,
             errors: request.session.errors,
@@ -18,12 +18,12 @@ router
         request.session.errors = null;
     })
 
-    .post('/:id/signup', async (request, response) => {
-        const user = request.session.user;
+    .post('/:id/signUp', async (request, response) => {
+        const user = request.user
         try {
             if (await controller.eventSignUp(request.params.id, user._id)) {
                 request.session.success = { msg: 'Tilmelding oprettet' };
-                response.redirect('events');
+                response.redirect('/events');
             }
         } catch (err) {
             request.session.errors = { msg: 'Der skete en fejl!' };
