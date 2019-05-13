@@ -23,7 +23,7 @@ router
         try {
             if (await controller.eventSignUp(request.params.id, user._id)) {
                 request.session.success = { msg: 'Tilmelding oprettet' };
-                response.redirect('back');
+                response.redirect('events');
             }
         } catch (err) {
             request.session.errors = { msg: 'Der skete en fejl!' };
@@ -31,7 +31,7 @@ router
         }
     })
 
-.get('/id=:id', async function (request, response) {
+.get('/:id', async function (request, response) {
         const event = await controller.findEvent(request.params.id); 
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;

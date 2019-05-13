@@ -32,7 +32,7 @@
                             <td>{{this.enddate}}</td>
                             <td>{{this.price}}</td>
                             <td>
-                                <form method="POST" action='/events/:id'>
+                                <form method="get" action='/events/{{this.id}}'>
                                     <button type="submit" class="btn btn-primary"><i class="fas fa-angle-right"></i></button>
                                 </form>
                             </td>
