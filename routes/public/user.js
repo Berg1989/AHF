@@ -188,11 +188,10 @@ router
         });
     })
 
-    .post('/events/eventid=:id/remove', async (request, response) => {
-        const event = request.params.id;
+    .post('/events/:id/remove', async (request, response) => {
         const user = request.user;
         try {
-            if (await controller.eventSignOff(event, user._id)) {
+            if (await controller.eventSignOff(request.params.id, user._id)) {
                 response.redirect('back');
             }
         } catch (err) {

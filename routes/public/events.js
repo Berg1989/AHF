@@ -12,7 +12,7 @@ router
             user: user,
             errors: request.session.errors,
             success: request.session.success,
-            events: await controller.findEvents(user),
+            events: await controller.findEvents(user._id),
         });
         request.session.success = null;
         request.session.errors = null;

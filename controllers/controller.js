@@ -286,25 +286,14 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
     }).exec();
 };
 
-exports.findUserEvents = async function (userid) {
-    const events = EventModel.find().exec();
-    const userEvents = [];
-    for (let i = 0; i < events.length; i++)
-        for (let u = 0; u < events[i].participants.length; u++) {
-            if (events[i].participants[u].id == userid) {
-                userEvents.push(events[i]);
-            }
-        }
-    return userEvents;
+exports.findUserEvents = function (userid) {
+    return EventModel.find({ "participants": { "$in": userid } })
 };
 
-exports.checkParticipants = function (eventid, userid) {
-    return EventModel.findById(eventid).participants.find({ "participants.id": { "id": userid } });
-}
-
-exports.findEvents = () => {
-    return EventModel.find().exec();
+exports.findEvents = function (userid) {
+    return EventModel.find({ "participants": { "$ne": userid } })
 };
+
 exports.updatePost = (id, headline, body) => {
 
     return PostModel.findByIdAndUpdate(id, {
