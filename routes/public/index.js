@@ -25,6 +25,16 @@ router
         });
         request.session.success = null;
         request.session.errors = null;  
-    });
+    })
+
+    .get('/contact', async (request, response) => {
+        response.render('public/contact', {
+            metaTags: {
+                title: 'AHF - Contact',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
+        })
+    })
 
 module.exports = router;
