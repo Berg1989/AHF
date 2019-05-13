@@ -44,11 +44,12 @@
         </ul>
         <hr>
         <p>Total pris: <strong>{{formatNumber totalPrice style="currency" currency="DKK"}}</strong></p>
+        <p><a class="btn btn-danger" href="/shop/empty-cart">Tøm kurven</a></p>
     </div>
     <div class="col-md-6">
         <form action="/shop/cart/checkout" method="POST">
             <div class="form-group">
-                <label>Telefon nummer: (Påkrævet)</label>
+                <label>Købers telefonnummer: (Påkrævet)</label>
                 <input type="number" class="form-control" name="phone" />
             </div>
             <div class="form-group">

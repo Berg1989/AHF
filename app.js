@@ -30,6 +30,8 @@ const adminShop = require('./routes/admin/shop');
 const adminNews = require('./routes/admin/news');
 
 const shop = require('./routes/shop/shop');
+const shopLogin = require('./routes/shop/login');
+const shopOrders = require('./routes/admin/orders');
 
 // MONGODB & MONGOOSE SETUP
 const mongoose = require('mongoose');
@@ -82,10 +84,12 @@ app.use('/admin/users', adminUsers);
 app.use('/admin/subscriptions', adminSubscriptions);
 app.use('/admin/news', adminNews);
 app.use('/admin/shop', adminShop);
+app.use('/admin/shop/orders', shopOrders);
 app.use('/admin', admin);
 
 // SHOP
 app.use('/shop', shop);
+app.use('/shop/login', shopLogin);
 
 // PUBLIC
 app.use('/user/login', userLogin);

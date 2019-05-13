@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col">
+        <h1>Ordre historik</h1>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this.msg }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <form action="/admin/shop/orders" method="POST" class="row align-items-end">
+            <div class="form-group col-md-4">
+                <label for="start">Angiv startdato: (Påkrævet)</label>
+                <input type="date" name="start" class="form-control">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="end">Angiv slutdato: (Påkrævet)</label>
+                <input type="date" name="end" class="form-control">
+            </div>
+            <div class="form-group col-md-4">
+                <button type="submit" class="btn btn-primary">Søg</button>
+            </div>
+        </form>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+        {{#if orders}}
+        <p>Viser ordre for perioden: <strong>{{period.start}} - {{period.end}}</strong></p>
+        {{#each orders}}
+        <div class="card">
+            <div class="card-header">
+                Ordre ID: {{this._id}}
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <span>Køber: {{this.recipient}} | </span>
+                    <span>Sælger: {{this.seller.info.firstname}} {{this.seller.info.lastname}} </span>
+                </p>
+                <p class="card-text">Ordre dato: {{this.date}}</p>
+                <hr>
+                <h5 class="card-title">Ordrelinjer:</h5>
+                <ul class="list-group list-group-flush"></ul>
+                {{#each this.orderlines}}
+                <li class="list-group-item"><span class="badge badge-secondary badge-pill">{{this.qty}}</span>
+                    {{this.product.name}} - <strong>{{formatNumber this.price style="currency" currency="DKK"}}</strong>
+                </li>
+                {{/each}}
+                </ul>
+                <br>
+                <p class="card-text">Total pris:
+                    <strong>{{formatNumber this.price style="currency" currency="DKK"}}</strong></p>
+            </div>
+        </div>
+        <br>
+        {{/each}}
+        {{else}}
+        <h2>Ingen ordre registreret i perioden</h2>
+        {{/if}}
+    </div>
+</div>

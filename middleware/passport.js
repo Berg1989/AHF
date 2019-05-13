@@ -117,3 +117,37 @@ passport.use('local.adminlogin', new LocalStrategy({
         return done(null, false, { message: 'WE FAILED, PLEASE DONT HURT US!' });
     }
 }));
+
+passport.use('local.shopLogin', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true //Så vi kan validere req med express-validater
+}, async function (req, email, password, done) {
+    req.checkBody('email', 'Email påkrævet').isEmail();
+    req.checkBody('password', 'Password påkrævet (min. 5 tegn)').isString().isLength({ min: 5 });
+    const errors = req.validationErrors();
+    if (errors) {
+        let messages = [];
+        errors.forEach(error => {
+            messages.push(error.msg);
+        });
+        return done(null, false, req.flash('error', messages));
+    }
+
+    try {
+        const user = await controller.checkEmail(email);
+        if (!user) {
+            return done(null, false, { message: 'Ukendt email' });
+        }
+        if(user.usertype.level > 2) {
+            return done(null, false, { message: 'Ukendt email' });
+        }
+        if (!await user.checkPassword(password)) {
+            return done(null, false, { message: 'Email og password matcher ikke' });
+        }
+
+        return done(null, user);
+    } catch (err) {
+        return done(null, false, { message: 'WE FAILED, PLEASE DONT HURT US!' });
+    }
+}));
