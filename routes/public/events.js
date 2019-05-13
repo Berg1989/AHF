@@ -31,7 +31,7 @@ router
         }
     })
 
-.get('/id=:id', async function (request, response) {
+.get('/:id', async function (request, response) {
         const event = await controller.findEvent(request.params.id); 
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;
