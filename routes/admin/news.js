@@ -37,10 +37,10 @@ router
             response.render('admin/createpost', {
                 action: '/createpost',
                 messages: { errors, success },
-                inputs: request.inputs,
+                inputs: request.session.inputs,
                 user: request.user
             });
-            request.inputs = null;
+            request.session.inputs = null;
         } else {
             response.redirect('/');
         }
@@ -60,10 +60,10 @@ router
             response.render('admin/createevent', {
                 action: '/createevent',
                 messages: { errors, success },
-                inputs: request.inputs,
+                inputs: request.session.inputs,
                 user: user
             });
-            request.inputs = null;
+            request.session.inputs = null;
 
 
         } else {
@@ -77,7 +77,7 @@ router
             const errors = validationResult(request);
             if (!errors.isEmpty()) {
                 request.flash('error', await errors.array());
-                request.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
+                request.session.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
                 response.redirect('/admin/news/createevent')
             } else {
                 const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
@@ -100,7 +100,7 @@ router
             const errors = validationResult(request);
             if (!errors.isEmpty()) {
                 request.flash('error', await errors.array());
-                request.inputs = { headline: request.body.headline, body: request.body.body };
+                request.session.inputs = { headline: request.body.headline, body: request.body.body };
                 response.redirect('/admin/news/createpost')
             } else {
                 const { headline, body } = request.body;
@@ -154,10 +154,10 @@ router
                 response.render('admin/post', {
                     layout: 'admin',
                     post,
-                    inputs: request.inputs,
+                    inputs: request.session.inputs,
                     messages: { errors, success }
                 });
-                request.inputs = null;
+                request.session.inputs = null;
             }
         } catch (err) {
             response.render('error');
@@ -179,10 +179,10 @@ router
                 response.render('admin/event', {
                     layout: 'admin',
                     event,
-                    inputs: request.inputs,
+                    inputs: request.session.inputs,
                     messages: { errors, success }
                 });
-                request.inputs = null;
+                request.session.inputs = null;
             }
         } catch (err) {
             response.render('error');
@@ -196,7 +196,7 @@ router
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
-            request.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
+            request.session.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
             response.redirect('/admin/news/eventedit/' + request.params.id)
         } else {
             const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
@@ -212,7 +212,7 @@ router
             const errors = validationResult(request);
             if (!errors.isEmpty()) {
                 request.flash('error', await errors.array());
-                request.inputs = { headline: request.body.headline, body: request.body.body };
+                request.session.inputs = { headline: request.body.headline, body: request.body.body };
                 response.redirect('/admin/news/postedit/' + request.params.id)
             } else {
                 const { headline, body } = request.body;
