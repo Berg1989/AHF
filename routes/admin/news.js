@@ -72,9 +72,8 @@ router
     })
 
     .post('/createevent', validate.eventInfoCheck, /* auth.adminIsLoggedIn, */ async (request, response) => {
-        const user = request.session.user;
+        const user = request.user;
         if (user) {
-
             const errors = validationResult(request);
             if (!errors.isEmpty()) {
                 request.flash('error', await errors.array());
@@ -95,7 +94,7 @@ router
 
 
     .post('/createpost', validate.postInfoCheck, /* auth.adminIsLoggedIn, */ async (request, response) => {
-        const user = request.session.user;
+        const user = request.user;
         if (user) {
 
             const errors = validationResult(request);

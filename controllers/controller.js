@@ -221,7 +221,6 @@ exports.createPost = (headline, body, author) => {
 };
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
-
     const event = new EventModel({
         headline: headline,
         author: author,
