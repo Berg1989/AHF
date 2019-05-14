@@ -164,6 +164,13 @@ exports.findOrder = (id) => {
     return Order.findById(id).exec();
 };
 
+exports.findOrders = (start, end) => {
+    return Order.find({ "date": { "$gte": start, "$lt": end } }).populate('seller').populate({
+        path: 'orderlines',
+        populate: { path: 'product' }
+    }).exec();
+};
+
 exports.deleteOrder = (id) => {
     return Order.findByIdAndRemove(id).exec();
 };

@@ -36,3 +36,23 @@ module.exports.adminNotloggedIn = function (req, res, next) {
     }
     res.redirect('/admin');
 };
+
+module.exports.shopIsLoggedIn = async function (req, res, next) {
+    try {
+        const usertype = await controller.findUsertype(req.user.usertype);
+        if (req.isAuthenticated() && usertype.level <= 2) {
+            return next();
+        }
+        res.redirect('/');
+    } catch (err) {
+        res.redirect('/');
+
+    }
+};
+
+module.exports.shopNotloggedIn = function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/shop');
+};

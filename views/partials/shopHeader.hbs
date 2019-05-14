@@ -17,11 +17,17 @@
                         <a class="nav-link" href="/shop">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/shop/cart">Kurv <span
+                        <a class="nav-link" href="/shop/cart"><i class="fas fa-shopping-cart"></i> <span
                                 class="badge badge-secondary badge-pill">{{session.cart.totalQty}}</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/shop/logout">Logout</a>
+                        </div>
                     </li>
                 </ul>
             </div>

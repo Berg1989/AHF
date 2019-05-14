@@ -113,4 +113,16 @@ module.exports = {
         check('duration', 'Varighed er påkrævet').isDecimal(),
         check('price', 'Pris er påkrævet').isDecimal(),
     ],
+    adminOrderDates: [
+        check('start', 'Startdato påkrævet').not().isEmpty().custom(async (start, { req }) => {
+            const startD = new Date(start);
+            const endD = new Date(req.body.end);
+            if (startD > endD) {
+                return Promise.reject('Startdato skal være mindre end slutdato');
+            } else {
+                return true;
+            }
+        }),
+        check('end', 'Slutdato påkrævet').not().isEmpty()
+    ]
 }

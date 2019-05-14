@@ -9,24 +9,23 @@ const auth = require('../../middleware/authentications');
 router.use(csrfProtection)
 
 router
-    .get('/', auth.notloggedIn, function (req, res, next) {
+    .get('/', auth.shopNotloggedIn, function (req, res, next) {
         const messages = req.flash('error')
-        res.render('public/register', {
+        res.render('public/login', {
             messages: messages,
-            hasErrors: messages.length > 0,
             metaTags: {
-                title: 'AHF - Registrering',
-                description: 'User register page',
-                keywords: 'Register and stuff'
+                title: 'AHF Shop - Login',
+                description: 'Shop login page',
+                keywords: 'Login and stuff'
             },
-            action: '/user/register',
+            action: '/shop/login',
             csrfToken: req.csrfToken(),
         });
     })
 
-    .post('/', passport.authenticate('local.register', {
-        successRedirect: '/user/info',
-        failureRedirect: '/user/register',
+    .post('/', passport.authenticate('local.shopLogin', {
+        successRedirect: '/shop',
+        failureRedirect: '/shop/login',
         failureFlash: true
     }));
 

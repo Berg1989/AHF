@@ -27,7 +27,16 @@ router
             messages: { errors, success },
             events: await controller.findEvents(user),
         });
-        
-    });
+    })
+
+    .get('/contact', async (request, response) => {
+        response.render('public/contact', {
+            metaTags: {
+                title: 'AHF - Contact',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
+        })
+    })
 
 module.exports = router;

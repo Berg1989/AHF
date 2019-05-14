@@ -9,10 +9,8 @@ const user = new Schema({
     info: {
         firstname: { type: String, required: true },
         lastname: { type: String, required: true },
-        birth: String,
-        phone: String,
-        zipcode: Number,
-        street: String,
+        comments: { type: String, require: true },
+        isLegalAge: { type: Boolean, require: true },
         func: String
     },
     usertype: { type: Schema.Types.ObjectId, ref: 'usertypes', required: true },

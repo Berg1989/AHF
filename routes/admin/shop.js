@@ -53,7 +53,7 @@ router
     })
 
     //Edit category
-    .get('/categories/:id', async (request, response) => {
+    .get('/categories/:id', auth.adminIsLoggedIn, async (request, response) => {
         const errors = request.flash('error');
         const success = request.flash('success');
         const category = await shopController.findCategory(request.params.id);
@@ -72,7 +72,7 @@ router
         }
     })
 
-    .post('/categories/:id', [
+    .post('/categories/:id', auth.adminIsLoggedIn, [
         check('name', 'Navn er påkrævet').isString().isLength({ min: 2 }).custom(async (name) => {
             if (await shopController.checkCategoryName(name)) {
                 return Promise.reject('Dette navn er allerede i brug');
@@ -100,7 +100,7 @@ router
     })
 
     //Delete category
-    .post('/categories/:id/remove', async (request, response) => {
+    .post('/categories/:id/remove', auth.adminIsLoggedIn, async (request, response) => {
         const category = await shopController.findCategory(request.params.id);
         if (category) {
             for (let product of category.products) {
