@@ -27,7 +27,7 @@ router
         });
     })
 
-    .get('/logout',auth.isLoggedIn, function (req, res, next) {
+    .get('/logout', auth.isLoggedIn, function (req, res, next) {
         req.logout();
         res.redirect('/user/login');
     })
@@ -53,9 +53,10 @@ router
             request.flash('error', await errors.array());
             response.redirect('/user/info');
         } else {
-            const { firstname, lastname, birth, phone, zipcode, street } = request.body;
+            const { firstname, lastname } = request.body;
             try {
-                const result = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, request.user.info.func);
+                const user = await controller.findUser(request.user);
+                const result = await controller.updateUserInfo(request.params.id, firstname, lastname, user.info.comments, user.info.isLegalAge, user.info.func);
 
                 if (result) {
                     request.flash('success', 'Success');

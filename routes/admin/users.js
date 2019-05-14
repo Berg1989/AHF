@@ -29,7 +29,6 @@ router
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
-            request.session.inputs = { email: request.body.email, firstname: request.body.firstname, lastname: request.body.lastname, func: request.body.func };
             response.redirect('back');
         } else {
             const { usertype, email, password, firstname, lastname, func } = request.body;
@@ -94,9 +93,13 @@ router
             request.flash('error', await errors.array());
             response.redirect('back');
         } else {
-            const { firstname, lastname, birth, phone, zipcode, street, usertype, func, email } = request.body;
+            const { firstname, lastname, isLegalAge, comments, usertype, func, email } = request.body;
+            let checked = false;
+            if (isLegalAge === 'checked') {
+                checked = true;
+            }
 
-            const res1 = await controller.updateUserInfo(request.params.id, firstname, lastname, birth, phone, zipcode, street, func);
+            const res1 = await controller.updateUserInfo(request.params.id, firstname, lastname, comments, checked, func);
             const res2 = await controller.updateUserType(request.params.id, usertype);
             if (email) await controller.updateUserEmail(request.params.id, email);
 

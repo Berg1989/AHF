@@ -8,7 +8,7 @@ const session = require('express-session');
 const hbs = require('handlebars'); //View engine middleware
 const xhbs = require('express-handlebars') //Udvidelse til handlebars
 const expressValidator = require('express-validator'); //Input validering af req.body
-const cookeParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser'); //Middleware til at parse req.body
 const handlebarsIntl = require('handlebars-intl'); //Middleware til hbs data formatering
 const MongoStore = require('connect-mongo')(session); //Gemme session i mongodb i stedet for sysMem
@@ -52,7 +52,7 @@ app.use(express.json());
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookeParser());
+app.use(cookieParser());
 app.use(session({
   secret: 'hemmelig',
   saveUninitialized: false,

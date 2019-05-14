@@ -55,21 +55,21 @@ exports.createUser = async (email, password, firstname, lastname, usertype, func
     newUser.info.firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
     newUser.info.lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
     newUser.info.func = func;
+    newUser.info.comments = '';
+    newUser.info.isLegalAge = false;
     newUser.usertype = usertype;
 
     return newUser.save();
 };
 
-exports.updateUserInfo = (id, firstname, lastname, birth, phone, zipcode, street, func) => {
+exports.updateUserInfo = (id, firstname, lastname, comments, isLegalAge, func) => {
     return User.findByIdAndUpdate(id, {
         $set: {
             info: {
                 firstname: firstname,
                 lastname: lastname,
-                birth: birth,
-                phone: phone,
-                zipcode: zipcode,
-                street: street,
+                comments: comments,
+                isLegalAge: isLegalAge,
                 func: func
             }
         }

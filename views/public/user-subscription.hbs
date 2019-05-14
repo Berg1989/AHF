@@ -19,8 +19,10 @@
         <h2>Kontingent info</h2>
         <hr>
         {{#if currentSub}}
-        <p>Nuværende model:</p>
-        <div class="card" style="max-width:350px;margin 0 auto">
+        <div class="card">
+            <div class="card-header">
+                Nuværende model
+            </div>
             <div class="card-body">
                 <h5 class="card-title">{{currentSub.model.name}}</h5>
                 <p class="card-text">{{formatNumber currentSub.model.price style="currency" currency="DKK"}}</p>
@@ -29,7 +31,6 @@
                 <p class="card-text">Udløbsdato: {{currentSub.expirationDate}}</p>
             </div>
         </div>
-
         {{else}}
         <p>Du har ikke et kontingent endnu</p>
         <p>Vælg et kontingent nedenfor:</p>
