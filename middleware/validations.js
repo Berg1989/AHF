@@ -7,10 +7,6 @@ module.exports = {
     userinfo: [
         check('firstname', 'Fornavn skal udfyldes').isString().isLength({ min: 2 }),
         check('lastname', 'Efternavn skal udfyldes').isString().isLength({ min: 2 }),
-        check('birth', 'Invalid input').optional({ checkFalsy: true }).isString(),
-        check('phone', 'Invalid input').optional({ checkFalsy: true }).isString(),
-        check('zipcode', 'Postnummer skal være et tal').optional({ checkFalsy: true }).isDecimal(),
-        check('street', 'Invalid input').optional({ checkFalsy: true }).isString()
     ],
     userLogin: [
         check('email', 'Email påkrævet').isEmail(),
@@ -74,9 +70,6 @@ module.exports = {
             .isLength({ min: 2 }),
         check('lastname', 'Efternavn skal udfyldes')
             .isLength({ min: 2 }),
-        check('zipcode', 'Postnummer skal være et tal')
-            .optional({ checkFalsy: true }) // Can be falsy
-            .isDecimal(),
         check('email', 'Email er påkrævet')
             .optional({ checkFalsy: true }) // Can be falsy
             .isEmail()

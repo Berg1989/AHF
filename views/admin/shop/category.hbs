@@ -72,22 +72,38 @@
         </form>
     </div>
 </div>
-<hr>
+<br>
 <div class="row">
     <div class="col">
         <h2>Produkter</h2>
-        {{#each category.products}}
-        <div class="row justify-content-between" style="border-bottom:1px solid #eeee;padding:5px">
-            <div class="col">{{this.name}}</div>
-            <div class="align-right col">
-                <a href="/admin/shop/categories/{{../category._id}}/products/{{this._id}}" class="btn btn-primary"><i
-                        class="fas fa-wrench"></i></a>
-                <form class="inline-form" onsubmit="return confirm('Er du sikker på denne handling?')"
-                    action="/admin/shop/categories/{{../category._id}}/products/{{this._id}}/remove" method="POST">
-                    <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
-                </form>
-            </div>
-        </div>
-        {{/each}}
+        <hr>
+        <table cellpadding='10'>
+            <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Pris(DKK)</th>
+                    <th>Størrelse</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each category.products}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.size}}</td>
+                    <td class="align-right">
+                        <a href="/admin/shop/categories/{{../category._id}}/products/{{this._id}}"
+                            class="btn btn-primary"><i class="fas fa-wrench"></i></a>
+                        <form class="inline-form" onsubmit="return confirm('Er du sikker på denne handling?')"
+                            action="/admin/shop/categories/{{../category._id}}/products/{{this._id}}/remove"
+                            method="POST">
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 </div>

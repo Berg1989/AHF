@@ -68,27 +68,32 @@
         </form>
     </div>
 </div>
-<hr>
+<br>
 <div class="row">
     <div class="col">
         <h3>Oversigt</h3>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
         {{#each categories}}
-        <div class="category-admin-wrap">
-            <div class="row justify-content-between categories-backend">
-                <div class="col">{{this.name}}</div>
-                <div class="align-right col">
+        <table style="width:100%" cellpadding='10'>
+            <tr>
+                <th>{{this.name}}</th>
+                <td class="align-right">
                     <a href="/admin/shop/categories/{{this._id}}" class="btn btn-primary"><i
                             class="fas fa-wrench"></i></a>
                     <form class="inline-form" action="/admin/shop/categories/{{this._id}}/remove" method="POST"
                         onsubmit="return confirm('OBS! Slettes denne kategori, slettes alle tilhørende produkter også. Er du sikker på denne handling?')">
                         <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
                     </form>
-                </div>
-            </div>
+                </td>
+            </tr>
             {{#each this.products}}
-            <div class="row justify-content-between products-backend">
-                <div class="col">{{this.name}}</div>
-                <div class="align-right col">
+            <tr style="border-left:5rem solid white">
+                <td>{{this.name}}</td>
+                <td>
                     <a href="/admin/shop/categories/{{../this._id}}/products/{{this._id}}" class="btn btn-primary"><i
                             class="fas fa-wrench"></i></a>
                     <form class="inline-form"
@@ -97,10 +102,11 @@
                         <button onclick="confirm('Er du sikker på denne handling?')" type="submit"
                             class="btn btn-danger"><i class="fas fa-times"></i></button>
                     </form>
-                </div>
-            </div>
+                </td>
+            </tr>
             {{/each}}
-        </div>
+        </table>
+        <hr>
         {{/each}}
     </div>
 </div>
