@@ -44,9 +44,15 @@
             <p class="col-lg-6" readonly>{{posts.body}}</p>
         </div>
     </div>
+    <div class="form-group">
+        <button class="btn btn-danger btnMargin" onclick="goBack()">Tilbage</button>
+    </div>
 
 </div>
 
 <script>
+    function goBack() {
+        window.history.back();
+    };
     updateTimeView(); 
 </script>

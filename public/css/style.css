@@ -100,3 +100,7 @@ tr {
   .body-container {
     padding: 50px 0;
   }
+
+  .btnMargin {
+    margin-left: 5px;
+  }
