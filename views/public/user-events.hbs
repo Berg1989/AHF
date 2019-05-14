@@ -17,7 +17,7 @@
                                     <th>Start Dato</th>
                                     <th>Slut Dato</th>
                                     <th>Pris</th>
-
+                                    <th>Mere</th>
                                     <th>Afmeld</th>
                                 </tr>
                             </thead>
@@ -30,12 +30,17 @@
                                     <td>{{this.enddate}}</td>
                                     <td>{{this.price}}</td>
                                     <td>
+                                <form method="get" action='/events/{{this.id}}'>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-angle-right"></i></button>
+                                </form>
+                            </td>
+                                    <td>
                                         <form method="POST"
                                             onsubmit="return confirm('Vil du framelde dig dette event?')"
                                             action='/user/events/{{this.id}}/remove'>
                                             <button type="submit" class="btn btn-danger"><i
                                                     class="fas fa-times"></i></button>
-                                        </form>
+                                        </form></td>
                                 </tr>
                                 {{/each}}
                             </tbody>
