@@ -8,9 +8,10 @@ const validate = require('../../middleware/validations');
 
 router
 
-    .get('/', /* auth.adminIsLoggedIn , */async function (request, response) {
+    .get('/', auth.adminIsLoggedIn, async function (request, response) {
         const errors = request.flash('error');
         const success = request.flash('success');
+
         response.locals.metaTags = {
             title: 'Admin - News',
             description: '',
@@ -25,94 +26,73 @@ router
         });
     })
 
-    .get('/createpost', /* auth.adminIsLoggedIn , */function (request, response) {
-        const user = request.user;
+    .get('/createpost', auth.adminIsLoggedIn, function (request, response) {
         const errors = request.flash('error');
         const success = request.flash('success');
-        if (user) {
-            response.locals.metaTags = {
-                title: 'Admin - Lav opslag',
-                description: '',
-                keywords: ''
-            };
-            response.render('admin/createpost', {
-                layout: 'admin',
-                action: '/createpost',
-                messages: { errors, success },
-                inputs: request.session.inputs,
-                user: request.user
-            });
-            request.session.inputs = null;
-        } else {
-            response.redirect('/');
-        }
+        response.locals.metaTags = {
+            title: 'Admin - Lav opslag',
+            description: '',
+            keywords: ''
+        };
+        response.render('admin/createpost', {
+            layout: 'admin',
+            action: '/createpost',
+            messages: { errors, success },
+            inputs: request.session.inputs,
+        });
+        request.session.inputs = null;
     })
 
-    .get('/createevent', function (request, response) {
-        const user = request.user;
+    .get('/createevent', auth.adminIsLoggedIn, function (request, response) {
+
         const errors = request.flash('error');
         const success = request.flash('success');
-        if (user) {
 
-            response.locals.metaTags = {
-                title: 'Admin - Lav event',
-                description: '',
-                keywords: ''
-            };
-            response.render('admin/createevent', {
-                layout: 'admin',
-                action: '/createevent',
-                messages: { errors, success },
-                inputs: request.session.inputs,
-                user: user
-            });
-            request.session.inputs = null;
-
-
-        } else {
-            response.redirect('/');
-        }
+        response.locals.metaTags = {
+            title: 'Admin - Lav event',
+            description: '',
+            keywords: ''
+        };
+        response.render('admin/createevent', {
+            layout: 'admin',
+            action: '/createevent',
+            messages: { errors, success },
+            inputs: request.session.inputs,
+        });
+        request.session.inputs = null;
     })
 
-    .post('/createevent', validate.eventInfoCheck, /* auth.adminIsLoggedIn, */ async (request, response) => {
-        const user = request.user;
-        if (user) {
-            const errors = validationResult(request);
-            if (!errors.isEmpty()) {
-                request.flash('error', await errors.array());
-                request.session.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
-                response.redirect('/admin/news/createevent')
-            } else {
-                const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
-                if (await controller.createEvent(headline, user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
+    .post('/createevent', validate.eventInfoCheck, auth.adminIsLoggedIn, async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.flash('error', await errors.array());
+            request.session.inputs = { headline: request.body.headline, startDate: request.body.startDate, endDate: request.body.endDate, body: request.body.body, deadline: request.body.deadline, maxparticipants: request.body.maxparticipants, price: request.body.price };
+            response.redirect('/admin/news/createevent')
+        } else {
+            const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
+            if (await controller.createEvent(headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
 
-                    request.flash('success', 'Success - Ny begivenhed: ' + headline + ', er oprettet');
-                    response.redirect('/admin/news')
-                }
-
+                request.flash('success', 'Success - Ny begivenhed: ' + headline + ', er oprettet');
+                response.redirect('/admin/news')
             }
 
         }
     })
 
 
-    .post('/createpost', validate.postInfoCheck, /* auth.adminIsLoggedIn, */ async (request, response) => {
-        const user = request.user;
-        if (user) {
+    .post('/createpost', validate.postInfoCheck, auth.adminIsLoggedIn, async (request, response) => {
 
-            const errors = validationResult(request);
-            if (!errors.isEmpty()) {
-                request.flash('error', await errors.array());
-                request.session.inputs = { headline: request.body.headline, body: request.body.body };
-                response.redirect('/admin/news/createpost')
-            } else {
-                const { headline, body } = request.body;
-                if (await controller.createPost(headline, body, user.info.firstname)) {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.flash('error', await errors.array());
+            request.session.inputs = { headline: request.body.headline, body: request.body.body };
+            response.redirect('/admin/news/createpost')
+        } else {
+            const { headline, body } = request.body;
+            if (await controller.createPost(headline, body, request.user.info.firstname)) {
 
-                    request.flash('success', 'Success - Nyt opslag: ' + headline + ', er oprettet')
-                    response.redirect('/admin/news')
-                }
-
+                request.flash('success', 'Success - Nyt opslag: ' + headline + ', er oprettet')
+                response.redirect('/admin/news')
             }
 
         }
@@ -141,7 +121,7 @@ router
     // EDIT
     //
 
-    .get('/postedit/:id',auth.adminIsLoggedIn, async (request, response) => {
+    .get('/postedit/:id', auth.adminIsLoggedIn, async (request, response) => {
 
         const errors = request.flash('error');
         const success = request.flash('success');
@@ -166,7 +146,7 @@ router
         }
     })
 
-    .get('/eventedit/:id',auth.adminIsLoggedIn, async (request, response) => {
+    .get('/eventedit/:id', auth.adminIsLoggedIn, async (request, response) => {
 
         const errors = request.flash('error');
         const success = request.flash('success');
@@ -193,8 +173,7 @@ router
     })
 
     .post('/eventedit/:id', validate.eventInfoCheck, auth.adminIsLoggedIn, async (request, response) => {
-        const user = request.user;
-
+        
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());
@@ -202,7 +181,7 @@ router
             response.redirect('/admin/news/eventedit/' + request.params.id)
         } else {
             const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
-            if (await controller.updateEvent(request.params.id, headline, user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
+            if (await controller.updateEvent(request.params.id, headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
 
                 request.flash('success', 'Success - Begivenheden: ' + headline + ' er opdateret');
                 response.redirect('/admin/news');

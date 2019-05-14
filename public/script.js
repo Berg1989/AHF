@@ -1,1 +1,0 @@
-document.body.innerHTML += 'Script is online!';
