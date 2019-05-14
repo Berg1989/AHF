@@ -6,13 +6,16 @@ const fetch = require('node-fetch');
 
 router
     .get('/', async (request, response) => {
-        response.locals.metaTags = {
-            title: 'Home',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
-        };
-            response.render('public/index', { user: request.session.user });
-            request.session.errors = null;
+        
+        const user = request.user;
+        response.render('public/index', {
+            metaTags: {
+                title: 'AHF - Home',
+                description: '',
+                keywords: ''
+            },
+            posts: await controller.findPosts()
+        });
     })
 
     .get('/logout', (request, response) => {

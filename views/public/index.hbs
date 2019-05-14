@@ -1,5 +1,14 @@
 <div class="row">
     <div class="col">
-        <h1>This is the index page</h1>
+        <h1 class="row">Nyheder</h1>
+        <div class="row-lg-6">
+            {{#each posts }}
+            <div class="col-lg-6 newsBox">
+                <h1>{{this.headline}}</h1>
+                <p><small>{{this.postdate}}</small></p>
+                <p>{{this.body}}</p>
+            </div>
+            {{/each}}
+        </div>
     </div>
 </div>
