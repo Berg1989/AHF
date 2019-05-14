@@ -6,15 +6,15 @@ const fetch = require('node-fetch');
 
 router
     .get('/', async (request, response) => {
-        
-        const user = request.user;
+        const news = await controller.findPosts();
+        const posts = news.reverse();
         response.render('public/index', {
             metaTags: {
                 title: 'AHF - Home',
                 description: '',
                 keywords: ''
             },
-            posts: await controller.findPosts()
+            posts
         });
     })
 

@@ -237,6 +237,9 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
 };
 
 exports.eventSignUp = (eventId, userId) => {
+    if(exports.findUserInEvent(userId, eventId)){
+        return false;    
+    }
     return EventModel.findByIdAndUpdate(eventId, {
         $push: {
             participants: userId

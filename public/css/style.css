@@ -104,3 +104,9 @@ tr {
   .btnMargin {
     margin-left: 5px;
   }
+
+  .newsBox {
+    border-color: rgba(0, 0, 0, 0.404);
+    border-style: solid;
+    margin-bottom: 1%;
+  }
