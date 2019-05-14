@@ -37,6 +37,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect(config.mongodb, { useNewUrlParser: true });
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 require('./middleware/passport'); //Make passport reachable in other files
 
 const app = express();

@@ -22,7 +22,7 @@ router
         const user = request.user
         try {
             if (await controller.eventSignUp(request.params.id, user._id)) {
-                request.session.success = { msg: 'Tilmelding oprettet' };
+                request.flash('success', 'Tilmelding gennemført');
                 response.redirect('/events');
             }
         } catch (err) {
