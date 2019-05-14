@@ -8,53 +8,65 @@ router
 
     .get('/', async (request, response) => {
         const user = request.user;
+        const errors = request.flash('error');
+        const success = request.flash('success');
         response.render('public/events', {
             user: user,
-            errors: request.session.errors,
-            success: request.session.success,
             events: await controller.findEvents(user),
+            messages: { errors, success }
         });
-        request.session.success = null;
-        request.session.errors = null;
+
     })
 
     .post('/:id/signUp', async (request, response) => {
         const user = request.user
-        try {
-            if (await controller.eventSignUp(request.params.id, user._id)) {
-                request.flash('success', 'Tilmelding gennemført');
-                response.redirect('/events');
+        const event = await controller.findEvent(request.params.id);
+        const maxparticipants = event.maxparticipants;
+        const participantsLength = maxparticipants - event.participants.length;
+        const exists = false;
+        for (let i = 0; i < event.participants.length && !exists; i++) {
+            if (event.participants[i] == user._id) {
+                exists = true;
             }
-        } catch (err) {
-            request.session.errors = { msg: 'Der skete en fejl!' };
-            response.redirect('back');
+        }
+        if (participantsLength == 0 || exists) {
+            request.flash('error', 'Du er allerede tilmeldt denne begivenhed');
+            response.redirect('/user/events');
+        } else {
+            try {
+                if (await controller.eventSignUp(request.params.id, user._id)) {
+                    request.flash('success', 'Tilmelding gennemført');
+                    response.redirect('/user/events');
+                }
+            } catch (err) {
+
+            }
         }
     })
 
-.get('/:id', async function (request, response) {
-        const event = await controller.findEvent(request.params.id); 
+    .get('/:id', async function (request, response) {
+        const event = await controller.findEvent(request.params.id);
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;
-        
-    response.locals.metaTags = {
-        title: 'Login',
-        description: 'Here goes the description',
-        keywords: 'Here goes keywords'
-    };
-    response.render('public/eventView', {
-        action: '/eventView',
-        events: event,
-        success: request.session.success,
-        errors: request.session.errors,
-        inputs: request.session.inputs,
-        ticket: participantsLength,
-        user: request.user
-        
-    });
-    request.session.errors = null;
-    request.session.inputs = null;
-    request.session.success = null;
-})
+        const errors = request.flash('error');
+        const success = request.flash('success');
+
+        response.locals.metaTags = {
+            title: 'Login',
+            description: 'Here goes the description',
+            keywords: 'Here goes keywords'
+        };
+        response.render('public/eventView', {
+            action: '/eventView',
+            events: event,
+            messages: { errors, success },
+            inputs: request.session.inputs,
+            ticket: participantsLength,
+            user: request.user
+
+        });
+        request.session.inputs = null;
+    })
 
 
 

@@ -18,26 +18,16 @@ router
         });
     })
 
-    .get('/logout', (request, response) => {
-        request.session.destroy(err => {
-            if (err) {
-                console.log(err);
-            } else {
-                response.redirect('/login');
-            }
-        });
-    })
-
     .get('/events', async (request,response) => {
         const user = request.session.user;
+        const errors = request.flash('error');
+        const success = request.flash('success');
         response.render('public/events', {
             user: user,
-            errors: request.session.errors,
-            success: request.session.success,
+            messages: { errors, success },
             events: await controller.findEvents(user),
         });
-        request.session.success = null;
-        request.session.errors = null;  
+        
     });
 
 module.exports = router;

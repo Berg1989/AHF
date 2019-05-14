@@ -141,11 +141,10 @@ router
     // EDIT
     //
 
-    .get('/postedit/:id',/* auth.adminIsLoggedIn, */ async (request, response) => {
+    .get('/postedit/:id',auth.adminIsLoggedIn, async (request, response) => {
 
         const errors = request.flash('error');
         const success = request.flash('success');
-
         try {
             const post = await controller.findPost(request.params.id);
             if (post) {
@@ -167,7 +166,7 @@ router
         }
     })
 
-    .get('/eventedit/:id',/* auth.adminIsLoggedIn, */ async (request, response) => {
+    .get('/eventedit/:id',auth.adminIsLoggedIn, async (request, response) => {
 
         const errors = request.flash('error');
         const success = request.flash('success');
@@ -193,7 +192,7 @@ router
 
     })
 
-    .post('/eventedit/:id', validate.eventInfoCheck/* , auth.adminIsLoggedIn */, async (request, response) => {
+    .post('/eventedit/:id', validate.eventInfoCheck, auth.adminIsLoggedIn, async (request, response) => {
         const user = request.user;
 
         const errors = validationResult(request);
@@ -211,19 +210,19 @@ router
         }
     })
 
-    .post('/postedit/:id', validate.postInfoCheck/* , auth.adminIsLoggedIn */, async (request, response) => {
-            const errors = validationResult(request);
-            if (!errors.isEmpty()) {
-                request.flash('error', await errors.array());
-                request.session.inputs = { headline: request.body.headline, body: request.body.body };
-                response.redirect('/admin/news/postedit/' + request.params.id)
-            } else {
-                const { headline, body } = request.body;
-                if (await controller.updatePost(request.params.id, headline, body)) {
-                    request.flash('success', 'Success - opslag: ' + headline + ', er opdateret');
-                    response.redirect('/admin/news')
-                }
+    .post('/postedit/:id', validate.postInfoCheck, auth.adminIsLoggedIn, async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            request.flash('error', await errors.array());
+            request.session.inputs = { headline: request.body.headline, body: request.body.body };
+            response.redirect('/admin/news/postedit/' + request.params.id)
+        } else {
+            const { headline, body } = request.body;
+            if (await controller.updatePost(request.params.id, headline, body)) {
+                request.flash('success', 'Success - opslag: ' + headline + ', er opdateret');
+                response.redirect('/admin/news')
             }
+        }
     })
 
 module.exports = router;

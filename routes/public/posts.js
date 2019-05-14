@@ -14,8 +14,6 @@ router
             user: user,
             messages: { errors, success }
         });
-        //request.session.success = null;
-        //request.session.errors = null;
     })
 
 

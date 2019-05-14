@@ -6,6 +6,8 @@ const auth = require('../../middleware/authentications');
 router
     //Admin root
     .get('/', auth.adminIsLoggedIn, async (request, response) => {
+        const errors = request.flash('error');
+        const success = request.flash('success');
         response.render('admin/index', {
             layout: 'admin',
             metaTags: {
@@ -13,7 +15,8 @@ router
                 description: 'Here goes the description',
                 keywords: 'Here goes keywords'
             },
-            admin: request.user
+            admin: request.user,
+            messages: { errors, success }
         })
     })
 

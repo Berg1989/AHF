@@ -19,7 +19,7 @@
         {{#if messages.errors }}
         <div class="alert alert-danger">
             {{#each messages.errors }}
-            <span>{{ this.msg }}</span><br>
+            <span>{{ this }}</span><br>
             {{/each}}
         </div>
         <hr>
@@ -63,7 +63,8 @@
     </div>
 
     {{#if user}}
-    <form method="POST" action="/events/{{events._id}}/signup" onsubmit="return confirm('Vil du tilmelde dig dette event?')">
+    <form method="POST" action="/events/{{events._id}}/signup"
+        onsubmit="return confirm('Vil du tilmelde dig dette event?')">
         <div class="form-group">
             <button type="submit" class="btn btn-danger">Tilmeld</button>
         </div>

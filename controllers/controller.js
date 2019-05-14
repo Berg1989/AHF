@@ -237,9 +237,6 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
 };
 
 exports.eventSignUp = (eventId, userId) => {
-    if(exports.findUserInEvent(userId, eventId)){
-        return false;    
-    }
     return EventModel.findByIdAndUpdate(eventId, {
         $push: {
             participants: userId
@@ -292,10 +289,6 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
 exports.findUserEvents = function (userid) {
     return EventModel.find({ "participants": { "$in": userid } })
 };
-
-exports.findUserInEvent = function(userid, eventId) {
-    return EventModel.findOne( eventId, { participants: userid } )
-}
 
 exports.findEvents = function (userid) {
     return EventModel.find({ "participants": { "$ne": userid } })

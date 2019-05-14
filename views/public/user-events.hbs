@@ -1,4 +1,20 @@
 <div class="row">
+    <div class="col">
+        {{#if messages.errors }}
+        <div class="alert alert-danger">
+            {{#each messages.errors }}
+            <span>{{ this }}</span><br>
+            {{/each}}
+        </div>
+        <hr>
+        {{/if}}
+        {{#if messages.success }}
+        <p class="alert alert-success">{{ messages.success }}</p>
+        <hr>
+        {{/if}}
+    </div>
+</div>
+<div class="row">
     <div class="col-md-3">
         {{> userNav}}
     </div>
@@ -30,17 +46,19 @@
                                     <td>{{this.enddate}}</td>
                                     <td>{{this.price}}</td>
                                     <td>
-                                <form method="get" action='/events/{{this.id}}'>
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-angle-right"></i></button>
-                                </form>
-                            </td>
+                                        <form method="get" action='/events/{{this.id}}'>
+                                            <button type="submit" class="btn btn-primary"><i
+                                                    class="fas fa-angle-right"></i></button>
+                                        </form>
+                                    </td>
                                     <td>
                                         <form method="POST"
                                             onsubmit="return confirm('Vil du framelde dig dette event?')"
                                             action='/user/events/{{this.id}}/remove'>
                                             <button type="submit" class="btn btn-danger"><i
                                                     class="fas fa-times"></i></button>
-                                        </form></td>
+                                        </form>
+                                    </td>
                                 </tr>
                                 {{/each}}
                             </tbody>
