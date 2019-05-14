@@ -51,7 +51,7 @@ module.exports = {
     postInfoCheck: [
         check('headline', 'Overskrift skal være minimum 1 tegn').not().isEmpty(),
         check('body', 'Beskrivelsen skal være minimum 1 tegn').not().isEmpty(),
-    ]
+    ],
     adminCreateUser: [
         check('email', 'Please enter a valid email')
             .isEmail().custom(async email => {

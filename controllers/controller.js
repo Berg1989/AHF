@@ -290,6 +290,10 @@ exports.findUserEvents = function (userid) {
     return EventModel.find({ "participants": { "$in": userid } })
 };
 
+exports.findUserInEvent = function(userid, eventId) {
+    return EventModel.findOne( eventId, { participants: userid } )
+}
+
 exports.findEvents = function (userid) {
     return EventModel.find({ "participants": { "$ne": userid } })
 };
