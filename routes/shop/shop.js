@@ -53,8 +53,6 @@ router
             },
             messages: { errors, success }
         });
-
-        req.session.errors = null;
     })
 
     .post('/cart/checkout', auth.shopIsLoggedIn, [
@@ -88,7 +86,7 @@ router
                     req.flash('success', 'Success - ordren oprettet')
                     res.redirect('/shop');
                 } else {
-                    req.flash('error', 'Ups noget gik galt');
+                    request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                     res.redirect('back');
                 }
             }
@@ -119,7 +117,7 @@ router
             req.session.cart = cart;
             res.redirect('/shop/cart');
         } else {
-            req.flash('error', 'Ups noget gik galt')
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             req.redirect('/shop');
         }
     })
@@ -133,7 +131,7 @@ router
             req.session.cart = cart;
             res.redirect('/shop/cart');
         } else {
-            req.flash('error', 'Ups noget gik galt')
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             req.redirect('/shop');
         }
     })

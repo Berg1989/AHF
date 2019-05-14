@@ -37,7 +37,7 @@ router
                 request.flash('success', 'Success - ny bruger: ' + email + ' oprettet');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups der skete en fejl');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -82,7 +82,7 @@ router
                 inputs: request.session.inputs,
             });
         } else {
-            request.flash('error', 'Bruger ikke fundet');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('back');
         }
     })
@@ -107,7 +107,7 @@ router
                 request.flash('success', 'Success - ' + res1.info.firstname + ' opdateret');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -119,24 +119,30 @@ router
             request.flash('success', 'Success - password ændre til: ' + result);
             response.redirect('back');
         } else {
-            request.flash('error', 'Ups noget gik galt');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('back');
         }
     })
 
     .post('/:id/delete', auth.adminIsLoggedIn, async (request, response) => {
         const user = await controller.findUser(request.params.id);
+
         if (user) {
-            const result = controller.deleteUser(request.params.id);
-            if (result) {
-                request.flash('success', 'Success - ' + result + ' blev slettet');
+            if (JSON.stringify(request.user._id) === JSON.stringify(user._id)) {
+                request.flash('error', [{ msg: 'UPS! Du kan ikke slette dig selv...' }]);
                 response.redirect('/admin/users');
             } else {
-                request.flash('error', 'Ups noget gik galt');
-                response.redirect('/admin/users');
+                const result = await controller.deleteUser(request.params.id);
+                if (result) {
+                    request.flash('success', 'Success - ' + result.email + ' blev slettet');
+                    response.redirect('/admin/users');
+                } else {
+                    request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                    response.redirect('/admin/users');
+                }
             }
         } else {
-            request.flash('error', 'Ups noget gik galt');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('/admin/users');
         }
     });

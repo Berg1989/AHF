@@ -36,7 +36,7 @@ router
                 request.flash('success', 'Success! - Kontingent oprettet');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -60,7 +60,7 @@ router
                 subscription: subscription
             });
         } else {
-            request.flash('error', 'Kontingent modellen findes ikke længere');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('back');
         }
     })
@@ -79,7 +79,7 @@ router
                 request.flash('success', 'Success! - Kontingent opdateret');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -95,11 +95,11 @@ router
                 request.flash('success', 'Success! - Kontingent blev slettet');
                 response.redirect('/admin/subscriptions');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         } else {
-            request.flash('error', 'Kontingentet findes ikk');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('/admin/subscriptions');
         }
 

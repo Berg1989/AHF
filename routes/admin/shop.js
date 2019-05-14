@@ -46,7 +46,7 @@ router
                 request.flash('success', result.name + ' oprettet');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -93,7 +93,7 @@ router
                 request.flash('success', 'Kategorien opdateret');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -119,11 +119,11 @@ router
                 request.flash('success', 'Produktkategorien og tilhørende produkter blev slettet');
                 response.redirect('/admin/shop');
             } else {
-                request.flash('error', 'Ups noget gik galt');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         } else {
-            request.flash('error', 'Ups noget gik galt');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('back');
         }
     })
@@ -148,7 +148,7 @@ router
                 response.redirect('back');
 
             } else {
-                request.flash('error', 'Ups der skete en fejl');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         }
@@ -163,7 +163,7 @@ router
         const category = await shopController.findCategory(request.params.id);
 
         if (!product && !category) {
-            request.flash('error', 'Ups der skete en fejl');
+            request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
             response.redirect('back');
         } else {
             response.render('admin/shop/product', {
@@ -189,7 +189,7 @@ router
             const { category, name, price, size } = request.body;
             const product = await shopController.findProduct(request.params.pid);
             if (!product) {
-                request.flash('error', 'Produktet findes ikke længere')
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/admin/shop');
             } else {
                 let currentImage = product.imgPath;
@@ -209,7 +209,7 @@ router
                     request.flash('success', 'Produktet opdateret');
                     response.redirect('back');
                 } else {
-                    request.flash('error', 'Ups der skete en fejl');
+                    request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                     response.redirect('/amin/shop/categories/' + request.params.id + '/products/' + request.params.pid);
                 }
             }
@@ -239,7 +239,7 @@ router
                 request.flash('success', 'Success! produktet slettet');
                 response.redirect('back');
             } else {
-                request.flash('error', 'Ups der skete en fejl');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/amin/shop/categories/' + request.params.id + '/products/' + request.params.pid);
             }
         }

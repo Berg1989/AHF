@@ -63,7 +63,7 @@ router
                     response.redirect('/user/info');
                 }
             } catch (err) {
-                request.flash('error', 'UPS der skete en fejl');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/user/info');
                 console.log(err);
             }
@@ -100,7 +100,7 @@ router
                 request.flash('success', 'Success - Dit kontingent er aktiveret')
                 response.redirect('/user/subscription');
             } else {
-                request.flash('error', 'Ups der skete en fejl')
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/user/subscription');
             }
         } else {
@@ -120,7 +120,7 @@ router
                 request.flash('success', 'Success - din email blev opdateret');
                 response.redirect('/user/info');
             } else {
-                request.flash('error', 'Ups der skete en fejl');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/user/info');
             }
         }
@@ -138,7 +138,7 @@ router
                 request.flash('success', 'Success - dit password blev opdateret');
                 response.redirect('/user/info');
             } else {
-                request.flash('error', 'Ups der skete en fejl');
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/user/info');
             }
         }
