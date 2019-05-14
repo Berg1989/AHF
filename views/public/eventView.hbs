@@ -70,8 +70,14 @@
     </form>
     {{else}}
     {{/if}}
+    <div class="form-group">
+        <button class="btn btn-danger btnMargin" onclick="goBack()">Tilbage</button>
+    </div>
 </div>
 
 <script>
+    function goBack() {
+        window.history.back();
+    };
     updateTimeView(); 
 </script>
