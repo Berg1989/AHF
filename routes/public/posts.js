@@ -7,18 +7,7 @@ const { check, validationResult } = require('express-validator/check');
 router
 
     .get('/', async (request, response) => {
-        const user = request.user;
-        const errors = request.flash('error');
-        const success = request.flash('success');
-        response.render('public/posts', {
-            metaTags: {
-                title: 'AHF - Opslag',
-                description: 'User login page',
-                keywords: 'Login and stuff'
-            },
-            user: user,
-            messages: { errors, success }
-        });
+        response.redirect('back');
     })
 
 

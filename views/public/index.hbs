@@ -6,12 +6,12 @@
                     <h1>Nyheder</h1>
                 </div>
             {{#each posts }}
-                <div class="card-body">
+                <div class="card-body border border-light">
                     <h5 class="card-title">{{this.headline}}</h5>
                     <p><small><small>Opslået: {{this.postdate}}</small></small></p>
                     <p class="card-text">{{this.body}}</p>
                     <p><small><small>Af: {{this.author}}</small></small></p>
-                    <a href="/posts/{{this.id}}" class="btn btn-primary">Go somewhere</a>
+                    <a href="/posts/{{this.id}}" class="btn btn-primary">Til opslag</a>
                 </div>
             {{/each}}
             </div>
