@@ -49,18 +49,18 @@ module.exports = {
         check('body', 'Beskrivelsen skal være minimum 1 tegn').not().isEmpty(),
     ],
     adminCreateUser: [
-        check('email', 'Please enter a valid email')
+        check('email', 'Indtast en gyldig mail')
             .isEmail().custom(async email => {
                 if (await controller.checkEmail(email.toLowerCase()))
-                    return Promise.reject('Email already in use');
+                    return Promise.reject('Email er allerede i brug');
             }),
-        check('password', 'Password must be 5 characters or longer')
+        check('password', 'Kodeordet skal være på minimum 5 tegn')
             .isLength({ min: 5 }),
-        check('firstname', 'Please enter your firstname')
+        check('firstname', 'Skriv dit fornavn')
             .isLength({ min: 2 }),
-        check('lastname', 'Please enter your lastname')
+        check('lastname', 'Skriv dit efternavn')
             .isLength({ min: 2 }),
-        check('usertype', 'Please select a usertype')
+        check('usertype', 'Vælg en brugertype')
             .not().isEmpty(),
         check('func')
             .optional({ checkFalsy: true }).isString()

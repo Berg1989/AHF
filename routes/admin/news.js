@@ -74,6 +74,9 @@ router
 
                 request.flash('success', 'Success - Ny begivenhed: ' + headline + ', er oprettet');
                 response.redirect('/admin/news')
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
             }
 
         }
@@ -93,6 +96,9 @@ router
 
                 request.flash('success', 'Success - Nyt opslag: ' + headline + ', er oprettet')
                 response.redirect('/admin/news')
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
             }
 
         }
@@ -100,7 +106,13 @@ router
 
     .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deleteEvent(request.params.id)) response.sendStatus(200);
+            if (await controller.deleteEvent(request.params.id)) {
+                request.flash('success', 'Success - begivenheden er slettet');
+                response.sendStatus(200);
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
+            }
         } catch (err) {
             response.sendStatus(405);
         }
@@ -108,7 +120,14 @@ router
 
     .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deletePost(request.params.id)) response.sendStatus(200);
+            if (await controller.deletePost(request.params.id)){
+                request.flash('success', 'Success - begivenheden er slettet');
+                response.sendStatus(200);
+            }  else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
+            }
+                
         } catch (err) {
             response.sendStatus(405);
         }

@@ -23,9 +23,9 @@ router
         const event = await controller.findEvent(request.params.id);
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;
-        const exists = false;
+        let exists = false;
         for (let i = 0; i < event.participants.length && !exists; i++) {
-            if (event.participants[i] == user._id) {
+            if (JSON.stringify(event.participants[i]) === JSON.stringify(user._id)) {
                 exists = true;
             }
         }
@@ -61,9 +61,9 @@ router
         const success = request.flash('success');
 
         response.locals.metaTags = {
-            title: 'Login',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
+            title: 'Begivenhed',
+            description: '',
+            keywords: ''
         };
         response.render('public/eventView', {
             action: '/eventView',

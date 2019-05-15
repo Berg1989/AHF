@@ -156,6 +156,7 @@ router
         const user = request.user;
         try {
             if (await controller.eventSignOff(request.params.id, user._id)) {
+                request.flash('success', 'Afmelding gennemført');
                 response.redirect('back');
             } else{
                 request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
