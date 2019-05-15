@@ -1,15 +1,20 @@
 <div class="row">
     <div class="col">
-        <h1 class="row">Nyheder</h1>
         <div class="row-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Nyheder</h1>
+                </div>
             {{#each posts }}
-            <div class="col-lg-6 newsBox">
-                <h1>{{this.headline}}</h1>
-                <p><small><small>Opslået: {{this.postdate}}</small></small></p>
-                <p>{{this.body}}</p>
-                <p><small><small>Af: {{this.author}}</small></small></p>
-            </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{this.headline}}</h5>
+                    <p><small><small>Opslået: {{this.postdate}}</small></small></p>
+                    <p class="card-text">{{this.body}}</p>
+                    <p><small><small>Af: {{this.author}}</small></small></p>
+                    <a href="/posts/{{this.id}}" class="btn btn-primary">Go somewhere</a>
+                </div>
             {{/each}}
+            </div>
         </div>
     </div>
 </div>
