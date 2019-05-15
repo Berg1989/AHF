@@ -19,7 +19,7 @@
         {{#if messages.errors }}
         <div class="alert alert-danger">
             {{#each messages.errors }}
-            <span>{{ this }}</span><br>
+            <span>{{ this.msg }}</span><br>
             {{/each}}
         </div>
         <hr>
@@ -55,7 +55,7 @@
         {{!-- participants information --}}
 
         <div class="row">
-            <p><strong>Maks antal deltager: {{events.maxparticipants}}</strong></p>
+            <p><strong>Maks antal deltagere: {{events.maxparticipants}}</strong></p>
         </div>
         <div class="row">
             <p>{{ticket}} pladser tilbage</p>

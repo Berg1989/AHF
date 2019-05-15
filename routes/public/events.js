@@ -23,20 +23,29 @@ router
         const event = await controller.findEvent(request.params.id);
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;
-        const exists = false;
+        let exists = false;
         for (let i = 0; i < event.participants.length && !exists; i++) {
-            if (event.participants[i] == user._id) {
+            if (JSON.stringify(event.participants[i]) === JSON.stringify(user._id)) {
                 exists = true;
             }
         }
-        if (participantsLength == 0 || exists) {
-            request.flash('error', 'Du er allerede tilmeldt denne begivenhed');
-            response.redirect('/user/events');
-        } else {
+        if (exists) {
+            
+            request.flash('error', [{ msg:'Du er allerede tilmeldt denne begivenhed'}]);
+            response.redirect('/events');
+        } 
+        else if(participantsLength == 0){
+            request.flash('error', [{ msg:'Der er ikke flere pladser på denne begivenhed'}]);
+            response.redirect('/events');
+        }
+        else {
             try {
                 if (await controller.eventSignUp(request.params.id, user._id)) {
                     request.flash('success', 'Tilmelding gennemført');
                     response.redirect('/user/events');
+                } else{
+                    request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                    response.redirect('back');
                 }
             } catch (err) {
 
@@ -52,9 +61,9 @@ router
         const success = request.flash('success');
 
         response.locals.metaTags = {
-            title: 'Login',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
+            title: 'Begivenhed',
+            description: '',
+            keywords: ''
         };
         response.render('public/eventView', {
             action: '/eventView',

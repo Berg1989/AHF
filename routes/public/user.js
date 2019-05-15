@@ -6,14 +6,6 @@ const controller = require("../../controllers/controller");
 const validate = require('../../middleware/validations');
 const auth = require('../../middleware/authentications');
 
-
-/*
-User routes:
-    /info
-    /events
-    /subscription
-*/
-
 router
     .get('/', auth.isLoggedIn, (request, response) => {
         const user = request.user;
@@ -65,7 +57,6 @@ router
             } catch (err) {
                 request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/user/info');
-                console.log(err);
             }
 
         }
@@ -165,6 +156,10 @@ router
         const user = request.user;
         try {
             if (await controller.eventSignOff(request.params.id, user._id)) {
+                request.flash('success', 'Afmelding gennemført');
+                response.redirect('back');
+            } else{
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
         } catch (err) {

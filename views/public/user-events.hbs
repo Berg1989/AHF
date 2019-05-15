@@ -3,7 +3,7 @@
         {{#if messages.errors }}
         <div class="alert alert-danger">
             {{#each messages.errors }}
-            <span>{{ this }}</span><br>
+            <span>{{ this.msg }}</span><br>
             {{/each}}
         </div>
         <hr>
@@ -24,7 +24,6 @@
         <div class="row">
             <span class="border border-primary">
                 <div class="col">
-                    <h3>Kommende events</h3>
                     <div class="form-group">
                         <table cellpadding='2' style="width:100%;">
                             <thead>

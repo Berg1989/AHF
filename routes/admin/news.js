@@ -74,6 +74,9 @@ router
 
                 request.flash('success', 'Success - Ny begivenhed: ' + headline + ', er oprettet');
                 response.redirect('/admin/news')
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
             }
 
         }
@@ -93,6 +96,9 @@ router
 
                 request.flash('success', 'Success - Nyt opslag: ' + headline + ', er oprettet')
                 response.redirect('/admin/news')
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
             }
 
         }
@@ -100,7 +106,13 @@ router
 
     .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deleteEvent(request.params.id)) response.sendStatus(200);
+            if (await controller.deleteEvent(request.params.id)) {
+                request.flash('success', 'Success - begivenheden er slettet');
+                response.sendStatus(200);
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
+            }
         } catch (err) {
             response.sendStatus(405);
         }
@@ -108,7 +120,14 @@ router
 
     .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deletePost(request.params.id)) response.sendStatus(200);
+            if (await controller.deletePost(request.params.id)){
+                request.flash('success', 'Success - opslaget er slettet');
+                response.sendStatus(200);
+            }  else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('back');
+            }
+                
         } catch (err) {
             response.sendStatus(405);
         }
@@ -182,8 +201,10 @@ router
         } else {
             const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
             if (await controller.updateEvent(request.params.id, headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
-
                 request.flash('success', 'Success - Begivenheden: ' + headline + ' er opdateret');
+                response.redirect('/admin/news');
+            } else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('/admin/news');
             }
         }
@@ -200,6 +221,10 @@ router
             if (await controller.updatePost(request.params.id, headline, body)) {
                 request.flash('success', 'Success - opslag: ' + headline + ', er opdateret');
                 response.redirect('/admin/news')
+            }
+            else {
+                request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                response.redirect('/admin/news');
             }
         }
     })
