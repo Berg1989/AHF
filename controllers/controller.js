@@ -15,7 +15,6 @@ const saltRounds = 10;
 exports.createSubscriptionModel = (name, duration, price) => {
     const tempName = name.charAt(0).toUpperCase() + name.slice(1);
     return new SubscriptionModel({
-        //name: tempName,
         name: name,
         duration: duration,
         price: price,

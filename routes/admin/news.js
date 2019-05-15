@@ -121,7 +121,7 @@ router
     .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
             if (await controller.deletePost(request.params.id)){
-                request.flash('success', 'Success - begivenheden er slettet');
+                request.flash('success', 'Success - opslaget er slettet');
                 response.sendStatus(200);
             }  else {
                 request.flash('error', [{ msg: 'UPS! noget gik galt' }]);

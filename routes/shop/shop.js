@@ -56,7 +56,7 @@ router
     })
 
     .post('/cart/checkout', auth.shopIsLoggedIn, [
-        check('phone', 'Telefonnummer er påkrævet').isDecimal().isLength({ min: 8 })
+        check('phone', 'Telefonnummer er påkrævet').isDecimal().isLength({ min: 8 }).withMessage('Gyldigt telefonnummer påkrævet'),
     ], async function (req, res, next) {
         if (!req.session.cart) {
             return res.render('shop/cart', { products: null });

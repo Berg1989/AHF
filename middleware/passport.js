@@ -35,7 +35,7 @@ passport.use('local.register', new LocalStrategy({
     }
 
     try {
-        const inUse = await controller.checkEmail(email);
+        const inUse = await controller.checkEmail(email.toLowerCase());
         if (inUse) {
             return done(null, false, { message: 'Denne email er allerede i brug' });
         }
@@ -69,7 +69,7 @@ passport.use('local.login', new LocalStrategy({
   
 
     try {
-        const user = await controller.checkEmail(email);
+        const user = await controller.checkEmail(email.toLowerCase());
         if (!user) {
             return done(null, false, { message: 'Ukendt email' });
         }
@@ -100,7 +100,7 @@ passport.use('local.adminlogin', new LocalStrategy({
     }
 
     try {
-        const user = await controller.checkEmail(email);
+        const user = await controller.checkEmail(email.toLowerCase());
         if (!user) {
             return done(null, false, { message: 'Ukendt email' });
         }
@@ -134,7 +134,7 @@ passport.use('local.shopLogin', new LocalStrategy({
     }
 
     try {
-        const user = await controller.checkEmail(email);
+        const user = await controller.checkEmail(email.toLowerCase());
         if (!user) {
             return done(null, false, { message: 'Ukendt email' });
         }
