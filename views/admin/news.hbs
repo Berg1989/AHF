@@ -1,13 +1,13 @@
 <script>
     function updateTimeView(startid, slutid) {
-    const startinput = document.getElementById(startid);
-    const endinput = document.getElementById(slutid);
+        const startinput = document.getElementById(startid);
+        const endinput = document.getElementById(slutid);
 
-    const startdate = new Date(startinput.innerHTML).toDateString();
-    const enddate = new Date(endinput.innerHTML).toDateString();
-    
-    startinput.innerHTML = startdate;
-    endinput.innerHTML = enddate;
+        const startdate = new Date(startinput.innerHTML).toDateString();
+        const enddate = new Date(endinput.innerHTML).toDateString();
+
+        startinput.innerHTML = startdate;
+        endinput.innerHTML = enddate;
     }
 </script>
 <div class="row">
@@ -27,14 +27,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-6">
-        <div class="row">
-            <h1>Begivenheder</h1>
-        </div>
-        <form method="GET" action="/admin/news/createevent">
-            <button type="submit" class="btn btn-primary row">Ny Begivenhed</button>
-        </form>
-
+    <div class="col">
+        <h1>Begivenheder</h1>
+        <a href="/admin/news/createevent" class="btn btn-primary">Opret ny begivenhed</a>
+        <hr>
         <table cellpadding='2' style="width:100%;">
             <thead>
                 <tr>
@@ -47,32 +43,29 @@
             <tbody>
                 {{#each events }}
                 <tr>
-                    
+
                     <td><a href="/events/{{this._id}}">{{this.headline}}</a></td>
                     <td id="{{this._id}}1">{{this.startdate}}</td>
                     <td id="{{this._id}}2">{{this.enddate}}</td>
                     <td>{{this.price}}</td>
                     <td><a href="/admin/news/eventedit/{{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a>
+                        <button type="submit" id="{{this._id}}" onclick="deleteEvent(this.id)" class="btn btn-danger"><i
+                                class="fas fa-times"></i></button>
                     </td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deleteEvent(this.id)" class="btn btn-danger"><i
-                                class="fas fa-times"></i></button></td>
                 </tr>
                 <script>updateTimeView("{{this.id}}1", "{{this.id}}2")</script>
                 {{/each}}
             </tbody>
         </table>
-
     </div>
-
-    <div class="col-lg-6">
-        <div class="row">
-            <h1>Opslag</h1>
-        </div>
-        <form method="GET" action="/admin/news/createpost">
-            <button type="submit" class="btn btn-primary row">Nyt opslag</button>
-        </form>
-
+</div>
+<br>
+<div class="row">
+    <div class="col">
+        <h1>Opslag</h1>
+        <a href="/admin/news/createpost" class="btn btn-primary">Opret nyt oplsag</a>
+        <hr>
         <table cellpadding='2' style="width:100%;">
             <thead>
                 <tr>
@@ -87,16 +80,14 @@
                     <td>{{this.postdate}}</td>
                     <td><a href="/admin/news/postedit/{{this._id}}" class="btn btn-primary"><i
                                 class="fas fa-wrench"></i></a>
+                        <button type="submit" id="{{this._id}}" onclick="deletePost(this.id)" class="btn btn-danger"><i
+                                class="fas fa-times"></i></button>
                     </td>
-                    <td> <button type="submit" id="{{this._id}}" onclick="deletePost(this.id)" class="btn btn-danger"><i
-                                class="fas fa-times"></i></button></td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
-
     </div>
-
 </div>
 
 <script>

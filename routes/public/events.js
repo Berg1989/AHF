@@ -11,6 +11,11 @@ router
         const errors = request.flash('error');
         const success = request.flash('success');
         response.render('public/events', {
+            metaTags: {
+                title: 'AHF - Begivenheder',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             user: user,
             events: await controller.findEvents(user),
             messages: { errors, success }
@@ -30,12 +35,12 @@ router
             }
         }
         if (exists) {
-            
-            request.flash('error', [{ msg:'Du er allerede tilmeldt denne begivenhed'}]);
+
+            request.flash('error', [{ msg: 'Du er allerede tilmeldt denne begivenhed' }]);
             response.redirect('/events');
-        } 
-        else if(participantsLength == 0){
-            request.flash('error', [{ msg:'Der er ikke flere pladser på denne begivenhed'}]);
+        }
+        else if (participantsLength == 0) {
+            request.flash('error', [{ msg: 'Der er ikke flere pladser på denne begivenhed' }]);
             response.redirect('/events');
         }
         else {
@@ -43,7 +48,7 @@ router
                 if (await controller.eventSignUp(request.params.id, user._id)) {
                     request.flash('success', 'Tilmelding gennemført');
                     response.redirect('/user/events');
-                } else{
+                } else {
                     request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                     response.redirect('back');
                 }
@@ -59,13 +64,12 @@ router
         const participantsLength = maxparticipants - event.participants.length;
         const errors = request.flash('error');
         const success = request.flash('success');
-
-        response.locals.metaTags = {
-            title: 'Begivenhed',
-            description: '',
-            keywords: ''
-        };
         response.render('public/eventView', {
+            metaTags: {
+                title: 'AHF - ' + event.headline,
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             action: '/eventView',
             events: event,
             messages: { errors, success },

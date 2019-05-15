@@ -12,12 +12,12 @@ router
         const errors = request.flash('error');
         const success = request.flash('success');
 
-        response.locals.metaTags = {
-            title: 'Admin - News',
-            description: '',
-            keywords: ''
-        };
         response.render('admin/news', {
+            metaTags: {
+                title: 'AHF - Begivenheder',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             layout: 'admin',
             action: '/news',
             events: await controller.findEvents(),
@@ -29,14 +29,14 @@ router
     .get('/createpost', auth.adminIsLoggedIn, function (request, response) {
         const errors = request.flash('error');
         const success = request.flash('success');
-        response.locals.metaTags = {
-            title: 'Admin - Lav opslag',
-            description: '',
-            keywords: ''
-        };
+
         response.render('admin/createpost', {
+            metaTags: {
+                title: 'AHF - Opret opslag',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             layout: 'admin',
-            action: '/createpost',
             messages: { errors, success },
             inputs: request.session.inputs,
         });
@@ -44,16 +44,15 @@ router
     })
 
     .get('/createevent', auth.adminIsLoggedIn, function (request, response) {
-
         const errors = request.flash('error');
         const success = request.flash('success');
 
-        response.locals.metaTags = {
-            title: 'Admin - Lav event',
-            description: '',
-            keywords: ''
-        };
         response.render('admin/createevent', {
+            metaTags: {
+                title: 'AHF - Opret begivenhed',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             layout: 'admin',
             action: '/createevent',
             messages: { errors, success },
@@ -120,14 +119,14 @@ router
 
     .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deletePost(request.params.id)){
+            if (await controller.deletePost(request.params.id)) {
                 request.flash('success', 'Success - opslaget er slettet');
                 response.sendStatus(200);
-            }  else {
+            } else {
                 request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
                 response.redirect('back');
             }
-                
+
         } catch (err) {
             response.sendStatus(405);
         }
@@ -147,12 +146,12 @@ router
         try {
             const post = await controller.findPost(request.params.id);
             if (post) {
-                response.locals.metaTags = {
-                    title: 'Admin - edit user: ' + post.headline,
-                    description: '',
-                    keywords: ''
-                };
                 response.render('admin/post', {
+                    metaTags: {
+                        title: 'AHF - ' + post.headline,
+                        description: 'User login page',
+                        keywords: 'Login and stuff'
+                    },
                     layout: 'admin',
                     post,
                     inputs: request.session.inputs,
@@ -172,12 +171,12 @@ router
         try {
             const event = await controller.findEvent(request.params.id);
             if (event) {
-                response.locals.metaTags = {
-                    title: 'Admin - edit user: ' + event.headline,
-                    description: 'Here goes the description',
-                    keywords: 'Here goes keywords'
-                };
                 response.render('admin/event', {
+                    metaTags: {
+                        title: 'AHF - ' + event.headline,
+                        description: 'User login page',
+                        keywords: 'Login and stuff'
+                    },
                     layout: 'admin',
                     event,
                     inputs: request.session.inputs,
@@ -192,7 +191,7 @@ router
     })
 
     .post('/eventedit/:id', validate.eventInfoCheck, auth.adminIsLoggedIn, async (request, response) => {
-        
+
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
             request.flash('error', await errors.array());

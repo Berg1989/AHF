@@ -8,10 +8,9 @@ const auth = require('../../middleware/authentications');
 
 router
     .get('/', auth.isLoggedIn, (request, response) => {
-        const user = request.user;
         response.render('public/user', {
             metaTags: {
-                title: 'AHF - ' + user.firstname,
+                title: 'AHF - ' + request.user.info.firstname,
                 description: 'Personal user page',
                 keywords: 'Profile and stuff'
             },

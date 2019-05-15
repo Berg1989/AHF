@@ -11,6 +11,11 @@ router
         const errors = request.flash('error');
         const success = request.flash('success');
         response.render('public/posts', {
+            metaTags: {
+                title: 'AHF - Opslag',
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             user: user,
             messages: { errors, success }
         });
@@ -21,12 +26,12 @@ router
         const post = await controller.findPost(request.params.id);
         const errors = request.flash('error');
         const success = request.flash('success');
-        response.locals.metaTags = {
-            title: 'Login',
-            description: 'Here goes the description',
-            keywords: 'Here goes keywords'
-        };
         response.render('public/postView', {
+            metaTags: {
+                title: 'AHF - ' + post.headline,
+                description: 'User login page',
+                keywords: 'Login and stuff'
+            },
             action: '/postView',
             posts: post,
             messages: { errors, success },
