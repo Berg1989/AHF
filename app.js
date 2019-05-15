@@ -69,7 +69,7 @@ app.use(passport.session());
 
 
 // VISIBLE IN ALL VIEWS:
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.locals.login = req.isAuthenticated();
   res.locals.session = req.session;
   res.locals.metaTags = {
@@ -108,14 +108,15 @@ app.use('/', index);
   next(err);
 });*/
 
-// Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
+// Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER defined ROUTES!!
 app.use(function (req, res, next) {
-  res.locals.metaTags = {
-    title: '404 - not found',
-    description: 'Here goes the description',
-    keywords: 'Here goes keywords'
-  };
-  res.status(404).render('error');
+  res.status(404).render('public/login', {
+    metaTags: {
+      title: 'AHF 404 - Not Found',
+      description: 'Error page',
+      keywords: 'Error and stuff'
+    },
+  });
 });
 
 // Select hbs-helper
