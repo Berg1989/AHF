@@ -29,10 +29,16 @@ router
                 exists = true;
             }
         }
-        if (participantsLength == 0 || exists) {
-            request.flash('error', 'Du er allerede tilmeldt denne begivenhed');
+        if (exists) {
+            
+            request.flash('error', [{ msg:'Du er allerede tilmeldt denne begivenhed'}]);
             response.redirect('/user/events');
-        } else {
+        } 
+        else if(participantsLength == 0){
+            request.flash('error', [{ msg:'Der er ikke flere pladser på denne begivenhed'}]);
+            response.redirect('/user/events');
+        }
+        else {
             try {
                 if (await controller.eventSignUp(request.params.id, user._id)) {
                     request.flash('success', 'Tilmelding gennemført');
