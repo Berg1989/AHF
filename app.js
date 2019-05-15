@@ -110,7 +110,7 @@ app.use('/', index);
 
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER defined ROUTES!!
 app.use(function (req, res, next) {
-  res.status(404).render('public/login', {
+  res.status(404).render('error', {
     metaTags: {
       title: 'AHF 404 - Not Found',
       description: 'Error page',
