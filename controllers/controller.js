@@ -307,3 +307,7 @@ exports.updatePost = (id, headline, body) => {
 exports.findPosts = () => {
     return PostModel.find().exec();
 };
+
+exports.findUserInEvent = function(userId, eventId){
+    return EventModel.findOne(eventId,{participants: userId});
+} 
