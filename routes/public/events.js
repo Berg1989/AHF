@@ -32,11 +32,11 @@ router
         if (exists) {
             
             request.flash('error', [{ msg:'Du er allerede tilmeldt denne begivenhed'}]);
-            response.redirect('/user/events');
+            response.redirect('/events');
         } 
         else if(participantsLength == 0){
             request.flash('error', [{ msg:'Der er ikke flere pladser på denne begivenhed'}]);
-            response.redirect('/user/events');
+            response.redirect('/events');
         }
         else {
             try {
