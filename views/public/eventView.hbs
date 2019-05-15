@@ -19,7 +19,7 @@
         {{#if messages.errors }}
         <div class="alert alert-danger">
             {{#each messages.errors }}
-            <span>{{ this }}</span><br>
+            <span>{{ this.msg }}</span><br>
             {{/each}}
         </div>
         <hr>

@@ -37,6 +37,9 @@ router
                 if (await controller.eventSignUp(request.params.id, user._id)) {
                     request.flash('success', 'Tilmelding gennemført');
                     response.redirect('/user/events');
+                } else{
+                    request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
+                    response.redirect('back');
                 }
             } catch (err) {
 

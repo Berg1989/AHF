@@ -11,7 +11,6 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async function (id, done) {
-    TODO: //done(await controller.findUser(id));
     User.findById(id, function (err, user) {
         done(err, user);
     });

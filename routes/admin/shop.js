@@ -108,7 +108,7 @@ router
                 if (product.imgPath !== '/uploads/default.png') {
                     fs.unlink('public' + product.imgPath, function (err) {
                         if (err) throw new Error(err);
-                        console.log(product.imgPath + 'Was deleted');
+                        
                     });
                 }
             };
@@ -197,7 +197,6 @@ router
                     if (currentImage !== '/uploads/default.png') {
                         fs.unlink('public' + currentImage, function (err) {
                             if (err) throw new Error(err);
-                            console.log(currentImage + 'Was deleted')
                         })
                     }
                     currentImage = '/uploads/' + request.file.filename;
@@ -232,7 +231,6 @@ router
                 if (imgPath !== '/uploads/default.png') {
                     fs.unlink('public' + imgPath, function (err) {
                         if (err) throw new Error(err);
-                        console.log(imgPath + 'Was deleted')
                     });
                 }
 

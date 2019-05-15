@@ -101,7 +101,6 @@ router
         if (product) {
             cart.addProduct(product, product._id)
             req.session.cart = cart;
-            console.log(req.session.cart)
             return res.redirect('back');
         } else {
             return res.redirect('/');
