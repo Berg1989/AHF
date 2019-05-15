@@ -103,10 +103,10 @@ router
         }
     })
 
-    .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async function (request, response) {
+    .delete('/delete/=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
             if (await controller.deleteEvent(request.params.id)) {
-                request.flash('success', 'Success - begivenheden er slettet');
+                request.flash('success', 'Success - Begivenheden er slettet');
                 response.sendStatus(200);
             } else {
                 request.flash('error', [{ msg: 'UPS! noget gik galt' }]);
@@ -117,10 +117,10 @@ router
         }
     })
 
-    .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
+    .delete('/delete/:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
             if (await controller.deletePost(request.params.id)) {
-                request.flash('success', 'Success - opslaget er slettet');
+                request.flash('success', 'Success - Opslaget er slettet');
                 response.sendStatus(200);
             } else {
                 request.flash('error', [{ msg: 'UPS! noget gik galt' }]);

@@ -37,7 +37,7 @@
                     <th>Titel</th>
                     <th>Start dato</th>
                     <th>Slut dato</th>
-                    <th>pris</th>
+                    <th>Pris</th>
                 </tr>
             </thead>
             <tbody>
@@ -96,7 +96,7 @@
         const res = window.confirm('Vil du slette denne begivenhed?');
         if (res) {
             try {
-                const response = await fetch('/admin/news/delete/eventid=' + id, {
+                const response = await fetch('/admin/news/delete/' + id, {
                     method: 'DELETE',
                 })
                 if (response.status === 200) location.reload(true);
@@ -110,7 +110,7 @@
         const res = window.confirm('Vil du slette dette opslag?');
         if (res) {
             try {
-                const response = await fetch('/admin/news/delete/postid=' + id, {
+                const response = await fetch('/admin/news/delete/' + id, {
                     method: 'DELETE',
                 })
                 if (response.status === 200) location.reload(true);
