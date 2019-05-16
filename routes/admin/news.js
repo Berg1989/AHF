@@ -103,7 +103,7 @@ router
         }
     })
 
-    .delete('/delete/:id', auth.adminIsLoggedIn, async function (request, response) {
+    .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
             if (await controller.deleteEvent(request.params.id)) {
                 request.flash('success', 'Success - Begivenheden er slettet');
@@ -117,7 +117,7 @@ router
         }
     })
 
-    .delete('/delete/:id', auth.adminIsLoggedIn, async function (request, response) {
+    .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
             if (await controller.deletePost(request.params.id)) {
                 request.flash('success', 'Success - Opslaget er slettet');
