@@ -2,8 +2,7 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-
-const controller = require('../controllers/controller');
+const userController = require('../controllers/userController');
 const User = require('../models/user');
 
 passport.serializeUser(function (user, done) {
@@ -35,12 +34,12 @@ passport.use('local.register', new LocalStrategy({
     }
 
     try {
-        const inUse = await controller.checkEmail(email.toLowerCase());
+        const inUse = await userController.checkEmail(email.toLowerCase());
         if (inUse) {
             return done(null, false, { message: 'Denne email er allerede i brug' });
         }
 
-        const newUser = await controller.createUser(email, password, req.body.firstname, req.body.lastname, req.body.usertype, req.body.func);
+        const newUser = await userController.createUser(email, password, req.body.firstname, req.body.lastname, req.body.usertype, req.body.func);
         if (!newUser) {
             return done(null, false, { message: 'Bruger kunne ikke oprettes' })
         }
@@ -69,7 +68,7 @@ passport.use('local.login', new LocalStrategy({
   
 
     try {
-        const user = await controller.checkEmail(email.toLowerCase());
+        const user = await userController.checkEmail(email.toLowerCase());
         if (!user) {
             return done(null, false, { message: 'Ukendt email' });
         }
@@ -100,7 +99,7 @@ passport.use('local.adminlogin', new LocalStrategy({
     }
 
     try {
-        const user = await controller.checkEmail(email.toLowerCase());
+        const user = await userController.checkEmail(email.toLowerCase());
         if (!user) {
             return done(null, false, { message: 'Ukendt email' });
         }
@@ -134,7 +133,7 @@ passport.use('local.shopLogin', new LocalStrategy({
     }
 
     try {
-        const user = await controller.checkEmail(email.toLowerCase());
+        const user = await userController.checkEmail(email.toLowerCase());
         if (!user) {
             return done(null, false, { message: 'Ukendt email' });
         }

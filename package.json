@@ -24,6 +24,7 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "mocha --timeout 3000 --exit",
     "shopTest": "mocha --exit"
   }

@@ -1,6 +1,7 @@
 "use strict";
 
 // INITIALIZATION
+const path = require("path");
 const express = require('express');
 const morgan = require('morgan');
 const config = require('./config');
@@ -19,7 +20,7 @@ const flash = require('connect-flash'); //Session stored flash messages to rende
 const index = require('./routes/public/index');
 const events = require('./routes/public/events');
 const posts = require('./routes/public/posts');
-const user = require('./routes/public/user');
+const user = require('./routes/public/users');
 const userLogin = require('./routes/public/login');
 const userRegister = require('./routes/public/register');
 
@@ -102,7 +103,7 @@ app.use('/posts', posts)
 app.use('/', index);
 
 // Render error view, when URL is not found in routes !!NEEDS TO BE DEFINED AFTER ROUTES!!
-app.use(function (req, res, next) {
+app.use((req, res) => {
   res.status(404).render('error', {
     metaTags: {
       title: 'AHF 404 - Not Found',
@@ -124,8 +125,13 @@ hbs.registerHelper("select", function (value, options) {
 });
 
 // START THE SERVER
-const port = process.env.PORT || config.localPort;
-app.listen(port);
-console.log('Listening on port ' + port + ' ...');
+const PORT = process.env.PORT || config.localPort;
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB.');
+  app.listen(PORT, () => console.log(`Server listening on port ${PORT}.`));
+})
+
+/*app.listen(port);
+console.log('Listening on port ' + port + ' ...');*/
 
 module.exports = app;

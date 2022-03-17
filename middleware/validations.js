@@ -1,7 +1,6 @@
-const { check, validationResult } = require('express-validator/check');
-
-const controller = require('../controllers/controller');
-const shopController = require('../controllers/shop');
+const { check } = require('express-validator/check');
+const userController = require('../controllers/userController');
+const shopController = require('../controllers/shopController');
 
 module.exports = {
     userinfo: [
@@ -14,17 +13,17 @@ module.exports = {
     ],
     userChangeEmail: [
         check('pw', 'Indtast venligst dit password').isString().custom(async (pw, { req }) => {
-            if (!await controller.checkPassword(pw, req.user.password))
+            if (!await userController.checkPassword(pw, req.user.password))
                 return Promise.reject('Forkert password indtastet');
         }),
         check('newEmail', 'Please enter a valid email').isEmail().custom(async (email) => {
-            if (await controller.checkEmail(email))
+            if (await userController.checkEmail(email))
                 return Promise.reject('Email already in use');
         })
     ],
     userChangePassword: [
         check('oldpw').custom(async (oldpw, { req }) => {
-            if (!await controller.checkPassword(oldpw, req.user.password))
+            if (!await userController.checkPassword(oldpw, req.user.password))
                 return Promise.reject('Forkert password indtastet');
         }),
         check('newpw', 'Nyt password skal være min. 5 karaktere lang').isLength({ min: 5 }).custom((newpw, { req }) => {
@@ -51,7 +50,7 @@ module.exports = {
     adminCreateUser: [
         check('email', 'Indtast en gyldig mail')
             .isEmail().custom(async email => {
-                if (await controller.checkEmail(email.toLowerCase()))
+                if (await userController.checkEmail(email.toLowerCase()))
                     return Promise.reject('Email er allerede i brug');
             }),
         check('password', 'Kodeordet skal være på minimum 5 tegn')
@@ -74,7 +73,7 @@ module.exports = {
             .optional({ checkFalsy: true }) // Can be falsy
             .isEmail()
             .custom(async email => {
-                if (await controller.checkEmail(email))
+                if (await userController.checkEmail(email))
                     return Promise.reject('Denne email er allerede registreret');
             })
     ],

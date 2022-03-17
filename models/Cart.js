@@ -28,7 +28,7 @@ module.exports = function Cart(oldCart) {
         return arr;
     };
 
-    //Rreducér et product fra kurv
+    //Reducér et product fra kurv
     this.retractOne = function(id) {
         this.items[id].qty--;
         this.items[id].price -= this.items[id].item.price;

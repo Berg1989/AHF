@@ -6,8 +6,6 @@ const subscriptions = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'subscriptionModel', required: true },
     model: { type: Schema.Types.ObjectId, ref: 'subscriptionModel', required: true },
     expirationDate: { type: Date, required: true }
-    //expirationDate: { type: Date, expires: 0 }
-    //createdAt: { type: Date, expires: 10 * 60, default: Date.now }
 });
 
 subscriptions.index({ expirationDate: 1, expireAfterSeconds: 0 })

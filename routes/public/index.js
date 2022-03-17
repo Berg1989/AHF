@@ -1,12 +1,11 @@
-const controller = require("../../controllers/controller");
+const postController = require("../../controllers/postController");
+const eventController = require("../../controllers/eventController");
 const express = require('express');
-const { check, validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
 
 router
     .get('/', async (request, response) => {
-        const news = await controller.findPosts();
+        const news = await postController.findPosts();
         const posts = news.reverse();
         response.render('public/index', {
             metaTags: {
@@ -25,7 +24,7 @@ router
         response.render('public/events', {
             user: user,
             messages: { errors, success },
-            events: await controller.findEvents(user),
+            events: await eventController.findEvents(user),
         });
     })
 

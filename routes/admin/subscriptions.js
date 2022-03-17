@@ -1,7 +1,7 @@
-const controller = require("../../controllers/controller");
+const subscriptionController = require("../../controllers/subscriptionController");
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator/check');
 
 const auth = require('../../middleware/authentications');
 const validate = require('../../middleware/validations');
@@ -19,7 +19,7 @@ router
                 keywords: 'Profile and stuff'
             },
             layout: 'admin',
-            subscriptions: await controller.findSubscriptionModels(),
+            subscriptions: await subscriptionController.findSubscriptionModels(),
         });
     })
 
@@ -30,7 +30,7 @@ router
             response.redirect('back');
         } else {
             const { name, duration, price } = request.body;
-            const result = await controller.createSubscriptionModel(name, duration, price);
+            const result = await subscriptionController.createSubscriptionModel(name, duration, price);
 
             if (result) {
                 request.flash('success', 'Success! - Kontingent oprettet');
@@ -43,7 +43,7 @@ router
     })
 
     .get('/:id', auth.adminIsLoggedIn, async (request, response) => {
-        const subscription = await controller.findSubscriptionModel(request.params.id);
+        const subscription = await subscriptionController.findSubscriptionModel(request.params.id);
 
         const errors = request.flash('error');
         const success = request.flash('success');
@@ -73,7 +73,7 @@ router
         } else {
             const { name, duration, price } = request.body;
 
-            const result = await controller.updateSubscriptionModel(request.params.id, name, duration, price);
+            const result = await subscriptionController.updateSubscriptionModel(request.params.id, name, duration, price);
 
             if (result) {
                 request.flash('success', 'Success! - Kontingent opdateret');
@@ -86,10 +86,10 @@ router
     })
 
     .post('/:id/delete', auth.adminIsLoggedIn, async (request, response) => {
-        const sub = await controller.findSubscriptionModel(request.params.id);
+        const sub = await subscriptionController.findSubscriptionModel(request.params.id);
 
         if (sub) {
-            const result = await controller.deleteSubscriptionModel(sub);
+            const result = await subscriptionController.deleteSubscriptionModel(sub);
 
             if (result) {
                 request.flash('success', 'Success! - Kontingent blev slettet');

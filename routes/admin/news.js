@@ -1,8 +1,8 @@
-const controller = require("../../controllers/controller");
+const postController = require("../../controllers/postController");
+const eventController = require("../../controllers/eventController");
 const express = require('express');
-const { check, validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator/check');
 const router = express.Router();
-const fetch = require('node-fetch');
 const auth = require('../../middleware/authentications');
 const validate = require('../../middleware/validations');
 
@@ -20,8 +20,8 @@ router
             },
             layout: 'admin',
             action: '/news',
-            events: await controller.findEvents(),
-            posts: await controller.findPosts(),
+            events: await eventController.findEvents(),
+            posts: await postController.findPosts(),
             messages: { errors, success }
         });
     })
@@ -69,7 +69,7 @@ router
             response.redirect('/admin/news/createevent')
         } else {
             const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
-            if (await controller.createEvent(headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
+            if (await eventController.createEvent(headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
 
                 request.flash('success', 'Success - Ny begivenhed: ' + headline + ', er oprettet');
                 response.redirect('/admin/news')
@@ -91,7 +91,7 @@ router
             response.redirect('/admin/news/createpost')
         } else {
             const { headline, body } = request.body;
-            if (await controller.createPost(headline, body, request.user.info.firstname)) {
+            if (await postController.createPost(headline, body, request.user.info.firstname)) {
 
                 request.flash('success', 'Success - Nyt opslag: ' + headline + ', er oprettet')
                 response.redirect('/admin/news')
@@ -105,7 +105,7 @@ router
 
     .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deleteEvent(request.params.id)) {
+            if (await eventController.deleteEvent(request.params.id)) {
                 request.flash('success', 'Success - Begivenheden er slettet');
                 response.sendStatus(200);
             } else {
@@ -119,7 +119,7 @@ router
 
     .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
         try {
-            if (await controller.deletePost(request.params.id)) {
+            if (await postController.deletePost(request.params.id)) {
                 request.flash('success', 'Success - Opslaget er slettet');
                 response.sendStatus(200);
             } else {
@@ -144,7 +144,7 @@ router
         const errors = request.flash('error');
         const success = request.flash('success');
         try {
-            const post = await controller.findPost(request.params.id);
+            const post = await postController.findPost(request.params.id);
             if (post) {
                 response.render('admin/post', {
                     metaTags: {
@@ -169,7 +169,7 @@ router
         const errors = request.flash('error');
         const success = request.flash('success');
         try {
-            const event = await controller.findEvent(request.params.id);
+            const event = await eventController.findEvent(request.params.id);
             if (event) {
                 response.render('admin/event', {
                     metaTags: {
@@ -199,7 +199,7 @@ router
             response.redirect('/admin/news/eventedit/' + request.params.id)
         } else {
             const { headline, startDate, endDate, body, deadline, maxparticipants, price } = request.body;
-            if (await controller.updateEvent(request.params.id, headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
+            if (await eventController.updateEvent(request.params.id, headline, request.user.info.firstname, startDate, endDate, body, deadline, maxparticipants, price)) {
                 request.flash('success', 'Success - Begivenheden: ' + headline + ' er opdateret');
                 response.redirect('/admin/news');
             } else {
@@ -217,7 +217,7 @@ router
             response.redirect('/admin/news/postedit/' + request.params.id)
         } else {
             const { headline, body } = request.body;
-            if (await controller.updatePost(request.params.id, headline, body)) {
+            if (await postController.updatePost(request.params.id, headline, body)) {
                 request.flash('success', 'Success - opslag: ' + headline + ', er opdateret');
                 response.redirect('/admin/news')
             }

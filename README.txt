@@ -1,5 +1,7 @@
 *** Start applikation ved at indtaste: node app.js i konsollen/terminalen ***
 
+Hvis MongoDB connection ikke kan oprettes, kan du blot sætte en ny MongoDB op, og replace connection string i config.js
+
 Applikationen benytter port 8080 og kan tilgås via http://localhost:8080/ 
 
 ______________________________

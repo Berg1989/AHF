@@ -1,8 +1,6 @@
-const controller = require("../../controllers/controller");
+const eventController = require("../../controllers/eventController");
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator/check');
-
 
 router
 
@@ -17,7 +15,7 @@ router
                 keywords: 'Login and stuff'
             },
             user: user,
-            events: await controller.findEvents(user),
+            events: await eventController.findEvents(user),
             messages: { errors, success }
         });
 
@@ -25,7 +23,7 @@ router
 
     .post('/:id/signUp', async (request, response) => {
         const user = request.user
-        const event = await controller.findEvent(request.params.id);
+        const event = await eventController.findEvent(request.params.id);
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;
         let exists = false;
@@ -45,7 +43,7 @@ router
         }
         else {
             try {
-                if (await controller.eventSignUp(request.params.id, user._id)) {
+                if (await eventController.eventSignUp(request.params.id, user._id)) {
                     request.flash('success', 'Tilmelding gennemført');
                     response.redirect('/user/events');
                 } else {
@@ -59,7 +57,7 @@ router
     })
 
     .get('/:id', async function (request, response) {
-        const event = await controller.findEvent(request.params.id);
+        const event = await eventController.findEvent(request.params.id);
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;
         const errors = request.flash('error');

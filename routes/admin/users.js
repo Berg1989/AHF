@@ -1,6 +1,8 @@
-const controller = require("../../controllers/controller");
+const userController = require("../../controllers/userController");
+const userTypeController = require("../../controllers/userTypeController");
+const subscriptionController = require("../../controllers/subscriptionController");
 const express = require('express');
-const { check, validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator/check');
 const router = express.Router();
 
 const validate = require('../../middleware/validations');
@@ -18,9 +20,9 @@ router
                 keywords: 'Profile and stuff'
             },
             layout: 'admin',
-            users: await controller.findUsers(),
-            userCount: await controller.getUsersCount(),
-            usertypes: await controller.findUsertypes(),
+            users: await userController.findUsers(),
+            userCount: await userController.getUsersCount(),
+            usertypes: await userTypeController.findUsertypes(),
             inputs: request.session.inputs,
         });
     })
@@ -33,7 +35,7 @@ router
         } else {
             const { usertype, email, password, firstname, lastname, func } = request.body;
 
-            if (await controller.createUser(email, password, firstname, lastname, usertype, func)) {
+            if (await userController.createUser(email, password, firstname, lastname, usertype, func)) {
                 request.flash('success', 'Success - ny bruger: ' + email + ' oprettet');
                 response.redirect('back');
             } else {
@@ -54,9 +56,9 @@ router
                 keywords: 'Profile and stuff'
             },
             layout: 'admin',
-            users: await controller.findUsersByText(request.params.searchid),
-            userCount: await controller.getUsersCount(),
-            usertypes: await controller.findUsertypes(),
+            users: await userController.findUsersByText(request.params.searchid),
+            userCount: await userController.getUsersCount(),
+            usertypes: await userController.userTypeController(),
             inputs: request.session.inputs,
         });
     })
@@ -64,8 +66,8 @@ router
     .get('/id=:id', auth.adminIsLoggedIn, async (request, response) => {
         const errors = request.flash('error');
         const success = request.flash('success');
-        const user = await controller.findUser(request.params.id);
-        const userSub = await controller.findSubscription(user.subscription);
+        const user = await userController.findUser(request.params.id);
+        const userSub = await subscriptionController.findSubscription(user.subscription);
         if (user) {
             response.render('admin/user', {
                 user: user,
@@ -78,7 +80,7 @@ router
                 layout: 'admin',
                 user: user,
                 currentSub: userSub ? userSub : false,
-                usertypes: await controller.findUsertypes(),
+                usertypes: await userController.userTypeController(),
                 inputs: request.session.inputs,
             });
         } else {
@@ -99,9 +101,9 @@ router
                 checked = true;
             }
 
-            const res1 = await controller.updateUserInfo(request.params.id, firstname, lastname, comments, checked, func);
-            const res2 = await controller.updateUserType(request.params.id, usertype);
-            if (email) await controller.updateUserEmail(request.params.id, email);
+            const res1 = await userController.updateUserInfo(request.params.id, firstname, lastname, comments, checked, func);
+            const res2 = await userController.updateUserType(request.params.id, usertype);
+            if (email) await userController.updateUserEmail(request.params.id, email);
 
             if (res1 && res2) {
                 request.flash('success', 'Success - ' + res1.info.firstname + ' opdateret');
@@ -114,7 +116,7 @@ router
     })
 
     .post('/id=:id/resetpw', auth.adminIsLoggedIn, async (request, response) => {
-        const result = await controller.resetPassword(request.params.id);
+        const result = await userController.resetPassword(request.params.id);
         if (result) {
             request.flash('success', 'Success - password ændre til: ' + result);
             response.redirect('back');
@@ -125,14 +127,14 @@ router
     })
 
     .post('/:id/delete', auth.adminIsLoggedIn, async (request, response) => {
-        const user = await controller.findUser(request.params.id);
+        const user = await userController.findUser(request.params.id);
 
         if (user) {
             if (JSON.stringify(request.user._id) === JSON.stringify(user._id)) {
                 request.flash('error', [{ msg: 'UPS! Du kan ikke slette dig selv...' }]);
                 response.redirect('/admin/users');
             } else {
-                const result = await controller.deleteUser(request.params.id);
+                const result = await userController.deleteUser(request.params.id);
                 if (result) {
                     request.flash('success', 'Success - ' + result.email + ' blev slettet');
                     response.redirect('/admin/users');

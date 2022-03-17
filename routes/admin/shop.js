@@ -1,5 +1,4 @@
-const controller = require("../../controllers/controller");
-const shopController = require('../../controllers/shop');
+const shopController = require('../../controllers/shopController');
 const express = require('express');
 const { check, validationResult } = require('express-validator/check');
 const router = express.Router();

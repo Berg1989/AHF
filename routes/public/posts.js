@@ -1,7 +1,6 @@
-const controller = require("../../controllers/controller");
+const postController = require("../../controllers/postController");
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator/check');
 
 
 router
@@ -12,7 +11,7 @@ router
 
 
     .get('/:id', async function (request, response) {
-        const post = await controller.findPost(request.params.id);
+        const post = await postController.findPost(request.params.id);
         const errors = request.flash('error');
         const success = request.flash('success');
         response.render('public/postView', {
