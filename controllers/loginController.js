@@ -1,9 +1,10 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const userController = require('../controllers/userController')
 const saltRounds = 10;
 
 exports.login = async (email, password) => {
-    const user = await exports.checkEmail(email);
+    const user = await userController.checkEmail(email);
     if (user) {
         if (await bcrypt.compare(password, user.password)) return user;
     } else {

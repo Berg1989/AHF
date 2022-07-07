@@ -21,7 +21,7 @@ router
         });
     })
 
-    .post('/', auth.adminIsLoggedIn, validate.adminOrderDates, async function (req, res, next) {
+    .post('/', auth.adminIsLoggedIn, validate.adminOrderDates, async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             req.flash('error', await errors.array());

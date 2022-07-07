@@ -17,11 +17,11 @@ const user = new Schema({
     subscription: { type: Schema.Types.ObjectId, ref: 'subscriptions' },
 });
 
-user.methods.hashPassword = async function(password) {
+user.methods.hashPassword = async function (password) {
     return await bcrypt.hash(password, 5);
 };
 
-user.methods.checkPassword = async function(password) {
+user.methods.checkPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
 

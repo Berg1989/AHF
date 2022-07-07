@@ -10,7 +10,7 @@ const subscriptions = new Schema({
 
 subscriptions.index({ expirationDate: 1, expireAfterSeconds: 0 })
 
-subscriptions.methods.getExpDate = function(model) {
+subscriptions.methods.getExpDate = function (model) {
     const created = new Date(this.createdAt);
     const expDate = new Date(created.setMonth(created.getMonth() + parseInt(model.duration)));
     return expDate.toISOString();

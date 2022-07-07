@@ -20,7 +20,7 @@ router
         })
     })
 
-    .get('/logout', auth.adminIsLoggedIn, function (req, res, next) {
+    .get('/logout', auth.adminIsLoggedIn, (req, res) => {
         req.logout();
         res.redirect('/admin/login');
     });

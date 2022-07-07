@@ -1,7 +1,7 @@
-const PostModel = require('../models/post');
+const Post = require('../models/post');
 
 exports.createPost = (headline, body, author) => {
-    return result = PostModel.create({
+    return result = Post.create({
         postdate: new Date().toDateString(),
         body: body,
         headline: headline.charAt(0).toUpperCase() + headline.slice(1),
@@ -10,20 +10,20 @@ exports.createPost = (headline, body, author) => {
 };
 
 exports.findPosts = () => {
-    return PostModel.find().exec();
+    return Post.find().exec();
 }
 
 exports.deletePost = id => {
-    return PostModel.findByIdAndDelete(id).exec();
+    return Post.findByIdAndDelete(id).exec();
 }
 
 exports.findPost = id => {
-    return PostModel.findById(id).exec();
+    return Post.findById(id).exec();
 }
 
 exports.updatePost = (id, headline, body) => {
 
-    return PostModel.findByIdAndUpdate(id, {
+    return Post.findByIdAndUpdate(id, {
         $set: {
             headline: headline,
             body: body,
@@ -32,5 +32,5 @@ exports.updatePost = (id, headline, body) => {
 };
 
 exports.findPosts = () => {
-    return PostModel.find().exec();
+    return Post.find().exec();
 };

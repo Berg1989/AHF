@@ -5,12 +5,12 @@ const LocalStrategy = require('passport-local');
 const userController = require('../controllers/userController');
 const User = require('../models/user');
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser( (user, done) => {
     done(null, user._id)
 });
 
-passport.deserializeUser(async function (id, done) {
-    User.findById(id, function (err, user) {
+passport.deserializeUser(async (id, done) => {
+    User.findById(id, (err, user) => {
         done(err, user);
     });
 });
@@ -19,7 +19,7 @@ passport.use('local.register', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true //Så vi kan validere req
-}, async function (req, email, password, done) {
+}, async (req, email, password, done) => {
     req.checkBody('email', 'Email påkrævet').isEmail();
     req.checkBody('password', 'Password påkrævet (min. 5 tegn)').isString().isLength({ min: 5 });
     req.checkBody('firstname', 'Fornavn påkrævet').isString().isLength({ min: 2 });
@@ -54,7 +54,7 @@ passport.use('local.login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true //Så vi kan validere req
-}, async function (req, email, password, done) {
+}, async (req, email, password, done) => {
     req.checkBody('email', 'Email påkrævet').isEmail();
     req.checkBody('password', 'Password påkrævet (min. 5 tegn)').isString().isLength({ min: 5 });
     const errors = req.validationErrors();
@@ -86,7 +86,7 @@ passport.use('local.adminlogin', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true //Så vi kan validere req med express-validater
-}, async function (req, email, password, done) {
+}, async (req, email, password, done) => {
     req.checkBody('email', 'Email påkrævet').isEmail();
     req.checkBody('password', 'Password påkrævet (min. 5 tegn)').isString().isLength({ min: 5 });
     const errors = req.validationErrors();
@@ -120,7 +120,7 @@ passport.use('local.shopLogin', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true //Så vi kan validere req med express-validater
-}, async function (req, email, password, done) {
+}, async (req, email, password, done) => {
     req.checkBody('email', 'Email påkrævet').isEmail();
     req.checkBody('password', 'Password påkrævet (min. 5 tegn)').isString().isLength({ min: 5 });
     const errors = req.validationErrors();

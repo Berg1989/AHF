@@ -4,7 +4,7 @@ const userController = require('../controllers/userController');
 const loginController = require('../controllers/loginController');
 const request = require('supertest');
 
-describe('User-Controller test', function () {
+describe('User-Controller test', () => {
     it('createUser() test', async function () {
         this.timeout(3000);
         const user = await userController.createUser("bergtest10@gmail.com", "123ab", "Danieltest", "Bergtest", '5cd04bc81c9d4400009071ce', 'Medlem');
@@ -19,8 +19,8 @@ describe('User-Controller test', function () {
     });
 });
 
-describe('POST /user/login', function () {
-    it("No CSRF token", function (done) {
+describe('POST /user/login', () => {
+    it("No CSRF token", (done) => {
         request(app)
         .post('/user/login')
         .send({ email: 'admin@mail.dk', password: '12345'})

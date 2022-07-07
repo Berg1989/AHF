@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator/check');
 const userController = require('../../controllers/userController');
 const eventController = require('../../controllers/eventController');
 const subscriptionController = require('../../controllers/subscriptionController');
+const subscriptionModelController = require('../../controllers/subscriptionModelController');
 const validate = require('../../middleware/validations');
 const auth = require('../../middleware/authentications');
 
@@ -19,12 +20,12 @@ router
         });
     })
 
-    .get('/logout', auth.isLoggedIn, function (req, res, next) {
+    .get('/logout', auth.isLoggedIn, (req, res) => {
         req.logout();
         res.redirect('/user/login');
     })
 
-    .get('/info', auth.isLoggedIn, function (req, res, next) {
+    .get('/info', auth.isLoggedIn, (req, res) => {
         const errors = req.flash('error');
         const success = req.flash('success');
         const user = req.user;
@@ -74,7 +75,7 @@ router
                 keywords: 'Profile and stuff'
             },
             messages: { errors, success },
-            subscriptionModels: await subscriptionController.findSubscriptionModels(),
+            subscriptionModels: await subscriptionModelController.findSubscriptionModels(),
             currentSub: userSub ? userSub : false,
             user: user
         });
@@ -83,7 +84,7 @@ router
     .post('/:id/subscription', auth.isLoggedIn, async (req, res) => {
         const user = await userController.findUser(req.params.id);
         if (user) {
-            const model = await subscriptionController.findSubscriptionModel(req.body.modelId);
+            const model = await subscriptionModelController.findSubscriptionModel(req.body.modelId);
             const newSub = await subscriptionController.createSubscription(user, model);
             const result = await userController.connectSubToUser(user._id, newSub._id);
 
@@ -167,7 +168,7 @@ router
         }
     })
 
-    .get('/events/:id', async function (req, res) {
+    .get('/events/:id', async (req, res) => {
         const event = await eventController.findEvent(req.params.id); 
         const maxparticipants = event.maxparticipants;
         const participantsLength = maxparticipants - event.participants.length;

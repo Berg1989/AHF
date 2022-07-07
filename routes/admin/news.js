@@ -8,7 +8,7 @@ const validate = require('../../middleware/validations');
 
 router
 
-    .get('/', auth.adminIsLoggedIn, async function (request, response) {
+    .get('/', auth.adminIsLoggedIn, async (request, response) => {
         const errors = request.flash('error');
         const success = request.flash('success');
 
@@ -26,7 +26,7 @@ router
         });
     })
 
-    .get('/createpost', auth.adminIsLoggedIn, function (request, response) {
+    .get('/createpost', auth.adminIsLoggedIn, (request, response) => {
         const errors = request.flash('error');
         const success = request.flash('success');
 
@@ -43,7 +43,7 @@ router
         request.session.inputs = null;
     })
 
-    .get('/createevent', auth.adminIsLoggedIn, function (request, response) {
+    .get('/createevent', auth.adminIsLoggedIn, (request, response) => {
         const errors = request.flash('error');
         const success = request.flash('success');
 
@@ -103,7 +103,7 @@ router
         }
     })
 
-    .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async function (request, response) {
+    .delete('/delete/eventid=:id', auth.adminIsLoggedIn, async (request, response) => {
         try {
             if (await eventController.deleteEvent(request.params.id)) {
                 request.flash('success', 'Success - Begivenheden er slettet');
@@ -117,7 +117,7 @@ router
         }
     })
 
-    .delete('/delete/postid=:id', auth.adminIsLoggedIn, async function (request, response) {
+    .delete('/delete/postid=:id', auth.adminIsLoggedIn, async (request, response) => {
         try {
             if (await postController.deletePost(request.params.id)) {
                 request.flash('success', 'Success - Opslaget er slettet');

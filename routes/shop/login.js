@@ -9,7 +9,7 @@ const auth = require('../../middleware/authentications');
 router.use(csrfProtection)
 
 router
-    .get('/', auth.shopNotloggedIn, function (req, res) {
+    .get('/', auth.shopNotloggedIn, (req, res) => {
         const messages = req.flash('error')
         res.render('public/login', {
             messages: messages,

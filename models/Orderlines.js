@@ -7,7 +7,7 @@ const orderlines = new Schema({
     price: { type: Number, required: true }
 });
 
-orderlines.methods.calcPrice = function() {
+orderlines.methods.calcPrice = function () {
     return this.number * this.product.methods.getPrice();
 };
 

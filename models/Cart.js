@@ -4,7 +4,7 @@ module.exports = function Cart(oldCart) {
     this.totalPrice = oldCart.totalPrice || 0;
 
     //Tilføj et product til kurven
-    this.addProduct = function (item, id) {
+    this.addProduct = (item, id) => {
         let orderline = this.items[id]; //Findes varen/ordrelinjen allerede i kurven
         if (!orderline) {
             //Hvis ikke så opret ny ordrelinje og tilføj til global items array
@@ -20,7 +20,7 @@ module.exports = function Cart(oldCart) {
         this.totalPrice += orderline.item.price;
     };
 
-    this.generateArray = function () {
+    this.generateArray = () => {
         const arr = [];
         for (let id in this.items) {
             arr.push(this.items[id]);
@@ -29,7 +29,7 @@ module.exports = function Cart(oldCart) {
     };
 
     //Reducér et product fra kurv
-    this.retractOne = function(id) {
+    this.retractOne = (id) => {
         this.items[id].qty--;
         this.items[id].price -= this.items[id].item.price;
         this.totalQty--;
@@ -42,7 +42,7 @@ module.exports = function Cart(oldCart) {
     };
 
     //Fjern en varelinje
-    this.removeItem = function(id) {
+    this.removeItem = (id) => {
         this.totalQty -= this.items[id].qty;
         this.totalPrice -= this.items[id].price;
         delete this.items[id];

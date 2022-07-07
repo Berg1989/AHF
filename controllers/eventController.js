@@ -1,15 +1,15 @@
-const EventModel = require('../models/event');
+const Event = require('../models/event');
 
 exports.findEvent = (id) => {
-    return EventModel.findById(id).exec();
+    return Event.findById(id).exec();
 };
 
-exports.findUserEvents = function (userid) {
-    return EventModel.find({ "participants": { "$in": userid } })
+exports.findUserEvents = (userid) => {
+    return Event.find({ "participants": { "$in": userid } })
 };
 
 exports.eventSignOff = (eventId, userId) => {
-    return EventModel.findByIdAndUpdate(eventId, {
+    return Event.findByIdAndUpdate(eventId, {
         $pull: {
             participants: userId
         }
@@ -17,7 +17,7 @@ exports.eventSignOff = (eventId, userId) => {
 };
 
 exports.createEvent = (headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
-    const result = EventModel.create({
+    const result = Event.create({
         headline: headline.charAt(0).toUpperCase() + headline.slice(1),
         author: author,
         startdate: startDate,
@@ -33,7 +33,7 @@ exports.createEvent = (headline, author, startDate, endDate, body, deadline, max
 };
 
 exports.eventSignUp = (eventId, userId) => {
-    return EventModel.findByIdAndUpdate(eventId, {
+    return Event.findByIdAndUpdate(eventId, {
         $push: {
             participants: userId
         }
@@ -42,7 +42,7 @@ exports.eventSignUp = (eventId, userId) => {
 
 exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline, maxParticipants, price) => {
 
-    return EventModel.findByIdAndUpdate(id, {
+    return Event.findByIdAndUpdate(id, {
         $set: {
             headline: headline,
             author: author,
@@ -57,13 +57,13 @@ exports.updateEvent = (id, headline, author, startDate, endDate, body, deadline,
 };
 
 exports.deleteEvent = async id => {
-    return EventModel.findByIdAndDelete(id).exec();
+    return Event.findByIdAndDelete(id).exec();
 }
 
-exports.findEvents = function (userid) {
-    return EventModel.find({ "participants": { "$ne": userid } })
+exports.findEvents = (userid) => {
+    return Event.find({ "participants": { "$ne": userid } })
 };
 
-exports.findUserInEvent = function(userId, eventId){
-    return EventModel.findOne(eventId,{participants: userId});
+exports.findUserInEvent = (userId, eventId) => {
+    return Event.findOne(eventId,{participants: userId});
 };

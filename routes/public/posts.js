@@ -10,7 +10,7 @@ router
     })
 
 
-    .get('/:id', async function (request, response) {
+    .get('/:id', async (request, response) => {
         const post = await postController.findPost(request.params.id);
         const errors = request.flash('error');
         const success = request.flash('success');

@@ -2,7 +2,7 @@ const assert = require('chai').assert;
 const shopController = require('../controllers/shopController');
 const userController = require('../controllers/userController');
 
-describe('Shop-controller test', function () {
+describe('Shop-controller test', () => {
     it('createProduct() test', async function () {
         this.timeout(3000);
         const data = { name: 'test', price: 10, size: 'XL' };

@@ -2,8 +2,8 @@ const assert = require('chai').assert;
 const eventController = require('../controllers/eventController');
 const userController = require('../controllers/userController');
 
-describe('eventSignUp test', function () {
-    it('eventSignUp() test', async function () {
+describe('eventSignUp test', () => {
+    it('eventSignUp() test', async () => {
         const userData = { email: 'bla@gmail.com', password: '12345', firstname: 'Hans', lastname: 'Hansen', usertype: '5cd04bc81c9d4400009071ce', func: 'bla' };
         const eventData = { headline: 'bla', author: 'Danmark', startdate: '2019-05-06', enddate: '2019-07-11', body: 'Hejsa', deadline: '2019-05-09', maxparticipants: 11, price: 1005 };
 
@@ -20,8 +20,8 @@ describe('eventSignUp test', function () {
     })
 })
 
-describe('eventSignOff test', function () {
-    it('eventSignOff() test', async function () {
+describe('eventSignOff test', () => {
+    it('eventSignOff() test', async () => {
         const userData = { email: 'bla@gmail.com', password: '12345', firstname: 'Hans', lastname: 'Hansen', usertype: '5cd04bc81c9d4400009071ce', func: 'bla' };
         const eventData = { headline: 'bla', author: 'Danmark', startdate: '2019-05-06', enddate: '2019-07-11', body: 'Hejsa', deadline: '2019-05-09', maxparticipants: 11, price: 1005 };
 

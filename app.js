@@ -70,7 +70,7 @@ app.use(passport.session());
 
 
 // VISIBLE IN ALL VIEWS:
-app.use(function (req, res, next) {
+app.use( (req, res, next) => {
   res.locals.login = req.isAuthenticated();
   res.locals.session = req.session;
   res.locals.metaTags = {
@@ -114,10 +114,10 @@ app.use((req, res) => {
 });
 
 // Select hbs-helper
-hbs.registerHelper("select", function (value, options) {
+hbs.registerHelper("select", (value, options) => {
   return options.fn(this)
     .split('\n')
-    .map(function (v) {
+    .map( (v) => {
       var t = 'value="' + value + '"'
       return !RegExp(t).test(v) ? v : v.replace(t, t + ' selected="selected"')
     })

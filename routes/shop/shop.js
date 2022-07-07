@@ -33,7 +33,7 @@ router
         });
     })
 
-    .get('/cart', auth.shopIsLoggedIn, async function (req, res, next) {
+    .get('/cart', auth.shopIsLoggedIn, async (req, res) => {
         const errors = req.flash('error');
         const success = req.flash('success');
         if (!req.session.cart) {
@@ -55,7 +55,7 @@ router
 
     .post('/cart/checkout', auth.shopIsLoggedIn, [
         check('phone', 'Telefonnummer er påkrævet').isDecimal().isLength({ min: 8 }).withMessage('Gyldigt telefonnummer påkrævet'),
-    ], async function (req, res, next) {
+    ], async (req, res) => {
         if (!req.session.cart) {
             return res.render('shop/cart', { products: null });
         }
@@ -91,7 +91,7 @@ router
         }
     })
 
-    .get('/add-to-cart/:id', auth.shopIsLoggedIn, async function (req, res, next) {
+    .get('/add-to-cart/:id', auth.shopIsLoggedIn, async (req, res) => {
         const productId = req.params.id;
         const cart = shopController.createCart(req.session.cart ? req.session.cart : {}) //Hvis en cart session findes returner den ellers, et tomt obj
 
@@ -105,7 +105,7 @@ router
         }
     })
 
-    .get('/retract-from-cart/:id', auth.shopIsLoggedIn, async function(req, res, next){
+    .get('/retract-from-cart/:id', auth.shopIsLoggedIn, async (req, res) => {
         const product = await shopController.findProduct(req.params.id);
         if (product) {
             const cart = await shopController.createCart(req.session.cart);
@@ -119,7 +119,7 @@ router
         }
     })
 
-    .get('/remove-from-cart/:id', auth.shopIsLoggedIn, async function(req, res, next){
+    .get('/remove-from-cart/:id', auth.shopIsLoggedIn, async (req, res) =>{
         const product = await shopController.findProduct(req.params.id);
         if (product) {
             const cart = await shopController.createCart(req.session.cart);
@@ -133,13 +133,13 @@ router
         }
     })
 
-    .get('/empty-cart', auth.shopIsLoggedIn, async function(req, res, next){
+    .get('/empty-cart', auth.shopIsLoggedIn, async (req, res) => {
         req.session.cart = {};
         req.flash('success', 'Kurven blev tømt');
         res.redirect('back');
     })
 
-    .get('/logout', auth.shopIsLoggedIn, function (req, res, next) {
+    .get('/logout', auth.shopIsLoggedIn, (req, res) => {
         req.logout();
         res.redirect('/shop/login');
     });

@@ -105,7 +105,7 @@ router
             for (let product of category.products) {
                 await shopController.deleteProduct(product._id);
                 if (product.imgPath !== '/uploads/default.png') {
-                    fs.unlink('public' + product.imgPath, function (err) {
+                    fs.unlink('public' + product.imgPath, (err) => {
                         if (err) throw new Error(err);
                         
                     });
@@ -194,7 +194,7 @@ router
                 let currentImage = product.imgPath;
                 if (request.file) {
                     if (currentImage !== '/uploads/default.png') {
-                        fs.unlink('public' + currentImage, function (err) {
+                        fs.unlink('public' + currentImage, (err) => {
                             if (err) throw new Error(err);
                         })
                     }
@@ -228,7 +228,7 @@ router
 
             if (result && dc) {
                 if (imgPath !== '/uploads/default.png') {
-                    fs.unlink('public' + imgPath, function (err) {
+                    fs.unlink('public' + imgPath, (err) => {
                         if (err) throw new Error(err);
                     });
                 }
